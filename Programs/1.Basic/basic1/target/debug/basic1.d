@@ -1,1 +1,0 @@
-/home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/Programs/1.Basic/basic1/target/debug/basic1: /home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/Programs/1.Basic/basic1/src/main.rs
