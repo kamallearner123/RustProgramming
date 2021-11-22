@@ -1,1 +1,0 @@
-/home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/Programs/2.Ownership/Ownership1/target/debug/Ownership1: /home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/Programs/2.Ownership/Ownership1/src/main.rs
