@@ -1,2 +1,4 @@
+Install rustup
+
 1) Underrstanding on Cargo
 2) Write few networking programs
