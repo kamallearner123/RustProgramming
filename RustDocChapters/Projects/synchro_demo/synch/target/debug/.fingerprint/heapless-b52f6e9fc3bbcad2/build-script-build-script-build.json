@@ -1,0 +1,1 @@
+{"rustc":5475348352969617417,"features":"[\"atomic-polyfill\", \"cas\", \"serde\"]","target":10429514197457385088,"profile":13719610756125836611,"path":2078777178503240562,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/heapless-b52f6e9fc3bbcad2/dep-build-script-build-script-build"}}],"rustflags":[],"metadata":7500573556408152354,"config":0,"compile_kind":0}
