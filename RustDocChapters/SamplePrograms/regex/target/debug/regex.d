@@ -1,0 +1,1 @@
+/home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/RustDocChapters/SamplePrograms/regex/target/debug/regex: /home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/RustDocChapters/SamplePrograms/regex/src/main.rs
