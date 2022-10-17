@@ -1,0 +1,25 @@
+Link: https://blog.redsift.com/labs/writing-bpf-code-in-rust/
+
+BPF is a virtual machine that allows user defined programs in kernel when certain events happen on linux system.
+Ex: You want to monitor suspicious file activity, log n/w response latency.
+
+Options to write the code:
+========================
+1) bpftrace
+2) C code 
+
+Compile with BCC.
+
+- BPFTRACE is a tool to write the program.
+- BCC is better suited for more complex tools, when integrating with other applications and systems.
+
+C code ----> clang to BPF byte code (Can be executed in BPF VM in kernel.
+
+
+An example of BPFTRACE:
+======================
+# bpftrace -e 'kprobe:vfs_read /pid == 30153/ { @start[tid] = nsecs; }
+kretprobe:vfs_read /@start[tid]/ { @ns = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+
+
+

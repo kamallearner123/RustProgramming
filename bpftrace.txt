@@ -1,0 +1,10 @@
+Liners:
+====
+https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md
+
+#bpftrace -l 'tracepoint:syscalls:sys_enter_*'
+
+# bpftrace -e 'BEGIN { printf("Hello world\n");}'
+
+
+~                                             
