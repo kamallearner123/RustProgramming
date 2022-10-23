@@ -13,3 +13,10 @@ Plans:
 4) Structs, enums
 5) Conccurency
 6) Projects
+
+Channels to follow:
+https://www.youtube.com/c/RustVideos
+
+Modules to cover:
+1) eBPF for observability
+2) Using Rust in cloud platform
