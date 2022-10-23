@@ -20,3 +20,5 @@ https://www.youtube.com/c/RustVideos
 Modules to cover:
 1) eBPF for observability
 2) Using Rust in cloud platform
+
+Interesting news:
