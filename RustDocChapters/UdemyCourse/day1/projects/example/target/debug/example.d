@@ -1,0 +1,1 @@
+/home/kamal/Documents/1.Git/RustProgramming/RustDocChapters/UdemyCourse/day1/projects/example/target/debug/example: /home/kamal/Documents/1.Git/RustProgramming/RustDocChapters/UdemyCourse/day1/projects/example/src/main.rs
