@@ -1,0 +1,11 @@
+/home/kamal/Documents/1.Git/RustProgramming/RustDocChapters/UdemyCourse/day1/projects/functions/funcs/target/debug/deps/digest-cf45ab41721971c1.rmeta: /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/lib.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/ct_variable.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/rt_variable.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/wrapper.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/xof_reader.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/digest.rs
+
+/home/kamal/Documents/1.Git/RustProgramming/RustDocChapters/UdemyCourse/day1/projects/functions/funcs/target/debug/deps/digest-cf45ab41721971c1.d: /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/lib.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/ct_variable.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/rt_variable.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/wrapper.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/xof_reader.rs /home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/digest.rs
+
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/lib.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/ct_variable.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/rt_variable.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/wrapper.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/core_api/xof_reader.rs:
+/home/kamal/.cargo/registry/src/github.com-1ecc6299db9ec823/digest-0.10.5/src/digest.rs:
