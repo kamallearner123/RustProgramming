@@ -1,0 +1,244 @@
+cscope 15 $HOME/Documents/1.Git/RustProgramming/UdemyCourse/March11               0000000996
+	@http.rs
+
+1 
+pub
+ 
+mod
+ 
+	gh‰p
+ {
+
+2 #[
+d”ive
+(
+Debug
+)]
+
+3 
+pub
+ 
+	eREQUEST_TYPE
+ {
+
+4 
+	gGET
+,
+
+5 
+	gPUT
+,
+
+6 
+	gDELETE
+,
+
+8 #[
+d”ive
+(
+Debug
+)]
+
+9 
+pub
+ 
+	s»que¡
+ {
+
+10 
+	gd©a
+: 
+SŒšg
+,
+
+11 
+	g»qId
+: 
+REQUEST_TYPE
+,
+
+13 
+im¶
+ 
+	g»que¡
+ {
+
+14 
+pub
+ 
+â
+ 
+Ãw
+(
+d©a
+: 
+SŒšg
+è-> 
+S–f
+ {
+
+15 
+Ët
+ 
+»qId
+ = 
+REQUEST_TYPE
+::
+GET
+;
+
+16 
+	gS–f
+ { 
+	gd©a
+, 
+	g»qId
+ }
+
+19 
+â
+ 
+´št
+(
+£lf
+) {
+
+20 
+	g´šŽn
+!("D©¨ð{:?}", 
+	g£lf
+);
+
+23 
+pub
+ 
+â
+ 
+´št_d‘ažs
+(
+£lf
+) {
+
+24 
+	g£lf
+.
+´št
+();
+
+28 #[
+d”ive
+(
+Debug
+)]
+
+29 
+pub
+ 
+	s£rv”
+ {
+
+30 
+	gaddr
+: 
+SŒšg
+,
+
+31 
+	gcÚn
+: 
+u32
+,
+
+34 
+im¶
+ 
+	g£rv”
+ {
+
+35 
+pub
+ 
+â
+ 
+Ãw
+(
+addr
+: 
+SŒšg
+è-> 
+S–f
+ {
+
+36 
+S–f
+ { 
+addr
+ }
+
+	@main.rs
+
+1 
+u£
+ 
+	gh‰p
+::
+h‰p
+::{
+»que¡
+, 
+	gREQUEST_TYPE
+};
+
+2 
+mod
+ 
+	gh‰p
+;
+
+3 
+â
+ 
+	$maš
+() {
+
+4 
+Ët
+ 
+»qTy³
+: 
+REQUEST_TYPE
+ = REQUEST_TYPE::
+DELETE
+;
+
+5 
+Ët
+ 
+r1
+ = 
+»que¡
+::
+	`Ãw
+("d©a".
+	`to_¡ršg
+());
+
+6 
+r1
+.
+	`´št_d‘ažs
+();
+
+7 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+2
+16
+http.rs
+main.rs
