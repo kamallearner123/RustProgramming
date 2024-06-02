@@ -18,8 +18,9 @@ Channels to follow:
 https://www.youtube.com/c/RustVideos
 
 Modules to cover:
-1) eBPF for observability
+1) Block chain
 2) Using Rust in cloud platform
+3) Important topics which encourages Embeded Engineers to shift from C/C++ to Rust programming
 
 Interesting news:
 
