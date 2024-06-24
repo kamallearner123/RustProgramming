@@ -64,3 +64,7 @@ Apply Rust to Real Projects:
 
 Consider using Rust for real-world projects. This could be a personal project or part of your professional work.
 Remember that learning a new programming language takes time and practice. The Rust community is supportive, and there are plenty of resources available. As someone with extensive experience, you'll likely find Rust's emphasis on safety, performance, and concurrency to be both challenging and rewarding. Good luck on your Rust journey!
+
+## Linking C code and calling in Rust program
+
+https://www.youtube.com/watch?v=1H9FHhRntAk
