@@ -1,1 +1,0 @@
-/home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/RustDocChapters/Projects/synchro_demo/synch/target/debug/synch: /home/aiengineer/Documents/1.Github/RustProgramming/RustProgramming/RustDocChapters/Projects/synchro_demo/synch/src/main.rs
