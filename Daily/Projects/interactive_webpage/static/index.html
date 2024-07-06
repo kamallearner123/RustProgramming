@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        select, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Choose an Option</h1>
+        <form id="main-form" action="/submit" method="post">
+            <div id="choices-container"></div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response"></div>
+    </div>
+    <script>
+        async function fetchOptions() {
+            const response = await fetch('/options');
+            return response.json();
+        }
+
+        function createSelectElement(name, options) {
+            const select = document.createElement('select');
+            select.name = name;
+
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.text = option.label;
+                select.appendChild(optionElement);
+            });
+
+            return select;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const choicesContainer = document.getElementById('choices-container');
+            const options = await fetchOptions();
+            const mainSelect = createSelectElement('choice', options.choices);
+
+            choicesContainer.appendChild(mainSelect);
+
+            mainSelect.addEventListener('change', function () {
+                // Remove any existing extra choice select elements
+                const existingExtraSelect = document.querySelector('select[name="extra_choice"]');
+                if (existingExtraSelect) {
+                    choicesContainer.removeChild(existingExtraSelect);
+                }
+
+                // Find the selected option
+                const selectedOption = options.choices.find(option => option.value === this.value);
+                if (selectedOption && selectedOption.extra_choices) {
+                    const extraSelect = createSelectElement('extra_choice', selectedOption.extra_choices);
+                    choicesContainer.appendChild(extraSelect);
+                }
+            });
+
+            document.getElementById('main-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const plainFormData = Object.fromEntries(formData.entries());
+                console.log('Form data being sent:', plainFormData);
+
+                fetch('/submit', {
+                    method: 'POST',
+                    body: new URLSearchParams(plainFormData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('response').innerText = data;
+                })
+                .catch(error => {
+                    console.error('Error during form submission:', error);
+                    document.getElementById('response').innerText = 'An error occurred. Please try again.';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

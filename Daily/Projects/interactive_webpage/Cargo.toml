@@ -1,0 +1,11 @@
+[package]
+name = "interactive_webpage"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.0"
+env_logger = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+actix-files = "0.6"
