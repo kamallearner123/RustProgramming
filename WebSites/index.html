@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Courses</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="scripts.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our Training Courses</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#courses">Courses</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#query">Query</a></li>
+            <li><button onclick="openCalculator()">Calculator</button></li>
+        </ul>
+    </nav>
+    <section id="courses">
+        <h2>Course Details</h2>
+        <p>Details about the courses go here...</p>
+    </section>
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: kamalbec2004@gmail.com</p>
+        <p>Phone: +1234567890</p>
+    </section>
+    <section id="query">
+        <h2>Submit a Query</h2>
+        <form id="queryForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <div id="calculatorPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeCalculator()">&times;</span>
+            <h2>Calculator</h2>
+            <input type="text" id="calcInput" readonly>
+            <div class="calc-buttons">
+                <button onclick="appendCalc('1')">1</button>
+                <button onclick="appendCalc('2')">2</button>
+                <button onclick="appendCalc('3')">3</button>
+                <button onclick="appendCalc('+')">+</button>
+                <button onclick="appendCalc('4')">4</button>
+                <button onclick="appendCalc('5')">5</button>
+                <button onclick="appendCalc('6')">6</button>
+                <button onclick="appendCalc('-')">-</button>
+                <button onclick="appendCalc('7')">7</button>
+                <button onclick="appendCalc('8')">8</button>
+                <button onclick="appendCalc('9')">9</button>
+                <button onclick="appendCalc('*')">*</button>
+                <button onclick="appendCalc('0')">0</button>
+                <button onclick="calculate()">=</button>
+                <button onclick="clearCalc()">C</button>
+                <button onclick="appendCalc('/')">/</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
