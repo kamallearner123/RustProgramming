@@ -18,7 +18,7 @@ Channels to follow:
 https://www.youtube.com/c/RustVideos
 
 Modules to cover:
-1) Block chain
+1) Block chain (solana)
 2) Using Rust in cloud platform
 3) Important topics which encourages Embeded Engineers to shift from C/C++ to Rust programming
 
