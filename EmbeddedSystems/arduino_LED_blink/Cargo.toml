@@ -1,0 +1,6 @@
+[package]
+name = "arduino_LED_blink"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]

@@ -1,0 +1,1 @@
+/Users/kamalmukiri/Documents/1.Git/RustProgramming/Presentations/CompiulationProcess/sample/target/debug/sample: /Users/kamalmukiri/Documents/1.Git/RustProgramming/Presentations/CompiulationProcess/sample/src/main.rs
