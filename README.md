@@ -68,3 +68,7 @@ Remember that learning a new programming language takes time and practice. The R
 ## Linking C code and calling in Rust program
 
 https://www.youtube.com/watch?v=1H9FHhRntAk
+
+
+## Important links should have a look
+https://www.youtube.com/watch?v=Dz6vcWnBODI
