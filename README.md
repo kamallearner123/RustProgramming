@@ -71,4 +71,18 @@ https://www.youtube.com/watch?v=1H9FHhRntAk
 
 
 ## Important links should have a look
+
+
+## Important project for beginners:
+To-Do App
+Password Manager
+Conway’s Game
+Web Scraper
+Crate for Utilities
+Web Server
+URL Shortener
+Chat Application
+2D Game
+Blockchain
+Text Editor
 https://www.youtube.com/watch?v=Dz6vcWnBODI
