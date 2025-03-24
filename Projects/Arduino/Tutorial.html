@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Arduino UNO using Rust</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2e;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff9800;
+            text-align: center;
+        }
+        h2 {
+            color: #03a9f4;
+        }
+        code {
+            background-color: #2d2d2d;
+            color: #00ff00;
+            padding: 5px;
+            border-radius: 5px;
+            display: block;
+            white-space: pre-wrap;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Programming Arduino UNO using Rust</h1>
+        
+        <h2>1. Install Cargo Generate</h2>
+        <code>cargo install cargo-generate --locked</code>
+        <code>cargo generate --version</code>
+        
+        <h2>2. Create a New Arduino Uno Project</h2>
+        <code>cargo generate --git https://github.com/Rahix/avr-hal-template.git</code>
+        <p>Enter the project name when prompted.</p>
+        
+        <h2>3. Build the Project</h2>
+        <code>cargo build</code>
+        
+        <h2>4. Find the .elf File</h2>
+        <p>Locate the built file in:</p>
+        <code>target/avr-atmega328p/release/</code>
+        
+        <h2>5. Convert to HEX Format</h2>
+        <code>avr-objcopy -O ihex target/avr-atmega328p/release/blink-led.elf blink.hex</code>
+        
+        <h2>6. Upload to Arduino Uno</h2>
+        <code>avrdude -c arduino -p atmega328p -P /dev/ttyACM0 -b 115200 -U flash:w:blink.hex:i</code>
+    </div>
+</body>
+</html>
