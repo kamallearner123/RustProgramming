@@ -1,0 +1,45 @@
+{
+	"rust-analyzer.linkedProjects": [
+		{
+			"sysroot": "",
+			"crates": [
+				{
+					"root_module": "modules/isdr/src/autosar_idsm_intf.rs",
+					"display_name": "modules_isdr_src_autosar_idsm_intf",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "pointer.rs",
+					"display_name": "pointer",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "strucuts/pixel.rs",
+					"display_name": "strucuts_pixel",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "strucuts/pixel_mod.rs",
+					"display_name": "strucuts_pixel_mod",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "strucuts/globalVariable.rs",
+					"display_name": "strucuts_globalvariable",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "strucuts/globalData/src/main.rs",
+					"display_name": "strucuts_globaldata_src_main",
+					"edition": "2021",
+					"deps": []
+				}
+			]
+		}
+	]
+}

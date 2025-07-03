@@ -1,0 +1,15 @@
+{
+	"rust-analyzer.linkedProjects": [
+		{
+			"sysroot": "",
+			"crates": [
+				{
+					"root_module": "docExample/src/myMode.rs",
+					"display_name": "docexample_src_mymode",
+					"edition": "2021",
+					"deps": []
+				}
+			]
+		}
+	]
+}

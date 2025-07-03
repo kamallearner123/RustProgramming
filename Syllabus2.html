@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Programming - 20 Days Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rust Programming - 20 Days Plan</h1>
+    <p>Below is a detailed table of Rust programming topics and assignments for 20 days. Each day includes a topic, a detailed description, and an assignment to reinforce learning.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Topic</th>
+                <th>Description</th>
+                <th>Assignment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Days 1-10 (Basic to Intermediate Topics) -->
+            <tr>
+                <td>Day 1</td>
+                <td>Introduction to Rust</td>
+                <td>
+                    <ul>
+                        <li>What is Rust? Overview of its features (memory safety, concurrency, performance).</li>
+                        <li>Installing Rust using <code>rustup</code>.</li>
+                        <li>Setting up the development environment (VS Code with Rust extensions).</li>
+                        <li>Writing and running a simple "Hello, World!" program.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Install Rust and set up your development environment.</li>
+                        <li>Write a "Hello, World!" program and run it using <code>cargo run</code>.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 2</td>
+                <td>Variables and Data Types</td>
+                <td>
+                    <ul>
+                        <li>Understanding variables, mutability, and shadowing.</li>
+                        <li>Primitive data types: integers, floats, booleans, characters.</li>
+                        <li>Compound data types: tuples and arrays.</li>
+                        <li>Type annotations and type inference.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that declares and prints variables of different data types.</li>
+                        <li>Create a tuple and an array, and access their elements.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 3</td>
+                <td>Control Flow</td>
+                <td>
+                    <ul>
+                        <li>Conditional statements: <code>if</code>, <code>else if</code>, <code>else</code>.</li>
+                        <li>Looping constructs: <code>loop</code>, <code>while</code>, <code>for</code>.</li>
+                        <li>Pattern matching with <code>match</code> expressions.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that uses <code>if-else</code> to determine if a number is even or odd.</li>
+                        <li>Use a <code>for</code> loop to print numbers from 1 to 10.</li>
+                        <li>Create a <code>match</code> expression to handle different cases for a variable.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 4</td>
+                <td>Functions</td>
+                <td>
+                    <ul>
+                        <li>Defining and calling functions.</li>
+                        <li>Function parameters and return values.</li>
+                        <li>Understanding scope and lifetime.</li>
+                        <li>Closures and their differences from functions.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a function that takes two numbers as input and returns their sum.</li>
+                        <li>Create a closure that captures a variable from its environment.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 5</td>
+                <td>Ownership and Borrowing</td>
+                <td>
+                    <ul>
+                        <li>Understanding Rust's ownership model.</li>
+                        <li>Rules of ownership: move, copy, and borrow.</li>
+                        <li>References and borrowing: mutable and immutable references.</li>
+                        <li>Lifetimes and their role in memory safety.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that demonstrates ownership transfer.</li>
+                        <li>Create a function that borrows a variable and modifies it using a mutable reference.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 6</td>
+                <td>Structs and Enums</td>
+                <td>
+                    <ul>
+                        <li>Defining and using structs to group related data.</li>
+                        <li>Tuple structs and unit structs.</li>
+                        <li>Defining and using enums with variants.</li>
+                        <li>Pattern matching with enums.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Create a struct to represent a rectangle and calculate its area.</li>
+                        <li>Define an enum to represent different types of shapes and use pattern matching to handle them.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 7</td>
+                <td>Error Handling</td>
+                <td>
+                    <ul>
+                        <li>Understanding the <code>Result</code> and <code>Option</code> types.</li>
+                        <li>Handling errors using <code>match</code> and <code>unwrap</code>.</li>
+                        <li>Propagating errors with the <code>?</code> operator.</li>
+                        <li>Creating custom error types.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a function that returns a <code>Result</code> type and handle the error using <code>match</code>.</li>
+                        <li>Create a custom error type and use it in a function.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 8</td>
+                <td>Collections</td>
+                <td>
+                    <ul>
+                        <li>Vectors: dynamic arrays in Rust.</li>
+                        <li>Strings: <code>String</code> and <code>&str</code>.</li>
+                        <li>Hash maps: storing key-value pairs.</li>
+                        <li>Iterating over collections.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Create a vector of integers and perform operations like push, pop, and iteration.</li>
+                        <li>Write a program that uses a hash map to count the frequency of words in a string.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 9</td>
+                <td>Modules and Packages</td>
+                <td>
+                    <ul>
+                        <li>Organizing code using modules.</li>
+                        <li>Creating and using crates.</li>
+                        <li>Understanding the module hierarchy.</li>
+                        <li>Using external crates from <code>crates.io</code>.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Create a multi-module project and use items from different modules.</li>
+                        <li>Add an external crate to your project and use its functionality.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 10</td>
+                <td>Concurrency</td>
+                <td>
+                    <ul>
+                        <li>Understanding threads and concurrency in Rust.</li>
+                        <li>Using the <code>std::thread</code> module.</li>
+                        <li>Message passing with channels.</li>
+                        <li>Shared-state concurrency with <code>Mutex</code> and <code>Arc</code>.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that spawns multiple threads and prints messages from each thread.</li>
+                        <li>Create a program that uses channels to communicate between threads.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- Days 11-20 (Advanced Topics) -->
+            <tr>
+                <td>Day 11</td>
+                <td>Traits and Generics</td>
+                <td>
+                    <ul>
+                        <li>Defining and implementing traits.</li>
+                        <li>Using traits for polymorphism.</li>
+                        <li>Generics: writing reusable code.</li>
+                        <li>Trait bounds and where clauses.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Define a trait and implement it for multiple types.</li>
+                        <li>Write a generic function that works with any type implementing a specific trait.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 12</td>
+                <td>Advanced Ownership</td>
+                <td>
+                    <ul>
+                        <li>Understanding smart pointers: <code>Box</code>, <code>Rc</code>, and <code>Arc</code>.</li>
+                        <li>Interior mutability with <code>RefCell</code>.</li>
+                        <li>Working with lifetimes in complex scenarios.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that uses <code>Box</code> to store data on the heap.</li>
+                        <li>Create a program that demonstrates shared ownership using <code>Rc</code>.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 13</td>
+                <td>File I/O</td>
+                <td>
+                    <ul>
+                        <li>Reading and writing files in Rust.</li>
+                        <li>Working with directories and paths.</li>
+                        <li>Error handling in file operations.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that reads a file and prints its contents.</li>
+                        <li>Create a program that writes data to a new file.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 14</td>
+                <td>Testing</td>
+                <td>
+                    <ul>
+                        <li>Writing unit tests and integration tests.</li>
+                        <li>Using the <code>#[test]</code> attribute.</li>
+                        <li>Test-driven development (TDD) in Rust.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write unit tests for a function that calculates the factorial of a number.</li>
+                        <li>Create an integration test for a multi-module project.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 15</td>
+                <td>Macros</td>
+                <td>
+                    <ul>
+                        <li>Understanding declarative and procedural macros.</li>
+                        <li>Writing custom macros using <code>macro_rules!</code>.</li>
+                        <li>Using macros for code generation.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a macro that generates a function to print a message.</li>
+                        <li>Create a macro that simplifies repetitive code patterns.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 16</td>
+                <td>Async Programming</td>
+                <td>
+                    <ul>
+                        <li>Understanding asynchronous programming in Rust.</li>
+                        <li>Using <code>async</code> and <code>await</code>.</li>
+                        <li>Working with the <code>tokio</code> runtime.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write an asynchronous function that fetches data from a URL.</li>
+                        <li>Create a program that runs multiple async tasks concurrently.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 17</td>
+                <td>Unsafe Rust</td>
+                <td>
+                    <ul>
+                        <li>Understanding unsafe code and its use cases.</li>
+                        <li>Dereferencing raw pointers.</li>
+                        <li>Calling unsafe functions and implementing unsafe traits.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a program that uses raw pointers to manipulate memory.</li>
+                        <li>Create an unsafe function and call it from safe code.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 18</td>
+                <td>FFI (Foreign Function Interface)</td>
+                <td>
+                    <ul>
+                        <li>Calling C functions from Rust.</li>
+                        <li>Exposing Rust functions to C.</li>
+                        <li>Using the <code>libc</code> crate.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Write a Rust program that calls a C function.</li>
+                        <li>Create a Rust library that can be used from C.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 19</td>
+                <td>Web Development with Rust</td>
+                <td>
+                    <ul>
+                        <li>Introduction to web frameworks like <code>Rocket</code> and <code>Actix</code>.</li>
+                        <li>Building a simple web server.</li>
+                        <li>Handling HTTP requests and responses.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Create a simple web server using <code>Rocket</code> or <code>Actix</code>.</li>
+                        <li>Write a route that returns a JSON response.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Day 20</td>
+                <td>Building a Project</td>
+                <td>
+                    <ul>
+                        <li>Planning and structuring a Rust project.</li>
+                        <li>Using external crates and dependencies.</li>
+                        <li>Building and publishing a crate to <code>crates.io</code>.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Build a small project (e.g., a CLI tool or a library) using everything you've learned.</li>
+                        <li>Publish your project to <code>crates.io</code> (optional).</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
