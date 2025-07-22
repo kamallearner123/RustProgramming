@@ -1,0 +1,39 @@
+{
+	"rust-analyzer.linkedProjects": [
+		{
+			"sysroot": "",
+			"crates": [
+				{
+					"root_module": "tutorial/target/debug/build/clang-sys-04d8b60caffb14ed/out/common.rs",
+					"display_name": "tutorial_target_debug_build_clang-sys-04d8b60caffb14ed_out_common",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "tutorial/target/debug/build/clang-sys-04d8b60caffb14ed/out/dynamic.rs",
+					"display_name": "tutorial_target_debug_build_clang-sys-04d8b60caffb14ed_out_dynamic",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "tutorial/target/debug/build/clang-sys-04d8b60caffb14ed/out/macros.rs",
+					"display_name": "tutorial_target_debug_build_clang-sys-04d8b60caffb14ed_out_macros",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "tutorial/target/debug/build/coreaudio-sys-41c71356b5713776/out/coreaudio.rs",
+					"display_name": "tutorial_target_debug_build_coreaudio-sys-41c71356b5713776_out_coreaudio",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "tutorial/target/debug/build/coreaudio-sys-cb6e471fc849670c/out/coreaudio.rs",
+					"display_name": "tutorial_target_debug_build_coreaudio-sys-cb6e471fc849670c_out_coreaudio",
+					"edition": "2021",
+					"deps": []
+				}
+			]
+		}
+	]
+}

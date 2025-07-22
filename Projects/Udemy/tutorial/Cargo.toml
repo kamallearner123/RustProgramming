@@ -1,0 +1,21 @@
+[package]
+name = "tutorial"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rusty_engine = "4.0" # This implicitly pulls in Bevy 0.6.0 (or compatible)
+                     # because rusty_engine 4.0 depends on bevy_0_6
+
+# YOU MUST ADD OR ENSURE THIS LINE IS PRESENT AND CORRECT:
+syn = { version = "1.0.109", features = ["full"] }
+
+# The profile section is separate and doesn't affect the 'syn' error
+# Corrected syntax for profile (dot, not hyphen)
+[profile.dev]
+opt-level = 3         # Recommended default for development
+debug = false         # Recommended default for development
+debug-assertions = false # Recommended default for development
+overflow-checks = false  #12470 Recommended default for development
+incremental = false  # Recommended default for development
+codegen-units = 16

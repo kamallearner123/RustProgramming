@@ -1,0 +1,8 @@
+[package]
+name = "demo1"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+recuerdame = {path =  "/Users/kamalmukiri/Documents/1.GitHub/RustProgramming/Presentation01/crates/recuerdame-main/"}
+

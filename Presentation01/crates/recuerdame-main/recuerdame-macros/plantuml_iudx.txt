@@ -1,0 +1,77 @@
+@startuml
+actor User
+participant "Web Interface (Django)" as Web
+participant "Django Backend" as Backend
+participant "AWS RDS" as RDS
+participant "AWS S3" as S3
+participant "Ansible" as Ansible
+participant "Rancher" as Rancher
+participant "AWS EKS" as EKS
+participant "Prometheus/Grafana" as Monitoring
+participant "ML Model" as ML
+
+== Component Configuration ==
+User -> Web: Access configuration form
+Web -> Backend: Submit configuration data
+Backend -> RDS: Save configuration
+RDS --> Backend: Confirmation
+Backend -> S3: Save as YAML (optional)
+S3 --> Backend: Confirmation
+Backend --> Web: Configuration saved
+Web --> User: Display confirmation
+
+== Deployment ==
+User -> Web: Initiate deployment
+Web -> Backend: Trigger deployment
+Backend -> Ansible: Run playbooks with config
+Ansible -> Rancher: Apply Kubernetes manifests
+Rancher -> EKS: Deploy components (DB, AAA, etc.)
+EKS --> Rancher: Deployment status
+Rancher --> Ansible: Confirmation
+Ansible --> Backend: Deployment complete
+Backend --> Web: Deployment status
+Web --> User: Display deployment success
+
+== Monitoring ==
+EKS -> Monitoring: Send metrics (nodes, load, etc.)
+Monitoring -> Backend: Push metrics via API
+Backend -> ML: Feed metrics for overload prediction
+ML --> Backend: Return prediction results
+Backend -> RDS: Save monitoring data
+Backend --> Web: Send metrics and predictions
+Web --> User: Display stats and alerts
+
+== Security Policy Configuration ==
+User -> Web: Configure security policies
+Web -> Backend: Submit policy data
+Backend -> RDS: Save policies
+Backend -> Ansible: Apply policies via playbooks
+Ansible -> Rancher: Update Kubernetes policies
+Rancher -> EKS: Enforce policies (Network Policies, RBAC)
+EKS --> Rancher: Confirmation
+Rancher --> Ansible: Confirmation
+Ansible --> Backend: Policy applied
+Backend --> Web: Policy update success
+Web --> User: Display confirmation
+
+== Dataset Management ==
+User -> Web: Upload dataset
+Web -> Backend: Send dataset file
+Backend -> S3: Store dataset
+S3 --> Backend: Confirmation
+Backend -> RDS: Save metadata
+RDS --> Backend: Confirmation
+Backend --> Web: Upload success
+Web --> User: Display confirmation
+
+User -> Web: Update/Delete dataset
+Web -> Backend: Send update/delete request
+Backend -> S3: Update/Delete dataset
+S3 --> Backend: Confirmation
+Backend -> RDS: Update/Delete metadata
+RDS --> Backend: Confirmation
+Backend --> Web: Operation success
+Web --> User: Display confirmation
+
+@enduml
+            
