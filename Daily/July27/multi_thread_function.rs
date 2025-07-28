@@ -1,5 +1,8 @@
 use std::thread;
 
+fn function(data:i32) {
+    println!("data = {}", data);
+}
 fn main() {
     let mut handles = vec![];
 
@@ -8,10 +11,7 @@ fn main() {
 
     for &item in &data[..2] {
         handles.push(thread::spawn(
-            move || {
-                println!("item in thread = {}", item);
-            }
-        ));
+               || {function(10)}));
         //println!("item = {}", item);
     }
     //item is mutable reference &muti32
