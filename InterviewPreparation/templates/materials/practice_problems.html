@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Problems - Rust Interview Preparation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-code"></i> Practice Problems
+            </h2>
+            <div>
+                <a href="{% url 'code_runner:editor' %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Open Code Editor
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="topic" class="form-label">Topic</label>
+                        <select class="form-select" id="topic" name="topic">
+                            <option value="">All Topics</option>
+                            {% for topic in topics %}
+                            <option value="{{ topic.id }}" {% if current_topic == topic.id|stringformat:"s" %}selected{% endif %}>
+                                Day {{ topic.day_number }}: {{ topic.title }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="difficulty" class="form-label">Difficulty</label>
+                        <select class="form-select" id="difficulty" name="difficulty">
+                            <option value="">All Difficulties</option>
+                            <option value="easy" {% if current_difficulty == "easy" %}selected{% endif %}>Easy</option>
+                            <option value="medium" {% if current_difficulty == "medium" %}selected{% endif %}>Medium</option>
+                            <option value="hard" {% if current_difficulty == "hard" %}selected{% endif %}>Hard</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-filter"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Problems Grid -->
+<div class="row">
+    {% for problem in problems %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card problem-card h-100">
+            <div class="card-header d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="mb-1">{{ problem.title }}</h6>
+                    <small class="text-muted">{{ problem.topic.title }}</small>
+                </div>
+                <span class="badge bg-{% if problem.difficulty == 'easy' %}success{% elif problem.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
+                    {{ problem.get_difficulty_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ problem.description|truncatewords:25 }}</p>
+                
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-code"></i> {{ problem.language|upper }} |
+                        <i class="fas fa-clock"></i> {{ problem.time_limit }} min
+                        {% if problem.test_cases %}
+                        | <i class="fas fa-vial"></i> {{ problem.test_cases|length }} tests
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-grid">
+                    <a href="{% url 'materials:problem_detail' problem.id %}" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Solve Problem
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center" role="alert">
+            <i class="fas fa-info-circle fa-2x mb-3"></i>
+            <h4>No problems found</h4>
+            <p class="mb-0">Try adjusting your filters or check back later for new problems.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination would go here -->
+{% if problems %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="text-center">
+            <p class="text-muted">Showing {{ problems|length }} problem{{ problems|length|pluralize }}</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.problem-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid #28a745;
+}
+
+.problem-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+</style>
+{% endblock %}

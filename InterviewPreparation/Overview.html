@@ -1,0 +1,268 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Interview Training Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        .day-section {
+            margin-bottom: 30px;
+        }
+        .topic {
+            margin-bottom: 20px;
+        }
+        .topic h3 {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .question-list {
+            margin-left: 20px;
+        }
+        .question-list li {
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rust Interview Training Program</h1>
+        <p>This 4-day training program is designed to prepare candidates for interviews focusing on System Design, Backend Concepts, Rust Internals, and Rust Programming. Each day covers one topic with subtopics and at least 20 interview questions per section.</p>
+
+        <div class="day-section">
+            <h2>Day 1: System Design</h2>
+            <div class="topic">
+                <h3>Subtopics</h3>
+                <ul>
+                    <li>Scalability and Load Balancing</li>
+                    <li>Distributed Systems</li>
+                    <li>Database Design and Caching</li>
+                    <li>Microservices Architecture</li>
+                    <li>System Reliability and Fault Tolerance</li>
+                </ul>
+            </div>
+            <div class="topic">
+                <h3>Interview Questions</h3>
+                <ol class="question-list">
+                    <li>How would you design a scalable web service using Rust?</li>
+                    <li>Explain the role of load balancers in system design.</li>
+                    <li>How can Rust's async features improve system scalability?</li>
+                    <li>What are the key considerations for designing a distributed system?</li>
+                    <li>How would you handle data consistency in a distributed system using Rust?</li>
+                    <li>Describe the CAP theorem and its implications for system design.</li>
+                    <li>How can Rust's ownership model help in designing fault-tolerant systems?</li>
+                    <li>What is sharding, and how would you implement it in a Rust-based system?</li>
+                    <li>Explain how you would use caching to improve system performance.</li>
+                    <li>How does Rust's memory safety benefit database interactions?</li>
+                    <li>Design a URL shortening service using Rust. What components would you include?</li>
+                    <li>How would you handle rate limiting in a Rust-based API?</li>
+                    <li>What are the trade-offs between monolithic and microservices architectures?</li>
+                    <li>How can Rust's concurrency model support microservices?</li>
+                    <li>Explain how you would design a system to handle high-throughput logging.</li>
+                    <li>What strategies would you use to ensure high availability in a Rust system?</li>
+                    <li>How would you implement a message queue in a Rust-based system?</li>
+                    <li>Discuss the role of API gateways in system design.</li>
+                    <li>How would you design a system to handle real-time data processing in Rust?</li>
+                    <li>What are the challenges of integrating Rust with existing legacy systems?</li>
+                    <li>How would youHannah you design a content delivery network (CDN) using Rust?</li>
+                    <li>Explain the use of circuit breakers in system design with Rust.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <h2>Day 2: Backend Concepts</h2>
+            <div class="topic">
+                <h3>Subtopics</h3>
+                <ul>
+                    <li>REST and GraphQL APIs</li>
+                    <li>Authentication and Authorization</li>
+                    <li>Database Interactions</li>
+                    <li>Middleware and Request Handling</li>
+                    <li>Performance Optimization</li>
+                </ul>
+            </div>
+            <div class="topic">
+                <h3>Interview Questions</h3>
+                <ol class="question-list">
+                    <li>What is the difference between REST and GraphQL APIs in Rust?</li>
+                    <li>How would you implement JWT authentication in a Rust backend?</li>
+                    <li>Explain how Rust's async/await works in backend development.</li>
+                    <li>How do you handle database connections in a Rust backend?</li>
+                    <li>What are the benefits of using Actix Web for backend development?</li>
+                    <li>How would you implement OAuth2 in a Rust-based application?</li>
+                    <li>Describe how to handle CORS in a Rust backend.</li>
+                    <li>How can Rust's type system improve backend API reliability?</li>
+                    <li>What is connection pooling, and how is it implemented in Rust?</li>
+                    <li>How would you optimize database queries in a Rust backend?</li>
+                    <li>Explain the role of middleware in a Rust web framework.</li>
+                    <li>How do you handle errors in a Rust backend application?</li>
+                    <li>What are the advantages of using Diesel for database operations in Rust?</li>
+                    <li>How would you implement rate limiting in a Rust backend?</li>
+                    <li>Describe how to secure API endpoints in a Rust application.</li>
+                    <li>How do you handle file uploads in a Rust backend?</li>
+                    <li>What is the role of serde in Rust backend development?</li>
+                    <li>How would you implement WebSockets in a Rust backend?</li>
+                    <li>Explain how to use environment variables in a Rust backend.</li>
+                    <li>How do you test a Rust backend application?</li>
+                    <li>What are the challenges of handling large payloads in Rust APIs?</li>
+                    <li>How would you implement logging in a Rust backend?</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <h2>Day 3: Rust Internals</h2>
+            <div class="topic">
+                <h3>Subtopics</h3>
+                <ul>
+                    <li>Ownership and Borrowing</li>
+                    <li>Lifetimes</li>
+                    <li>Memory Management</li>
+                    <li>Concurrency Model</li>
+                    <li>Unsafe Rust</li>
+                </ul>
+            </div>
+            <div class="topic">
+                <h3>Interview Questions</h3>
+                <ol class="question-list">
+                    <li>What is the ownership model in Rust, and why is it important?</li>
+                    <li>Explain the concept of borrowing in Rust.</li>
+                    <li>How do lifetimes work in Rust?</li>
+                    <li>What are the differences between &str and String in Rust?</li>
+                    <li>How does Rust ensure memory safety without a garbage collector?</li>
+                    <li>What is the purpose of the unsafe keyword in Rust?</li>
+                    <li>Explain the role of the borrow checker in Rust.</li>
+                    <li>How does Rust handle stack vs. heap memory allocation?</li>
+                    <li>What is a reference-counted pointer (Rc) in Rust?</li>
+                    <li>Explain the Arc type and its use in concurrent programming.</li>
+                    <li>How does Rust's mutex differ from other languages?</li>
+                    <li>What are the benefits of Rust's zero-cost abstractions?</li>
+                    <li>How does Rust handle memory leaks?</li>
+                    <li>Explain the concept of a lifetime annotation in Rust.</li>
+                    <li>What is the difference between Box<T> and Rc<T>?</li>
+                    <li>How does Rust's concurrency model prevent data races?</li>
+                    <li>What is the role of the Send and Sync traits in Rust?</li>
+                    <li>How does Rust optimize memory usage in high-performance systems?</li>
+                    <li>Explain the use of Cell and RefCell in Rust.</li>
+                    <li>What are the risks of using unsafe Rust code?</li>
+                    <li>How does Rust handle raw pointers?</li>
+                    <li>Explain the concept of interior mutability in Rust.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <h2>Day 4: Rust Programming</h2>
+            <div class="topic">
+                <h3>Subtopics</h3>
+                <ul>
+                    <li>Basic Syntax and Semantics</li>
+                    <li>Error Handling</li>
+                    <li>Traits and Generics</li>
+                    <li>Modules and Crates</li>
+                    <li>Testing in Rust</li>
+                </ul>
+            </div>
+            <div class="topic">
+                <h3>Interview Questions</h3>
+                <ol class="question-list">
+                    <li>What is the difference between let and let mut in Rust?</li>
+                    <li>How does Rust's match expression work?</li>
+                    <li>Explain the Result and Option types in Rust.</li>
+                    <li>How do you create a custom error type in Rust?</li>
+                    <li>What are traits in Rust, and how are they used?</li>
+                    <li>Explain generics in Rust with an example.</li>
+                    <li>How do you organize code using modules in Rust?</li>
+                    <li>What is a crate in Rust, and how is it different from a module?</li>
+                    <li>How do you write unit tests in Rust?</li>
+                    <li>Explain the use of the #[derive] attribute in Rust.</li>
+                    <li>How do you handle string manipulation in Rust?</li>
+                    <li>What is the purpose of the Cargo tool in Rust?</li>
+                    <li>How do you implement a trait for a custom type?</li>
+                    <li>Explain the concept of closures in Rust.</li>
+                    <li>How do you use iterators in Rust?</li>
+                    <li>What is the difference between Vec<T> and &[T]?</li>
+                    <li>How do you handle file I/O in Rust?</li>
+                    <li>Explain the use of macros in Rust.</li>
+                    <li>How do you implement a simple HTTP client in Rust?</li>
+                    <li>What are the best practices for error handling in Rust?</li>
+                    <li>How do you use the tokio crate for async programming?</li>
+                    <li>Explain the role of the cfg attribute in Rust.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Prepared for Rust Interview Training - August 2025</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,767 @@
+{% extends 'base.html' %}
+
+{% block title %}Code Editor - Rust Interview Preparation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-code"></i> Interactive Code Editor
+                </h3>
+                <p class="mb-0 text-muted">Practice coding in multiple languages with our online editor</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Editor Panel -->
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit"></i> Code Editor
+                    </h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="languageSelect" class="form-label mb-0 me-2">Language:</label>
+                    <select id="languageSelect" class="form-select form-select-sm" style="width: auto;">
+                        <option value="rust" selected>Rust</option>
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="go">Go</option>
+                        <option value="cpp">C++</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <textarea id="codeEditor" class="form-control"></textarea>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button id="runCode" class="btn btn-success">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                        <button id="clearCode" class="btn btn-outline-secondary">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                    <div>
+                        <button id="loadTemplate" class="btn btn-outline-primary">
+                            <i class="fas fa-file-code"></i> Load Template
+                        </button>
+                        <button id="fullscreen" class="btn btn-outline-info">
+                            <i class="fas fa-expand"></i> Fullscreen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Control Panel -->
+    <div class="col-md-4">
+        <!-- Input Section -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-keyboard"></i> Input
+                </h6>
+            </div>
+            <div class="card-body">
+                <textarea id="inputData" class="form-control" rows="6" 
+                          placeholder="Enter input data for your program here..."></textarea>
+                <small class="text-muted">Provide input that your program will read from stdin</small>
+            </div>
+        </div>
+        
+        <!-- Quick Templates -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-file-code"></i> Quick Templates
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm template-btn" data-template="hello-world">
+                        Hello World
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm template-btn" data-template="fibonacci">
+                        Fibonacci
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm template-btn" data-template="sorting">
+                        Array Sorting
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm template-btn" data-template="binary-search">
+                        Binary Search
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Language Info -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle"></i> Language Info
+                </h6>
+            </div>
+            <div class="card-body" id="languageInfo">
+                <div id="rustInfo">
+                    <h6>Rust</h6>
+                    <ul class="small">
+                        <li>Memory safe systems programming</li>
+                        <li>Zero-cost abstractions</li>
+                        <li>Ownership and borrowing</li>
+                        <li>Pattern matching</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Output Section -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-terminal"></i> Output
+                </h5>
+                <button id="clearOutput" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-broom"></i> Clear Output
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="outputSection" class="d-none">
+                    <div id="executionResults"></div>
+                </div>
+                <div id="defaultOutput" class="text-muted text-center py-4">
+                    <i class="fas fa-play-circle fa-2x mb-2"></i>
+                    <p class="mb-0">Click "Run Code" to execute your program and see the output here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Help Section -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-question-circle"></i> Help & Keyboard Shortcuts
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Keyboard Shortcuts</h6>
+                        <ul class="small">
+                            <li><kbd>Ctrl + Enter</kbd> - Run code</li>
+                            <li><kbd>F11</kbd> - Toggle fullscreen</li>
+                            <li><kbd>Ctrl + Space</kbd> - Auto-complete</li>
+                            <li><kbd>Ctrl + /</kbd> - Toggle comment</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Editor Features</h6>
+                        <ul class="small">
+                            <li>Syntax highlighting for multiple languages</li>
+                            <li>Auto-indentation and bracket matching</li>
+                            <li>Line numbers and code folding</li>
+                            <li>Multiple cursor support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.CodeMirror {
+    height: 500px;
+    font-size: 14px;
+}
+
+.CodeMirror-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    z-index: 9999;
+}
+
+#languageInfo {
+    font-size: 0.9rem;
+}
+
+.template-btn {
+    text-align: left;
+}
+
+.execution-output {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+kbd {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-size: 0.875em;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let codeEditor;
+let currentLanguage = 'rust';
+
+// Advanced templates
+const advancedTemplates = {
+    'hello-world': {
+        'rust': `fn main() {
+    println!("Hello, World!");
+}`,
+        'python': `print("Hello, World!")`,
+        'javascript': `console.log("Hello, World!");`,
+        'go': `package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}`,
+        'cpp': `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}`
+    },
+    'fibonacci': {
+        'rust': `fn fibonacci(n: u32) -> u32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}
+
+fn main() {
+    let n = 10;
+    println!("Fibonacci of {} is {}", n, fibonacci(n));
+}`,
+        'python': `def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+n = 10
+print(f"Fibonacci of {n} is {fibonacci(n)}")`,
+        'javascript': `function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+const n = 10;
+console.log(\`Fibonacci of \${n} is \${fibonacci(n)}\`);`,
+        'go': `package main
+
+import "fmt"
+
+func fibonacci(n int) int {
+    if n <= 1 {
+        return n
+    }
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+
+func main() {
+    n := 10
+    fmt.Printf("Fibonacci of %d is %d\\n", n, fibonacci(n))
+}`,
+        'cpp': `#include <iostream>
+using namespace std;
+
+int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main() {
+    int n = 10;
+    cout << "Fibonacci of " << n << " is " << fibonacci(n) << endl;
+    return 0;
+}`
+    },
+    'sorting': {
+        'rust': `fn bubble_sort(arr: &mut [i32]) {
+    let n = arr.len();
+    for i in 0..n {
+        for j in 0..n - 1 - i {
+            if arr[j] > arr[j + 1] {
+                arr.swap(j, j + 1);
+            }
+        }
+    }
+}
+
+fn main() {
+    let mut numbers = [64, 34, 25, 12, 22, 11, 90];
+    println!("Original array: {:?}", numbers);
+    bubble_sort(&mut numbers);
+    println!("Sorted array: {:?}", numbers);
+}`,
+        'python': `def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+numbers = [64, 34, 25, 12, 22, 11, 90]
+print("Original array:", numbers)
+bubble_sort(numbers)
+print("Sorted array:", numbers)`,
+        'javascript': `function bubbleSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+}
+
+const numbers = [64, 34, 25, 12, 22, 11, 90];
+console.log("Original array:", numbers);
+bubbleSort(numbers);
+console.log("Sorted array:", numbers);`,
+        'go': `package main
+
+import "fmt"
+
+func bubbleSort(arr []int) {
+    n := len(arr)
+    for i := 0; i < n; i++ {
+        for j := 0; j < n-i-1; j++ {
+            if arr[j] > arr[j+1] {
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+            }
+        }
+    }
+}
+
+func main() {
+    numbers := []int{64, 34, 25, 12, 22, 11, 90}
+    fmt.Println("Original array:", numbers)
+    bubbleSort(numbers)
+    fmt.Println("Sorted array:", numbers)
+}`,
+        'cpp': `#include <iostream>
+#include <vector>
+using namespace std;
+
+void bubbleSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+int main() {
+    vector<int> numbers = {64, 34, 25, 12, 22, 11, 90};
+    cout << "Original array: ";
+    for (int num : numbers) cout << num << " ";
+    cout << endl;
+    
+    bubbleSort(numbers);
+    
+    cout << "Sorted array: ";
+    for (int num : numbers) cout << num << " ";
+    cout << endl;
+    
+    return 0;
+}`
+    },
+    'binary-search': {
+        'rust': `fn binary_search(arr: &[i32], target: i32) -> Option<usize> {
+    let mut left = 0;
+    let mut right = arr.len();
+    
+    while left < right {
+        let mid = left + (right - left) / 2;
+        match arr[mid].cmp(&target) {
+            std::cmp::Ordering::Equal => return Some(mid),
+            std::cmp::Ordering::Less => left = mid + 1,
+            std::cmp::Ordering::Greater => right = mid,
+        }
+    }
+    None
+}
+
+fn main() {
+    let arr = [1, 3, 5, 7, 9, 11, 13, 15];
+    let target = 7;
+    
+    match binary_search(&arr, target) {
+        Some(index) => println!("Found {} at index {}", target, index),
+        None => println!("{} not found", target),
+    }
+}`,
+        'python': `def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
+
+arr = [1, 3, 5, 7, 9, 11, 13, 15]
+target = 7
+
+result = binary_search(arr, target)
+if result != -1:
+    print(f"Found {target} at index {result}")
+else:
+    print(f"{target} not found")`,
+        'javascript': `function binarySearch(arr, target) {
+    let left = 0, right = arr.length - 1;
+    
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        if (arr[mid] === target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return -1;
+}
+
+const arr = [1, 3, 5, 7, 9, 11, 13, 15];
+const target = 7;
+
+const result = binarySearch(arr, target);
+if (result !== -1) {
+    console.log(\`Found \${target} at index \${result}\`);
+} else {
+    console.log(\`\${target} not found\`);
+}`,
+        'go': `package main
+
+import "fmt"
+
+func binarySearch(arr []int, target int) int {
+    left, right := 0, len(arr)-1
+    
+    for left <= right {
+        mid := (left + right) / 2
+        if arr[mid] == target {
+            return mid
+        } else if arr[mid] < target {
+            left = mid + 1
+        } else {
+            right = mid - 1
+        }
+    }
+    
+    return -1
+}
+
+func main() {
+    arr := []int{1, 3, 5, 7, 9, 11, 13, 15}
+    target := 7
+    
+    result := binarySearch(arr, target)
+    if result != -1 {
+        fmt.Printf("Found %d at index %d\\n", target, result)
+    } else {
+        fmt.Printf("%d not found\\n", target)
+    }
+}`,
+        'cpp': `#include <iostream>
+#include <vector>
+using namespace std;
+
+int binarySearch(const vector<int>& arr, int target) {
+    int left = 0, right = arr.size() - 1;
+    
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return -1;
+}
+
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 9, 11, 13, 15};
+    int target = 7;
+    
+    int result = binarySearch(arr, target);
+    if (result != -1) {
+        cout << "Found " << target << " at index " << result << endl;
+    } else {
+        cout << target << " not found" << endl;
+    }
+    
+    return 0;
+}`
+    }
+};
+
+// Language information
+const languageInfo = {
+    'rust': {
+        title: 'Rust',
+        features: [
+            'Memory safe systems programming',
+            'Zero-cost abstractions',
+            'Ownership and borrowing',
+            'Pattern matching',
+            'Concurrent programming'
+        ]
+    },
+    'python': {
+        title: 'Python',
+        features: [
+            'Dynamic typing',
+            'Simple and readable syntax',
+            'Rich standard library',
+            'Object-oriented programming',
+            'Great for rapid prototyping'
+        ]
+    },
+    'javascript': {
+        title: 'JavaScript',
+        features: [
+            'Dynamic and interpreted',
+            'First-class functions',
+            'Prototype-based OOP',
+            'Event-driven programming',
+            'Web development standard'
+        ]
+    },
+    'go': {
+        title: 'Go',
+        features: [
+            'Fast compilation',
+            'Built-in concurrency',
+            'Simple syntax',
+            'Garbage collected',
+            'Network programming'
+        ]
+    },
+    'cpp': {
+        title: 'C++',
+        features: [
+            'Systems programming',
+            'Object-oriented programming',
+            'Manual memory management',
+            'High performance',
+            'Template metaprogramming'
+        ]
+    }
+};
+
+$(document).ready(function() {
+    // Initialize CodeMirror
+    initializeCodeEditor();
+    
+    // Event listeners
+    $('#languageSelect').change(function() {
+        currentLanguage = $(this).val();
+        changeEditorLanguage(currentLanguage);
+        updateLanguageInfo(currentLanguage);
+    });
+    
+    $('#runCode').click(runCode);
+    $('#clearCode').click(clearCode);
+    $('#loadTemplate').click(loadTemplate);
+    $('#clearOutput').click(clearOutput);
+    $('#fullscreen').click(toggleFullscreen);
+    
+    $('.template-btn').click(function() {
+        const template = $(this).data('template');
+        loadAdvancedTemplate(template);
+    });
+    
+    // Keyboard shortcuts
+    $(document).keydown(function(e) {
+        if (e.ctrlKey && e.keyCode === 13) { // Ctrl + Enter
+            e.preventDefault();
+            runCode();
+        }
+    });
+    
+    // Initial language info
+    updateLanguageInfo(currentLanguage);
+});
+
+function initializeCodeEditor() {
+    codeEditor = CodeEditorUtils.initializeEditor('codeEditor', currentLanguage);
+    if (codeEditor) {
+        // Set initial template
+        CodeEditorUtils.loadTemplate(codeEditor, currentLanguage);
+    }
+}
+
+function changeEditorLanguage(language) {
+    CodeEditorUtils.changeLanguage(codeEditor, language);
+}
+
+function updateLanguageInfo(language) {
+    const info = languageInfo[language];
+    if (info) {
+        const html = \`
+            <h6>\${info.title}</h6>
+            <ul class="small">
+                \${info.features.map(feature => \`<li>\${feature}</li>\`).join('')}
+            </ul>
+        \`;
+        $('#languageInfo').html(html);
+    }
+}
+
+function runCode() {
+    const code = codeEditor.getValue();
+    const input = $('#inputData').val();
+    
+    if (!code.trim()) {
+        Utils.showNotification('Please enter some code first.', 'warning');
+        return;
+    }
+    
+    Utils.showLoading($('#runCode'), 'Running...');
+    
+    API.executeCode(code, currentLanguage, input)
+        .done(function(response) {
+            displayOutput(response);
+        })
+        .fail(function(xhr) {
+            const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'An error occurred';
+            displayOutput({
+                success: false,
+                error: errorMsg,
+                execution_time: 0
+            });
+        })
+        .always(function() {
+            Utils.hideLoading($('#runCode'));
+        });
+}
+
+function clearCode() {
+    if (confirm('Are you sure you want to clear the code?')) {
+        codeEditor.setValue('');
+        codeEditor.focus();
+    }
+}
+
+function loadTemplate() {
+    CodeEditorUtils.loadTemplate(codeEditor, currentLanguage);
+    Utils.showNotification('Template loaded successfully!', 'success');
+}
+
+function loadAdvancedTemplate(templateName) {
+    const template = advancedTemplates[templateName];
+    if (template && template[currentLanguage]) {
+        codeEditor.setValue(template[currentLanguage]);
+        Utils.showNotification(\`\${templateName.replace('-', ' ')} template loaded!\`, 'success');
+    } else {
+        Utils.showNotification('Template not available for this language.', 'warning');
+    }
+}
+
+function clearOutput() {
+    $('#outputSection').addClass('d-none');
+    $('#defaultOutput').removeClass('d-none');
+    $('#executionResults').empty();
+}
+
+function toggleFullscreen() {
+    const isFullscreen = codeEditor.getOption('fullScreen');
+    codeEditor.setOption('fullScreen', !isFullscreen);
+    
+    if (!isFullscreen) {
+        $('#fullscreen').html('<i class="fas fa-compress"></i> Exit Fullscreen');
+    } else {
+        $('#fullscreen').html('<i class="fas fa-expand"></i> Fullscreen');
+    }
+}
+
+function displayOutput(response) {
+    $('#defaultOutput').addClass('d-none');
+    $('#outputSection').removeClass('d-none');
+    
+    const resultClass = response.success ? 'execution-success' : 'execution-error';
+    const icon = response.success ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+    const statusText = response.success ? 'Success' : 'Error';
+    
+    let content = \`
+        <div class="execution-output \${resultClass}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong><i class="\${icon}"></i> \${statusText}</strong>
+                <small>Execution time: \${Utils.formatTime(response.execution_time || 0)}</small>
+            </div>
+    \`;
+    
+    if (response.output && response.output.trim()) {
+        content += \`<div class="mb-2"><strong>Output:</strong></div><pre class="mb-0">\${response.output}</pre>\`;
+    }
+    
+    if (response.error && response.error.trim()) {
+        content += \`<div class="mb-2 mt-2"><strong>Error:</strong></div><pre class="mb-0">\${response.error}</pre>\`;
+    }
+    
+    content += '</div>';
+    
+    $('#executionResults').html(content);
+    
+    // Show notification
+    if (response.success) {
+        Utils.showNotification('Code executed successfully!', 'success');
+    } else {
+        Utils.showNotification('Code execution failed.', 'danger');
+    }
+}
+</script>
+{% endblock %}

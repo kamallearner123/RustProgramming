@@ -1,0 +1,446 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ problem.title }} - Coding Problem{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'materials:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'materials:topic_detail' problem.topic.id %}">{{ problem.topic.title }}</a></li>
+                <li class="breadcrumb-item active">{{ problem.title }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Problem Description -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-puzzle-piece"></i> {{ problem.title }}
+                </h4>
+                <span class="badge bg-{{ problem.difficulty|default:'secondary' }} fs-6">
+                    {{ problem.get_difficulty_display|default:'Medium' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6><i class="fas fa-info-circle"></i> Problem Description</h6>
+                    <div class="problem-description">
+                        {{ problem.description|linebreaks }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-tag"></i> Details</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Language:</strong> {{ problem.language|upper }}</li>
+                        <li><strong>Time Limit:</strong> {{ problem.time_limit }} minutes</li>
+                        <li><strong>Topic:</strong> {{ problem.topic.title }}</li>
+                        {% if problem.subtopic %}
+                            <li><strong>Subtopic:</strong> {{ problem.subtopic.title }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                {% if problem.test_cases %}
+                <div class="mb-3">
+                    <h6><i class="fas fa-vial"></i> Test Cases</h6>
+                    <div class="test-cases">
+                        {% for test_case in problem.test_cases %}
+                        <div class="card mb-2">
+                            <div class="card-body p-2">
+                                <small>
+                                    <strong>Input:</strong> <code>{{ test_case.input|default:'None' }}</code><br>
+                                    <strong>Expected Output:</strong> <code>{{ test_case.output|default:'None' }}</code>
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Code Editor -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-code"></i> Code Editor
+                </h5>
+                <div class="btn-group" role="group">
+                    <select id="languageSelect" class="form-select form-select-sm">
+                        <option value="rust" selected>Rust</option>
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="go">Go</option>
+                        <option value="cpp">C++</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body p-0" style="height: 400px;">
+                <textarea id="codeEditor" class="form-control h-100">{{ problem.starter_code|default:'// Your code here' }}</textarea>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button id="runCode" class="btn btn-success">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                        <button id="submitCode" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Submit Solution
+                        </button>
+                    </div>
+                    <div>
+                        <button id="resetCode" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Output Section -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-terminal"></i> Output
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="outputSection" class="d-none">
+                    <div id="executionResults"></div>
+                </div>
+                <div id="defaultOutput" class="text-muted text-center py-3">
+                    <i class="fas fa-info-circle"></i> Run your code to see the output here.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Previous Submissions -->
+{% if user_submissions %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i> Your Previous Submissions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Submitted At</th>
+                                <th>Language</th>
+                                <th>Result</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for submission in user_submissions %}
+                            <tr>
+                                <td>{{ submission.submitted_at|date:"M d, Y H:i" }}</td>
+                                <td><span class="badge bg-secondary">{{ submission.language|upper }}</span></td>
+                                <td>
+                                    {% if submission.passed_tests == submission.total_tests %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check"></i> Passed ({{ submission.passed_tests }}/{{ submission.total_tests }})
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-times"></i> Failed ({{ submission.passed_tests }}/{{ submission.total_tests }})
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-sm view-submission" 
+                                            data-code="{{ submission.code }}" 
+                                            data-language="{{ submission.language }}">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.CodeMirror {
+    height: 400px;
+    border: none;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.problem-description {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+.test-cases .card {
+    background-color: #f1f3f4;
+}
+
+#outputSection {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.execution-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.execution-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.execution-output {
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    white-space: pre-wrap;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let codeEditor;
+let currentLanguage = 'rust';
+
+$(document).ready(function() {
+    // Initialize CodeMirror
+    initializeCodeEditor();
+    
+    // Event listeners
+    $('#languageSelect').change(function() {
+        currentLanguage = $(this).val();
+        loadTemplateForLanguage(currentLanguage);
+    });
+    
+    $('#runCode').click(function() {
+        runCode();
+    });
+    
+    $('#submitCode').click(function() {
+        submitCode();
+    });
+    
+    $('#resetCode').click(function() {
+        resetCode();
+    });
+    
+    $('.view-submission').click(function() {
+        const code = $(this).data('code');
+        const language = $(this).data('language');
+        codeEditor.setValue(code);
+        $('#languageSelect').val(language).trigger('change');
+    });
+});
+
+function initializeCodeEditor() {
+    const textarea = document.getElementById('codeEditor');
+    codeEditor = CodeMirror.fromTextArea(textarea, {
+        mode: 'rust',
+        theme: 'monokai',
+        lineNumbers: true,
+        indentUnit: 4,
+        lineWrapping: true,
+        autoCloseBrackets: true,
+        matchBrackets: true
+    });
+}
+
+function loadTemplateForLanguage(language) {
+    // Update CodeMirror mode
+    const modes = {
+        'rust': 'rust',
+        'python': 'python',
+        'javascript': 'javascript',
+        'go': 'go',
+        'cpp': 'text/x-c++src'
+    };
+    
+    codeEditor.setOption('mode', modes[language] || 'text');
+    
+    // Load template from API
+    $.get(`/api/code/api/template/${language}/`)
+        .done(function(data) {
+            if (data.template_code) {
+                codeEditor.setValue(data.template_code);
+            }
+        })
+        .fail(function() {
+            console.log('Could not load template for ' + language);
+        });
+}
+
+function runCode() {
+    const code = codeEditor.getValue();
+    if (!code.trim()) {
+        alert('Please enter some code first.');
+        return;
+    }
+    
+    $('#runCode').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Running...');
+    
+    $.ajax({
+        url: '/api/code/api/execute/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        data: JSON.stringify({
+            code: code,
+            language: currentLanguage,
+            input: ''
+        }),
+        success: function(response) {
+            displayOutput(response);
+        },
+        error: function(xhr) {
+            const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'An error occurred';
+            displayOutput({
+                success: false,
+                error: errorMsg,
+                execution_time: 0
+            });
+        },
+        complete: function() {
+            $('#runCode').prop('disabled', false).html('<i class="fas fa-play"></i> Run Code');
+        }
+    });
+}
+
+function submitCode() {
+    const code = codeEditor.getValue();
+    if (!code.trim()) {
+        alert('Please enter some code first.');
+        return;
+    }
+    
+    $('#submitCode').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
+    
+    $.ajax({
+        url: '/api/submit/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        data: JSON.stringify({
+            problem_id: {{ problem.id }},
+            code: code,
+            language: currentLanguage
+        }),
+        success: function(response) {
+            if (response.success) {
+                const message = `Submission successful! Passed ${response.passed_tests}/${response.total_tests} test cases.`;
+                displayOutput({
+                    success: response.passed_tests === response.total_tests,
+                    output: message,
+                    execution_time: response.execution_result.execution_time || 0
+                });
+                
+                // Reload page to show new submission
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                displayOutput({
+                    success: false,
+                    error: response.error || 'Submission failed',
+                    execution_time: 0
+                });
+            }
+        },
+        error: function(xhr) {
+            const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'An error occurred';
+            displayOutput({
+                success: false,
+                error: errorMsg,
+                execution_time: 0
+            });
+        },
+        complete: function() {
+            $('#submitCode').prop('disabled', false).html('<i class="fas fa-check"></i> Submit Solution');
+        }
+    });
+}
+
+function resetCode() {
+    const starterCode = `{{ problem.starter_code|default:'// Your code here' }}`;
+    codeEditor.setValue(starterCode);
+}
+
+function displayOutput(response) {
+    $('#defaultOutput').addClass('d-none');
+    $('#outputSection').removeClass('d-none');
+    
+    const resultClass = response.success ? 'execution-success' : 'execution-error';
+    const icon = response.success ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+    
+    let content = `
+        <div class="execution-output ${resultClass}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong><i class="${icon}"></i> ${response.success ? 'Success' : 'Error'}</strong>
+                <small>Execution time: ${response.execution_time || 0}s</small>
+            </div>
+    `;
+    
+    if (response.output) {
+        content += `<div><strong>Output:</strong>\n${response.output}</div>`;
+    }
+    
+    if (response.error) {
+        content += `<div><strong>Error:</strong>\n${response.error}</div>`;
+    }
+    
+    content += '</div>';
+    
+    $('#executionResults').html(content);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

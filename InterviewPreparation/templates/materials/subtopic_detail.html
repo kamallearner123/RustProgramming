@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subtopic.title }} - Study Materials{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'materials:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'materials:topic_detail' subtopic.topic.id %}">{{ subtopic.topic.title }}</a></li>
+                <li class="breadcrumb-item active">{{ subtopic.title }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-bookmark"></i> {{ subtopic.title }}
+                </h2>
+                <p class="mb-0">{{ subtopic.topic.title }} - Day {{ subtopic.topic.day_number }}</p>
+            </div>
+            <div class="card-body">
+                {% if subtopic.description %}
+                    <p class="lead">{{ subtopic.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Study Materials -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>
+            <i class="fas fa-book-open"></i> Study Materials
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    {% if materials %}
+        {% for material in materials %}
+        <div class="col-md-12 mb-4">
+            <div class="card material-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ material.title }}</h5>
+                    <span class="badge bg-primary">{{ material.get_material_type_display }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="material-content">
+                        {{ material.content|linebreaks }}
+                    </div>
+                    
+                    {% if material.code_example %}
+                    <div class="mt-3">
+                        <h6><i class="fas fa-code"></i> Example Code ({{ material.language|upper }})</h6>
+                        <pre class="code-example"><code>{{ material.code_example }}</code></pre>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No study materials available for this subtopic yet.
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Related Questions -->
+{% if questions %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>
+            <i class="fas fa-question-circle"></i> Related Questions
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="accordion" id="questionsAccordion">
+                    {% for question in questions %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="question{{ question.id }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse{{ question.id }}" aria-expanded="false">
+                                <span class="badge bg-{% if question.difficulty == 'easy' %}success{% elif question.difficulty == 'medium' %}warning{% else %}danger{% endif %} me-2">
+                                    {{ question.get_difficulty_display }}
+                                </span>
+                                {{ question.question_text }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ question.id }}" class="accordion-collapse collapse" 
+                             data-bs-parent="#questionsAccordion">
+                            <div class="accordion-body">
+                                {% if question.hints %}
+                                    <div class="alert alert-info">
+                                        <strong><i class="fas fa-lightbulb"></i> Hints:</strong>
+                                        <p class="mb-0">{{ question.hints|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if question.expected_answer %}
+                                    <div class="alert alert-success">
+                                        <strong><i class="fas fa-check-circle"></i> Expected Answer:</strong>
+                                        <div class="mt-2">{{ question.expected_answer|linebreaks }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Practice Problems -->
+{% if problems %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>
+            <i class="fas fa-code"></i> Practice Problems
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    {% for problem in problems %}
+    <div class="col-md-6 mb-3">
+        <div class="card problem-card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ problem.title }}</h6>
+                <span class="badge bg-{% if problem.difficulty == 'easy' %}success{% elif problem.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
+                    {{ problem.get_difficulty_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ problem.description|truncatewords:20 }}</p>
+                
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-code"></i> {{ problem.language|upper }} |
+                        <i class="fas fa-clock"></i> {{ problem.time_limit }} min
+                    </small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'materials:problem_detail' problem.id %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-play"></i> Solve Problem
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Navigation -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'materials:topic_detail' subtopic.topic.id %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to {{ subtopic.topic.title }}
+            </a>
+            <a href="{% url 'code_runner:editor' %}" class="btn btn-success">
+                <i class="fas fa-code"></i> Practice Coding
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.material-card {
+    border-left: 4px solid #17a2b8;
+}
+
+.material-content {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.code-example {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.375rem;
+    padding: 15px;
+    overflow-x: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.problem-card {
+    transition: transform 0.2s;
+    border-left: 4px solid #28a745;
+}
+
+.problem-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e3f2fd;
+}
+</style>
+{% endblock %}
