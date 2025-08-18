@@ -1,0 +1,33 @@
+{
+	"rust-analyzer.linkedProjects": [
+		{
+			"sysroot": "",
+			"crates": [
+				{
+					"root_module": "SamplePrograms/Level3/raw_pointer.rs",
+					"display_name": "sampleprograms_level3_raw_pointer",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "SamplePrograms/Level3/macro.rs",
+					"display_name": "sampleprograms_level3_macro",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "SamplePrograms/Level3/macro2.rs",
+					"display_name": "sampleprograms_level3_macro2",
+					"edition": "2021",
+					"deps": []
+				},
+				{
+					"root_module": "SamplePrograms/Level4/stack.rs",
+					"display_name": "sampleprograms_level4_stack",
+					"edition": "2021",
+					"deps": []
+				}
+			]
+		}
+	]
+}

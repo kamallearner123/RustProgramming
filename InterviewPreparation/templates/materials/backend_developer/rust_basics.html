@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Programming Interview Preparation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        section {
+            background-color: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; }
+        .number { color: #d19a66; }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Rust Programming Interview Preparation</h1>
+        <p>This guide covers key Rust programming topics for your interview on August 14, 2025. Each section includes practical examples, explanations, and tips to help you succeed.</p>
+    </header>
+
+    <section id="basic-syntax">
+        <h2>1. Basic Syntax</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Variables (immutable/mutable), functions, control flow (if, match, loops).</li>
+            <li>Error handling with <code>Result</code> and <code>Option</code>.</li>
+        </ul>
+        <h3>Example: Error Handling with Result and Option</h3>
+        <p>Demonstrates safe error handling using <code>Result</code> for division and <code>Option</code> for searching a value.</p>
+        <pre><code>
+<span class="keyword">fn</span> <span class="function">divide</span>(a: <span class="keyword">i32</span>, b: <span class="keyword">i32</span>) -> <span class="keyword">Result</span>&lt;<span class="keyword">i32</span>, <span class="keyword">String</span>&gt; {
+    <span class="keyword">if</span> b == <span class="number">0</span> {
+        <span class="keyword">Err</span>(<span class="function">String</span>::<span class="function">from</span>(<span class="string">"Division by zero"</span>))
+    } <span class="keyword">else</span> {
+        <span class="keyword">Ok</span>(a / b)
+    }
+}
+
+<span class="keyword">fn</span> <span class="function">find_value</span>(arr: &amp;[<span class="keyword">i32</span>], target: <span class="keyword">i32</span>) -> <span class="keyword">Option</span>&lt;<span class="keyword">usize</span>&gt; {
+    arr.<span class="function">iter</span>().<span class="function">position</span>(|&amp;x| x == target)
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="comment">// Result example</span>
+    <span class="keyword">match</span> <span class="function">divide</span>(<span class="number">10</span>, <span class="number">2</span>) {
+        <span class="keyword">Ok</span>(result) => <span class="function">println!</span>(<span class="string">"Result: {}"</span>, result),
+        <span class="keyword">Err</span>(e) => <span class="function">println!</span>(<span class="string">"Error: {}"</span>, e),
+    }
+
+    <span class="keyword">match</span> <span class="function">divide</span>(<span class="number">10</span>, <span class="number">0</span>) {
+        <span class="keyword">Ok</span>(result) => <span class="function">println!</span>(<span class="string">"Result: {}"</span>, result),
+        <span class="keyword">Err</span>(e) => <span class="function">println!</span>(<span class="string">"Error: {}"</span>, e),
+    }
+
+    <span class="comment">// Option example</span>
+    <span class="keyword">let</span> numbers = <span class="function">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+    <span class="keyword">match</span> <span class="function">find_value</span>(&amp;numbers, <span class="number">3</span>) {
+        <span class="keyword">Some</span>(index) => <span class="function">println!</span>(<span class="string">"Found at index: {}"</span>, index),
+        <span class="keyword">None</span> => <span class="function">println!</span>(<span class="string">"Value not found"</span>),
+    }
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows <code>Result</code> for error handling and <code>Option</code> for optional values, using <code>match</code> for control flow. Discuss how these replace null pointers for safety.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain <code>match</code> vs. <code>if let</code> and the <code>?</code> operator for error propagation.</p>
+    </section>
+
+    <section id="data-structures">
+        <h2>2. Data Structures</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li><code>Vec&lt;T&gt;</code>: Dynamic arrays.</li>
+            <li><code>HashMap&lt;K, V&gt;</code>: Key-value store.</li>
+            <li><code>enum</code>: Custom types with variants.</li>
+            <li><code>struct</code>: Custom data structures.</li>
+        </ul>
+        <h3>Example: Task Manager</h3>
+        <p>A task manager using <code>Vec</code>, <code>HashMap</code>, <code>enum</code>, and <code>struct</code>.</p>
+        <pre><code>
+<span class="keyword">use</span> std::collections::<span class="function">HashMap</span>;
+
+#[<span class="function">derive</span>(<span class="keyword">Debug</span>)]
+<span class="keyword">enum</span> TaskStatus {
+    <span class="keyword">Todo</span>,
+    <span class="keyword">InProgress</span>,
+    <span class="keyword">Done</span>,
+}
+
+#[<span class="function">derive</span>(<span class="keyword">Debug</span>)]
+<span class="keyword">struct</span> Task {
+    id: <span class="keyword">u32</span>,
+    description: <span class="keyword">String</span>,
+    status: <span class="keyword">TaskStatus</span>,
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="comment">// Vector to store tasks</span>
+    <span class="keyword">let</span> <span class="keyword">mut</span> tasks: <span class="function">Vec</span>&lt;<span class="keyword">Task</span>&gt; = <span class="function">Vec</span>::<span class="function">new</span>();
+    tasks.<span class="function">push</span>(<span class="keyword">Task</span> {
+        id: <span class="number">1</span>,
+        description: <span class="function">String</span>::<span class="function">from</span>(<span class="string">"Write Rust code"</span>),
+        status: <span class="keyword">TaskStatus</span>::<span class="keyword">Todo</span>,
+    });
+    tasks.<span class="function">push</span>(<span class="keyword">Task</span> {
+        id: <span class="number">2</span>,
+        description: <span class="function">String</span>::<span class="function">from</span>(<span class="string">"Test application"</span>),
+        status: <span class="keyword">TaskStatus</span>::<span class="keyword">InProgress</span>,
+    });
+
+    <span class="comment">// HashMap to map task ID to description</span>
+    <span class="keyword">let</span> <span class="keyword">mut</span> task_map: <span class="function">HashMap</span>&lt;<span class="keyword">u32</span>, <span class="keyword">String</span>&gt; = <span class="function">HashMap</span>::<span class="function">new</span>();
+    <span class="keyword">for</span> task <span class="keyword">in</span> &amp;tasks {
+        task_map.<span class="function">insert</span>(task.id, task.description.<span class="function">clone</span>());
+    }
+
+    <span class="comment">// Print tasks</span>
+    <span class="function">println!</span>(<span class="string">"Tasks: {:?}"</span>, tasks);
+    <span class="function">println!</span>(<span class="string">"Task Map: {:?}"</span>, task_map);
+
+    <span class="comment">// Find task by ID</span>
+    <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">Some</span>(desc) = task_map.<span class="function">get</span>(&amp;<span class="number">1</span>) {
+        <span class="function">println!</span>(<span class="string">"Task ID 1: {}"</span>, desc);
+    }
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows practical use of <code>Vec</code>, <code>HashMap</code>, <code>enum</code>, and <code>struct</code> in a task manager. Discuss ownership and cloning in the interview.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain when to use <code>Vec</code> vs. <code>HashMap</code> and how enums enable algebraic data types.</p>
+    </section>
+
+    <section id="modules-crates">
+        <h2>3. Modules and Crates</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Modules for code organization, <code>pub</code> for visibility.</li>
+            <li><code>Cargo</code> for dependencies and testing.</li>
+        </ul>
+        <h3>Example: Modular Code with Tests</h3>
+        <p>Organizes math operations in a module with tests.</p>
+        <pre><code>
+<span class="comment">// src/lib.rs</span>
+<span class="keyword">pub</span> <span class="keyword">mod</span> math {
+    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="function">add</span>(a: <span class="keyword">i32</span>, b: <span class="keyword">i32</span>) -> <span class="keyword">i32</span> {
+        a + b
+    }
+
+    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="function">subtract</span>(a: <span class="keyword">i32</span>, b: <span class="keyword">i32</span>) -> <span class="keyword">i32</span> {
+        a - b
+    }
+}
+
+#[<span class="function">cfg</span>(test)]
+<span class="keyword">mod</span> tests {
+    <span class="keyword">use</span> <span class="keyword">super</span>::math::{<span class="function">add</span>, <span class="function">subtract</span>};
+
+    #[<span class="function">test</span>]
+    <span class="keyword">fn</span> <span class="function">test_add</span>() {
+        <span class="function">assert_eq!</span>(<span class="function">add</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">5</span>);
+    }
+
+    #[<span class="function">test</span>]
+    <span class="keyword">fn</span> <span class="function">test_subtract</span>() {
+        <span class="function">assert_eq!</span>(<span class="function">subtract</span>(<span class="number">5</span>, <span class="number">3</span>), <span class="number">2</span>);
+    }
+}
+
+<span class="comment">// src/main.rs</span>
+<span class="keyword">use</span> my_crate::math;
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="function">println!</span>(<span class="string">"Add: {}"</span>, math::<span class="function">add</span>(<span class="number">10</span>, <span class="number">5</span>));
+    <span class="function">println!</span>(<span class="string">"Subtract: {}"</span>, math::<span class="function">subtract</span>(<span class="number">10</span>, <span class="number">5</span>));
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Demonstrates module organization, visibility, and testing. Assumes a crate named <code>my_crate</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss <code>pub</code> vs. private, <code>Cargo</code> dependency management, and integration tests.</p>
+    </section>
+
+    <section id="generics-traits">
+        <h2>4. Generics and Traits</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Generics with <code>&lt;T&gt;</code>.</li>
+            <li>Custom traits and trait bounds.</li>
+        </ul>
+        <h3>Example: Generic Stack with Trait</h3>
+        <p>A generic stack with a custom <code>Printable</code> trait.</p>
+        <pre><code>
+<span class="keyword">use</span> std::fmt::<span class="keyword">Debug</span>;
+
+<span class="keyword">trait</span> <span class="keyword">Printable</span> {
+    <span class="keyword">fn</span> <span class="function">print</span>(&amp;<span class="keyword">self</span>);
+}
+
+#[<span class="function">derive</span>(<span class="keyword">Debug</span>)]
+<span class="keyword">struct</span> Stack&lt;<span class="keyword">T</span>&gt; {
+    items: <span class="function">Vec</span>&lt;<span class="keyword">T</span>&gt;,
+}
+
+<span class="keyword">impl</span>&lt;<span class="keyword">T</span>: <span class="keyword">Debug</span>&gt; <span class="keyword">Printable</span> <span class="keyword">for</span> <span class="keyword">Stack</span>&lt;<span class="keyword">T</span>&gt; {
+    <span class="keyword">fn</span> <span class="function">print</span>(&amp;<span class="keyword">self</span>) {
+        <span class="function">println!</span>(<span class="string">"Stack: {:?}"</span>, <span class="keyword">self</span>.items);
+    }
+}
+
+<span class="keyword">impl</span>&lt;<span class="keyword">T</span>&gt; <span class="keyword">Stack</span>&lt;<span class="keyword">T</span>&gt; {
+    <span class="keyword">fn</span> <span class="function">new</span>() -> <span class="keyword">Self</span> {
+        <span class="keyword">Stack</span> { items: <span class="function">Vec</span>::<span class="function">new</span>() }
+    }
+
+    <span class="keyword">fn</span> <span class="function">push</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, item: <span class="keyword">T</span>) {
+        <span class="keyword">self</span>.items.<span class="function">push</span>(item);
+    }
+
+    <span class="keyword">fn</span> <span class="function">pop</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) -> <span class="keyword">Option</span>&lt;<span class="keyword">T</span>&gt; {
+        <span class="keyword">self</span>.items.<span class="function">pop</span>()
+    }
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="keyword">let</span> <span class="keyword">mut</span> int_stack: <span class="keyword">Stack</span>&lt;<span class="keyword">i32</span>&gt; = <span class="keyword">Stack</span>::<span class="function">new</span>();
+    int_stack.<span class="function">push</span>(<span class="number">1</span>);
+    int_stack.<span class="function">push</span>(<span class="number">2</span>);
+    int_stack.<span class="function">print</span>();
+
+    <span class="keyword">let</span> <span class="keyword">mut</span> str_stack: <span class="keyword">Stack</span>&lt;<span class="keyword">String</span>&gt; = <span class="keyword">Stack</span>::<span class="function">new</span>();
+    str_stack.<span class="function">push</span>(<span class="function">String</span>::<span class="function">from</span>(<span class="string">"hello"</span>));
+    str_stack.<span class="function">print</span>();
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows generics, custom traits, and trait bounds in a reusable stack implementation.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss monomorphization and <code>impl Trait</code> vs. <code>dyn Trait</code>.</p>
+    </section>
+
+    <section id="async-rust">
+        <h2>5. Async Rust</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Futures, <code>async/await</code>.</li>
+            <li>Tokio runtime for concurrency.</li>
+        </ul>
+        <h3>Example: Async HTTP Client</h3>
+        <p>Fetches multiple URLs concurrently using Tokio and <code>reqwest</code>.</p>
+        <pre><code>
+<span class="keyword">use</span> tokio;
+<span class="keyword">use</span> reqwest;
+
+#[<span class="function">tokio</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), reqwest::<span class="keyword">Error</span>&gt; {
+    <span class="keyword">let</span> urls = <span class="function">vec!</span>[
+        <span class="string">"https://api.github.com"</span>,
+        <span class="string">"https://jsonplaceholder.typicode.com/posts/1"</span>,
+    ];
+
+    <span class="keyword">let</span> <span class="keyword">mut</span> handles = <span class="function">vec!</span>[];
+
+    <span class="comment">// Spawn async tasks for each URL</span>
+    <span class="keyword">for</span> url <span class="keyword">in</span> urls {
+        <span class="keyword">let</span> handle = <span class="function">tokio</span>::<span class="function">spawn</span>(<span class="keyword">async</span> <span class="keyword">move</span> {
+            <span class="keyword">let</span> response = <span class="function">reqwest</span>::<span class="function">get</span>(url).<span class="keyword">await</span>?;
+            <span class="keyword">let</span> body = response.<span class="function">text</span>().<span class="keyword">await</span>?;
+            <span class="keyword">Ok</span>::&lt;_, reqwest::<span class="keyword">Error</span>&gt;(body)
+        });
+        handles.<span class="function">push</span>(handle);
+    }
+
+    <span class="comment">// Wait for all tasks to complete</span>
+    <span class="keyword">for</span> handle <span class="keyword">in</span> handles {
+        <span class="keyword">match</span> handle.<span class="keyword">await</span>.<span class="function">unwrap</span>() {
+            <span class="keyword">Ok</span>(body) => <span class="function">println!</span>(<span class="string">"Response: {}"</span>, &amp;body[..<span class="number">50</span>]),
+            <span class="keyword">Err</span>(e) => <span class="function">println!</span>(<span class="string">"Error: {}"</span>, e),
+        }
+    }
+
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows concurrent URL fetching with Tokio. Add <code>tokio = { version = "1", features = ["full"] }</code> and <code>reqwest = "0.11"</code> to <code>Cargo.toml</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain <code>std::thread</code> vs. <code>tokio::spawn</code> and async I/O benefits.</p>
+    </section>
+
+    <section id="performance">
+        <h2>6. Performance</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Iterators, pattern matching, macros.</li>
+        </ul>
+        <h3>Example: Macro and Iterator Optimization</h3>
+        <p>Uses a logging macro and iterators for efficient data processing.</p>
+        <pre><code>
+<span class="keyword">macro_rules!</span> log {
+    ($($arg:tt)*) => {
+        <span class="function">println!</span>(<span class="string">"[INFO] {}"</span>, <span class="function">format!</span>($($arg)*));
+    };
+}
+
+<span class="keyword">fn</span> <span class="function">process_numbers</span>(numbers: <span class="function">Vec</span>&lt;<span class="keyword">i32</span>&gt;) -> <span class="keyword">i32</span> {
+    numbers
+        .<span class="function">into_iter</span>()
+        .<span class="function">filter</span>(|&amp;x| x > <span class="number">0</span>)
+        .<span class="function">map</span>(|x| x * <span class="number">2</span>)
+        .<span class="function">sum</span>()
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="keyword">let</span> numbers = <span class="function">vec!</span>[<span class="number">-1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">-4</span>, <span class="number">5</span>];
+    <span class="function">log!</span>(<span class="string">"Processing numbers: {:?}"</span>, numbers);
+    
+    <span class="keyword">let</span> result = <span class="function">process_numbers</span>(numbers);
+    <span class="function">log!</span>(<span class="string">"Result: {}"</span>, result);
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows a custom macro and iterator chain for performance.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss iterator laziness and macro expansion at compile time.</p>
+    </section>
+
+    <section id="best-practices">
+        <h2>7. Best Practices</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Error propagation, documentation, Clippy lints.</li>
+        </ul>
+        <h3>Example: Error Propagation with Documentation</h3>
+        <p>Reads a file with proper error handling and documentation.</p>
+        <pre><code>
+<span class="keyword">use</span> std::fs::<span class="function">File</span>;
+<span class="keyword">use</span> std::io::{<span class="keyword">self</span>, <span class="function">Read</span>};
+
+<span class="comment">/// Reads a file's contents into a string.</span>
+<span class="comment">///</span>
+<span class="comment">/// # Errors</span>
+<span class="comment">/// Returns an `io::Error` if the file cannot be read.</span>
+<span class="keyword">fn</span> <span class="function">read_file</span>(path: &amp;<span class="keyword">str</span>) -> <span class="keyword">Result</span>&lt;<span class="keyword">String</span>, <span class="function>">io</span>::<span class="keyword">Error</span>&gt; {
+    <span class="keyword">let</span> <span class="keyword">mut</span> file = <span class="function">File</span>::<span class="function">open</span>(path)?;
+    <span class="keyword">let</span> <span class="keyword">mut</span> contents = <span class="function">String</span>::<span class="function">new</span>();
+    file.<span class="function">read_to_string</span>(&amp;<span class="keyword">mut</span> contents)?;
+    <span class="keyword">Ok</span>(contents)
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="keyword">match</span> <span class="function">read_file</span>(<span class="string">"example.txt"</span>) {
+        <span class="keyword">Ok</span>(contents) => <span class="function">println!</span>(<span class="string">"File contents: {}"</span>, contents),
+        <span class="keyword">Err</span>(e) => <span class="function">eprintln!</span>(<span class="string">"Error reading file: {}"</span>, e),
+    }
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows the <code>?</code> operator, doc comments, and idiomatic error handling.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain why <code>unwrap</code> is dangerous and how Clippy enforces best practices.</p>
+    </section>
+
+    <section id="preparation-tips">
+        <h2>Preparation Tips</h2>
+        <ul>
+            <li><strong>Practice Coding</strong>: Solve LeetCode problems in Rust.</li>
+            <li><strong>Build Projects</strong>: Create a CLI tool or web server with Rocket/Actix.</li>
+            <li><strong>Explain Thought Process</strong>: Verbalize your approach during coding.</li>
+            <li><strong>Resources</strong>: Use "The Rust Programming Language" book, Rust by Example, and Rust community forums.</li>
+            <li><strong>Mock Interviews</strong>: Practice on Pramp or Interviewing.io.</li>
+        </ul>
+        <p><strong>Screen Sharing Tip</strong>: Test sharing your screen in VS Code with Rust Analyzer. Ensure a stable internet connection and Zoom setup.</p>
+    </section>
+
+    <footer>
+        <p>Prepared by Grok | Best of luck with your interview on August 14, 2025!</p>
+    </footer>
+</body>
+</html>

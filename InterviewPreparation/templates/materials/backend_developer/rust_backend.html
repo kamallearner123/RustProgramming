@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Concepts Interview Preparation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        section {
+            background-color: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; }
+        .number { color: #d19a66; }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Backend Concepts Interview Preparation</h1>
+        <p>This guide covers key backend concepts for your interview on August 14, 2025. Each section includes practical examples, explanations, and tips to help you succeed. Examples are in Rust using the Actix framework where applicable, aligning with your Rust-focused interview.</p>
+    </header>
+
+    <section id="server-architectures">
+        <h2>1. Server Architectures</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Client-server model: Clients send requests, servers process and respond.</li>
+            <li>Stateless vs. stateful: Stateless servers (e.g., REST APIs) don't retain client data; stateful servers (e.g., WebSocket) maintain session state.</li>
+        </ul>
+        <h3>Example: Stateless REST Server with Actix</h3>
+        <p>A simple REST API server using Actix-web for handling GET requests.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">greet</span>(name: <span class="function">web</span>::<span class="function">Path</span>&lt;<span class="keyword">String</span>&gt;) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="function">HttpResponse</span>::<span class="function">Ok</span>()
+        .<span class="function">body</span>(<span class="function">format!</span>(<span class="string">"Hello, {}!"</span>, name))
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="function">HttpServer</span>::<span class="function">new</span>(|| {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">route</span>(<span class="string">"/greet/{name}"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(greet))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows a stateless REST server using Actix-web. Add <code>actix-web = "4"</code> to <code>Cargo.toml</code>. Each request is independent, demonstrating statelessness.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain stateless benefits (scalability) vs. stateful use cases (e.g., real-time apps).</p>
+    </section>
+
+    <section id="api-development">
+        <h2>2. API Development</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>HTTP methods: GET, POST, PUT, DELETE.</li>
+            <li>Status codes: 200 OK, 404 Not Found, 500 Internal Server Error.</li>
+            <li>Error handling: Consistent error responses.</li>
+            <li>Versioning: URL-based or header-based versioning.</li>
+        </ul>
+        <h3>Example: REST API with Error Handling</h3>
+        <p>API with GET and POST endpoints, handling errors and versioning.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> serde::{<span class="function">Deserialize</span>, <span class="function">Serialize</span>};
+
+#[<span class="function">derive</span>(<span class="function">Serialize</span>, <span class="function">Deserialize</span>)]
+<span class="keyword">struct</span> Item {
+    id: <span class="keyword">u32</span>,
+    name: <span class="keyword">String</span>,
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">get_item</span>(id: <span class="function">web</span>::<span class="function">Path</span>&lt;<span class="keyword">u32</span>&gt;) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">if</span> *id == <span class="number">1</span> {
+        <span class="keyword">let</span> item = <span class="keyword">Item</span> { id: <span class="number">1</span>, name: <span class="function">String</span>::<span class="function">from</span>(<span class="string">"Example"</span>) };
+        <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">json</span>(item)
+    } <span class="keyword">else</span> {
+        <span class="function">HttpResponse</span>::<span class="function">NotFound</span>().<span class="function">body</span>(<span class="string">"Item not found"</span>)
+    }
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">create_item</span>(item: <span class="function">web</span>::<span class="function">Json</span>&lt;<span class="keyword">Item</span>&gt;) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="function">HttpResponse</span>::<span class="function">Created</span>().<span class="function">json</span>(item)
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="function">HttpServer</span>::<span class="function">new</span>(|| {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">route</span>(<span class="string">"/v1/item/{id}"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(get_item))
+            .<span class="function">route</span>(<span class="string">"/v1/item"</span>, <span class="function">web</span>::<span class="function">post</span>().<span class="function">to</span>(create_item))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows GET/POST endpoints, JSON serialization, error handling (404), and URL versioning (/v1). Add <code>actix-web = "4"</code>, <code>serde = { version = "1.0", features = ["derive"] }</code> to <code>Cargo.toml</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss REST principles, status codes, and versioning strategies (URL vs. headers).</p>
+    </section>
+
+    <section id="databases">
+        <h2>3. Databases</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>ORM vs. raw queries: ORMs (e.g., Diesel) simplify; raw queries offer control.</li>
+            <li>Transactions: Ensure ACID (Atomicity, Consistency, Isolation, Durability).</li>
+        </ul>
+        <h3>Example: Database Operations with Diesel</h3>
+        <p>CRUD operations using Diesel ORM with SQLite.</p>
+        <pre><code>
+<span class="keyword">use</span> diesel::{<span class="function">prelude</span>::*, <span class="function">SqliteConnection</span>};
+<span class="keyword">use</span> diesel::r2d2::{<span class="function">ConnectionManager</span>, <span class="function">Pool</span>};
+
+<span class="keyword">table!</span> {
+    users (id) {
+        id -> <span class="keyword">Integer</span>,
+        name -> <span class="keyword">Text</span>,
+    }
+}
+
+#[<span class="function">derive</span>(<span class="function">Queryable</span>, <span class="function">Insertable</span>)]
+#[diesel(table_name = users)]
+<span class="keyword">struct</span> User {
+    id: <span class="keyword">i32</span>,
+    name: <span class="keyword">String</span>,
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), <span class="keyword">Box</span>&lt;<span class="keyword">dyn</span> <span class="keyword">std</span>::<span class="function">error</span>::<span class="keyword">Error</span>&gt;&gt; {
+    <span class="keyword">let</span> manager = <span class="function">ConnectionManager</span>::<span class="function">&lt;SqliteConnection&gt;</span>(<span class="string">"test.db"</span>.<span class="function">to_string</span>());
+    <span class="keyword">let</span> pool = <span class="function">Pool</span>::<span class="function">builder</span>().<span class="function">build</span>(manager)?;
+    <span class="keyword">let</span> conn = &amp;<span class="keyword">mut</span> pool.<span class="function">get</span>()?;
+
+    <span class="comment">// Transaction</span>
+    conn.<span class="function">transaction</span>&lt;<span class="keyword">_</span>, <span class="keyword">_</span>, <span class="keyword">_</span>&gt;(|conn| {
+        diesel::<span class="function">insert_into</span>(users::table)
+            .<span class="function">values</span>(<span class="keyword">User</span> { id: <span class="number">1</span>, name: <span class="string">"Alice"</span>.<span class="function">to_string</span>() })
+            .<span class="function">execute</span>(conn)?;
+        <span class="keyword">Ok</span>(())
+    })?;
+
+    <span class="keyword">let</span> results: <span class="keyword">Vec</span>&lt;<span class="keyword">User</span>&gt; = users::table.<span class="function">load</span>(conn)?;
+    <span class="function">println!</span>(<span class="string">"Users: {:?}"</span>, results);
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows Diesel ORM for type-safe queries and transactions. Add <code>diesel = { version = "2.0", features = ["sqlite"] }</code>, <code>libsqlite3-sys = { version = "0.24", features = ["bundled"] }</code>, <code>diesel_migrations = "2.0"</code>, and <code>r2d2 = "0.8"</code> to <code>Cargo.toml</code>. Requires SQLite database setup.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss ACID properties and how ORMs prevent N+1 query issues.</p>
+    </section>
+
+    <section id="auth">
+        <h2>4. Authentication and Authorization</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Sessions/cookies: Store user state on server or client.</li>
+            <li>Tokens: JWT for stateless auth.</li>
+            <li>OAuth: Third-party authentication flows.</li>
+        </ul>
+        <h3>Example: JWT Authentication with Actix</h3>
+        <p>Simple JWT-based authentication.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> jsonwebtoken::{<span class="function">encode</span>, <span class="function">Header</span>, <span class="function">EncodingKey</span>};
+<span class="keyword">use</span> serde::{<span class="function">Serialize</span>, <span class="function">Deserialize</span>};
+
+#[<span class="function">derive</span>(<span class="function">Serialize</span>, <span class="function">Deserialize</span>)]
+<span class="keyword">struct</span> Claims {
+    sub: <span class="keyword">String</span>,
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">login</span>() -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">let</span> claims = <span class="keyword">Claims</span> { sub: <span class="string">"user1"</span>.<span class="function">to_string</span>() };
+    <span class="keyword">let</span> token = <span class="function">encode</span>(
+        &amp;<span class="function">Header</span>::<span class="function">default</span>(),
+        &amp;claims,
+        &amp;<span class="function">EncodingKey</span>::<span class="function">from_secret</span>(<span class="string">"secret"</span>.<span class="function">as_ref</span>())
+    ).<span class="function">unwrap</span>();
+    <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(token)
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="function">HttpServer</span>::<span class="function">new</span>(|| {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">route</span>(<span class="string">"/login"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(login))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Generates a JWT token for authentication. Add <code>jsonwebtoken = "8"</code>, <code>serde = { version = "1.0", features = ["derive"] }</code>, <code>actix-web = "4"</code> to <code>Cargo.toml</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain JWT structure (header, payload, signature) and OAuth flows (e.g., authorization code).</p>
+    </section>
+
+    <section id="concurrency">
+        <h2>5. Concurrency</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Threading: <code>std::thread</code> for CPU-bound tasks.</li>
+            <li>Async programming: <code>async/await</code> for I/O-bound tasks.</li>
+            <li>Event loops: Tokio for managing async tasks.</li>
+        </ul>
+        <h3>Example: Async Task with Tokio</h3>
+        <p>Concurrent HTTP requests using Tokio.</p>
+        <pre><code>
+<span class="keyword">use</span> tokio;
+<span class="keyword">use</span> reqwest;
+
+#[<span class="function">tokio</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), <span class="function">reqwest</span>::<span class="keyword">Error</span>&gt; {
+    <span class="keyword">let</span> urls = <span class="function">vec!</span>[
+        <span class="string">"https://api.github.com"</span>,
+        <span class="string">"https://jsonplaceholder.typicode.com/posts/1"</span>,
+    ];
+
+    <span class="keyword">let</span> <span class="keyword">mut</span> handles = <span class="function">vec!</span>[];
+    <span class="keyword">for</span> url <span class="keyword">in</span> urls {
+        <span class="keyword">let</span> handle = <span class="function">tokio</span>::<span class="function">spawn</span>(<span class="keyword">async</span> <span class="keyword">move</span> {
+            <span class="keyword">let</span> resp = <span class="function">reqwest</span>::<span class="function">get</span>(url).<span class="keyword">await</span>?.<span class="function">text</span>().<span class="keyword">await</span>?;
+            <span class="keyword">Ok</span>::&lt;_, <span class="function">reqwest</span>::<span class="keyword">Error</span>&gt;(resp)
+        });
+        handles.<span class="function">push</span>(handle);
+    }
+
+    <span class="keyword">for</span> handle <span class="keyword">in</span> handles {
+        <span class="keyword">let</span> result = handle.<span class="keyword">await</span>.<span class="function">unwrap</span>();
+        <span class="keyword">match</span> result {
+            <span class="keyword">Ok</span>(body) => <span class="function">println!</span>(<span class="string">"Response: {}"</span>, &amp;body[..<span class="number">50</span>]),
+            <span class="keyword">Err</span>(e) => <span class="function">println!</span>(<span class="string">"Error: {}"</span>, e),
+        }
+    }
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows async I/O with Tokio. Add <code>tokio = { version = "1", features = ["full"] }</code>, <code>reqwest = "0.11"</code> to <code>Cargo.toml</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Compare threading (CPU-bound) vs. async (I/O-bound) and event loop mechanics.</p>
+    </section>
+
+    <section id="deployment">
+        <h2>6. Deployment</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Containers: Docker for packaging apps.</li>
+            <li>Orchestration: Kubernetes for managing containers.</li>
+            <li>CI/CD: Automate builds/tests/deployment.</li>
+        </ul>
+        <h3>Example: Dockerfile for Rust App</h3>
+        <p>Dockerfile for deploying an Actix-web app.</p>
+        <pre><code>
+<span class="comment"># Dockerfile</span>
+FROM rust:1.70 AS builder
+WORKDIR /app
+COPY . .
+RUN cargo build --release
+
+FROM debian:buster-slim
+COPY --from=builder /app/target/release/my_app /usr/local/bin/my_app
+EXPOSE 8080
+CMD ["my_app"]
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows multi-stage Docker build for a Rust app, minimizing image size.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss Kubernetes pods, services, and CI/CD tools like GitHub Actions.</p>
+    </section>
+
+    <section id="monitoring-logging">
+        <h2>7. Monitoring and Logging</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Monitoring: Prometheus for metrics.</li>
+            <li>Logging: Structured logging with <code>log</code> crate.</li>
+        </ul>
+        <h3>Example: Structured Logging with Actix</h3>
+        <p>Logging requests in an Actix server.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> env_logger;
+<span class="keyword">use</span> log::{<span class="function">info</span>};
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">index</span>() -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="function">info!</span>(<span class="string">"Received request to index"</span>);
+    <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(<span class="string">"Hello, world!"</span>)
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="function">env_logger</span>::<span class="function">init</span>();
+    <span class="function">HttpServer</span>::<span class="function">new</span>(|| {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">route</span>(<span class="string">"/"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(index))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows structured logging with <code>log</code> and <code>env_logger</code>. Add <code>log = "0.4"</code>, <code>env_logger = "0.9"</code>, <code>actix-web = "4"</code> to <code>Cargo.toml</code>.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss Prometheus metrics (e.g., request latency) and ELK for log aggregation.</p>
+    </section>
+
+    <section id="how-to-prepare">
+        <h2>How to Prepare</h2>
+        <p>Build small backend projects using frameworks like Actix (Rust). Study from "Web Scalability for Startup Engineers" or online courses on Udemy/Coursera. Practice coding problems on HackerRank involving APIs and databases. Review common pitfalls like N+1 queries or race conditions. Set up a personal project with a database and deploy it to AWS/Heroku for hands-on experience.</p>
+    </section>
+
+    <footer>
+        <p>Prepared by Grok | Best of luck with your interview on August 14, 2025!</p>
+    </footer>
+</body>
+</html>

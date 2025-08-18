@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Design Interview Preparation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        section {
+            background-color: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; }
+        .number { color: #d19a66; }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>System Design Interview Preparation</h1>
+        <p>This guide covers key system design concepts for your interview on August 14, 2025. Each section includes practical examples, explanations, and tips to help you succeed. Examples are provided in Rust where applicable, aligning with your Rust-focused interview.</p>
+    </header>
+
+    <section id="high-level-architecture">
+        <h2>1. High-Level System Architecture</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Designing scalable systems like Twitter or Uber.</li>
+            <li>Components: Front-end, back-end, databases, caching, message queues.</li>
+        </ul>
+        <h3>Example: Designing a URL Shortener</h3>
+        <p>A simplified design for a URL shortening service, implemented as a Rust Actix-web service.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> std::collections::<span class="function">HashMap</span>;
+<span class="keyword">use</span> std::sync::{<span class="keyword">Arc</span>, <span class="keyword">Mutex</span>};
+
+<span class="keyword">struct</span> AppState {
+    url_map: <span class="keyword">Arc</span>&lt;<span class="keyword">Mutex</span>&lt;<span class="function">HashMap</span>&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt;&gt;&gt;,
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">shorten</span>(
+    data: <span class="function">web</span>::<span class="function">Json</span>&lt;<span class="keyword">HashMap</span>&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt;&gt;,
+    state: <span class="function">web</span>::<span class="function">Data</span>&lt;<span class="keyword">AppState</span>&gt;
+) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">let</span> url = data.<span class="function">get</span>(<span class="string">"url"</span>).<span class="function">unwrap</span>();
+    <span class="keyword">let</span> short_id = <span class="string">"abc123"</span>.<span class="function">to_string</span>(); <span class="comment">// Simplified ID generation</span>
+    state.url_map.<span class="function">lock</span>().<span class="function">unwrap</span>().<span class="function">insert</span>(short_id.<span class="function">clone</span>(), url.<span class="function">clone</span>());
+    <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(<span class="function">format!</span>(<span class="string">"Short URL: /{}", short_id</span>))
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">redirect</span>(
+    id: <span class="function">web</span>::<span class="function">Path</span>&lt;<span class="keyword">String</span>&gt;,
+    state: <span class="function">web</span>::<span class="function">Data</span>&lt;<span class="keyword">AppState</span>&gt;
+) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">let</span> map = state.url_map.<span class="function">lock</span>().<span class="function">unwrap</span>();
+    <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">Some</span>(url) = map.<span class="function">get</span>(&amp;*id) {
+        <span class="function">HttpResponse</span>::<span class="function">TemporaryRedirect</span>()
+            .<span class="function">append_header</span>((<span class="string">"Location"</span>, url.<span class="function">clone</span>()))
+            .<span class="function">finish</span>()
+    } <span class="keyword">else</span> {
+        <span class="function">HttpResponse</span>::<span class="function">NotFound</span>().<span class="function">body</span>(<span class="string">"URL not found"</span>)
+    }
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="keyword">let</span> state = <span class="function">web</span>::<span class="function">Data</span>::<span class="function">new</span>(<span class="keyword">AppState</span> {
+        url_map: <span class="keyword">Arc</span>::<span class="function">new</span>(<span class="keyword">Mutex</span>::<span class="function">new</span>(<span class="function">HashMap</span>::<span class="function">new</span>())),
+    });
+
+    <span class="function">HttpServer</span>::<span class="function">new</span>(<span class="keyword">move</span> || {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">app_data</span>(state.<span class="function">clone</span>())
+            .<span class="function">route</span>(<span class="string">"/shorten"</span>, <span class="function">web</span>::<span class="function">post</span>().<span class="function">to</span>(shorten))
+            .<span class="function">route</span>(<span class="string">"/{id}"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(redirect))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Implements a URL shortener with Actix-web, showcasing a high-level architecture with in-memory storage. Add <code>actix-web = "4"</code> to <code>Cargo.toml</code>. In a real design, you'd use a database and caching.</p>
+        <h3>Interview Tip</h3>
+        <p>Draw components (client, server, database, cache) and explain request flow. Discuss trade-offs (e.g., in-memory vs. persistent storage).</p>
+    </section>
+
+    <section id="scalability">
+        <h2>2. Scalability Concepts</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Horizontal vs. vertical scaling: Add more machines vs. increase machine power.</li>
+            <li>Load balancing: Distribute traffic (e.g., Nginx, AWS ELB).</li>
+            <li>Caching: Redis/Memcached for fast data access.</li>
+        </ul>
+        <h3>Example: Redis Caching with Rust</h3>
+        <p>Caching API responses using Redis.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> redis::{<span class="function">Client</span>, <span class="function">Commands</span>};
+<span class="keyword">use</span> std::sync::{<span class="keyword">Arc</span>, <span class="keyword">Mutex</span>};
+
+<span class="keyword">struct</span> AppState {
+    redis: <span class="keyword">Arc</span>&lt;<span class="keyword">Mutex</span>&lt;<span class="function">Client</span>&gt;&gt;,
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">get_data</span>(
+    key: <span class="function">web</span>::<span class="function">Path</span>&lt;<span class="keyword">String</span>&gt;,
+    state: <span class="function">web</span>::<span class="function">Data</span>&lt;<span class="keyword">AppState</span>&gt;
+) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">let</span> <span class="keyword">mut</span> conn = state.redis.<span class="function">lock</span>().<span class="function">unwrap</span>().<span class="function">get_connection</span>().<span class="function">unwrap</span>();
+    <span class="keyword">let</span> cached: <span class="keyword">Option</span>&lt;<span class="keyword">String</span>&gt; = conn.<span class="function">get</span>(&amp;*key).<span class="function">unwrap_or</span>(<span class="keyword">None</span>);
+    
+    <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">Some</span>(value) = cached {
+        <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(<span class="function">format!</span>(<span class="string">"Cached: {}"</span>, value))
+    } <span class="keyword">else</span> {
+        <span class="keyword">let</span> value = <span class="function">format!</span>(<span class="string">"Data for {}"</span>, key); <span class="comment">// Simulate DB query</span>
+        conn.<span class="function">set_ex</span>(&amp;*key, &amp;value, <span class="number">60</span>).<span class="function">unwrap</span>(); <span class="comment">// Cache for 60s</span>
+        <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(value)
+    }
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="keyword">let</span> redis_client = <span class="function">Client</span>::<span class="function">open</span>(<span class="string">"redis://127.0.0.1/"</span>)<span class="function">.unwrap</span>();
+    <span class="keyword">let</span> state = <span class="function">web</span>::<span class="function">Data</span>::<span class="function">new</span>(<span class="keyword">AppState</span> {
+        redis: <span class="keyword">Arc</span>::<span class="function">new</span>(<span class="keyword">Mutex</span>::<span class="function">new</span>(redis_client)),
+    });
+
+    <span class="function">HttpServer</span>::<span class="function">new</span>(<span class="keyword">move</span> || {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">app_data</span>(state.<span class="function">clone</span>())
+            .<span class="function">route</span>(<span class="string">"/data/{key}"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(get_data))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Demonstrates caching with Redis to improve performance. Add <code>actix-web = "4"</code>, <code>redis = "0.21"</code> to <code>Cargo.toml</code>. Requires Redis running locally.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain horizontal scaling (adding servers) vs. vertical (more CPU/RAM) and load balancer types (round-robin, least connections).</p>
+    </section>
+
+    <section id="database-design">
+        <h2>3. Database Design</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>SQL vs. NoSQL: Relational (MySQL) for structured data, NoSQL (MongoDB) for flexibility.</li>
+            <li>Sharding: Split data across servers.</li>
+            <li>Replication: Primary-secondary for availability.</li>
+            <li>CAP theorem: Consistency, Availability, Partition tolerance trade-offs.</li>
+        </ul>
+        <h3>Example: Sharded Database Access with Diesel</h3>
+        <p>Simulates sharded database access using Diesel ORM.</p>
+        <pre><code>
+<span class="keyword">use</span> diesel::{<span class="function">prelude</span>::*, <span class="function">SqliteConnection</span>};
+<span class="keyword">use</span> std::collections::<span class="function">HashMap</span>;
+
+<span class="keyword">table!</span> {
+    users (id) {
+        id -> <span class="keyword">Integer</span>,
+        name -> <span class="keyword">Text</span>,
+    }
+}
+
+#[<span class="function">derive</span>(<span class="function">Queryable</span>, <span class="function">Insertable</span>)]
+#[diesel(table_name = users)]
+<span class="keyword">struct</span> User {
+    id: <span class="keyword">i32</span>,
+    name: <span class="keyword">String</span>,
+}
+
+<span class="keyword">struct</span> ShardManager {
+    shards: <span class="function">HashMap</span>&lt;<span class="keyword">u8</span>, <span class="function">SqliteConnection</span>&gt;,
+}
+
+<span class="keyword">impl</span> <span class="keyword">ShardManager</span> {
+    <span class="keyword">fn</span> <span class="function">new</span>() -> <span class="keyword">Self</span> {
+        <span class="keyword">let</span> <span class="keyword">mut</span> shards = <span class="function">HashMap</span>::<span class="function">new</span>();
+        shards.<span class="function">insert</span>(<span class="number">0</span>, <span class="function">SqliteConnection</span>::<span class="function">establish</span>(<span class="string">"shard0.db"</span>).<span class="function">unwrap</span>());
+        shards.<span class="function">insert</span>(<span class="number">1</span>, <span class="function">SqliteConnection</span>::<span class="function">establish</span>(<span class="string">"shard1.db"</span>).<span class="function">unwrap</span>());
+        <span class="keyword">ShardManager</span> { shards }
+    }
+
+    <span class="keyword">fn</span> <span class="function">get_shard</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, user_id: <span class="keyword">i32</span>) -> &amp;<span class="keyword">mut</span> <span class="function">SqliteConnection</span> {
+        <span class="keyword">let</span> shard_id = (user_id % <span class="number">2</span>) <span class="keyword">as</span> <span class="keyword">u8</span>;
+        self.shards.<span class="function">get_mut</span>(&amp;shard_id).<span class="function">unwrap</span>()
+    }
+
+    <span class="keyword">fn</span> <span class="function">insert_user</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, user: <span class="keyword">User</span>) -> <span class="keyword">Result</span>&lt;(), <span class="function">diesel</span>::<span class="keyword">Error</span>&gt; {
+        <span class="keyword">let</span> conn = self.<span class="function">get_shard</span>(user.id);
+        diesel::<span class="function">insert_into</span>(users::table)
+            .<span class="function">values</span>(&amp;user)
+            .<span class="function">execute</span>(conn)?;
+        <span class="keyword">Ok</span>(())
+    }
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), <span class="keyword">Box</span>&lt;<span class="keyword">dyn</span> <span class="keyword">std</span>::<span class="function">error</span>::<span class="keyword">Error</span>&gt;&gt; {
+    <span class="keyword">let</span> <span class="keyword">mut</span> manager = <span class="keyword">ShardManager</span>::<span class="function">new</span>();
+    <span class="keyword">let</span> user = <span class="keyword">User</span> { id: <span class="number">1</span>, name: <span class="string">"Alice"</span>.<span class="function">to_string</span>() };
+    manager.<span class="function">insert_user</span>(user)?;
+    <span class="function">println!</span>(<span class="string">"User inserted into shard"</span>);
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Simulates sharding with Diesel ORM, distributing users across two SQLite databases. Add <code>diesel = { version = "2.0", features = ["sqlite"] }</code>, <code>libsqlite3-sys = { version = "0.24", features = ["bundled"] }</code> to <code>Cargo.toml</code>. Requires SQLite databases.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain CAP theorem (e.g., MongoDB prioritizes AP, PostgreSQL prioritizes CA) and sharding strategies.</p>
+    </section>
+
+    <section id="microservices">
+        <h2>4. Microservices vs. Monoliths, API Design, Message Queues</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Microservices: Independent services vs. monolithic single codebase.</li>
+            <li>API design: REST (resource-based) vs. GraphQL (query-based).</li>
+            <li>Message queues: Kafka/RabbitMQ for asynchronous communication.</li>
+        </ul>
+        <h3>Example: Message Queue with RabbitMQ</h3>
+        <p>Producer sending messages to RabbitMQ.</p>
+        <pre><code>
+<span class="keyword">use</span> amqp::{<span class="function">Session</span>, <span class="function">Protocol</span>, <span class="function">Basic</span>};
+<span class="keyword">use</span> std::env;
+
+<span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), <span class="keyword">Box</span>&lt;<span class="keyword">dyn</span> <span class="keyword">std</span>::<span class="function">error</span>::<span class="keyword">Error</span>&gt;&gt; {
+    <span class="keyword">let</span> <span class="keyword">mut</span> session = <span class="function">Session</span>::<span class="function">open_url</span>(<span class="string">"amqp://guest:guest@localhost:5672//"</span>)?;
+    <span class="keyword">let</span> <span class="keyword">mut</span> channel = session.<span class="function">open_channel</span>(<span class="keyword">None</span>)?;
+    
+    <span class="keyword">let</span> queue_name = <span class="string">"task_queue"</span>;
+    channel.<span class="function">queue_declare</span>(queue_name, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="function">Table</span>::<span class="function">new</span>())?;
+    
+    <span class="keyword">let</span> message = <span class="string">"Process this task!"</span>;
+    channel.<span class="function">basic_publish</span>(<span class="string">""</span>, queue_name, <span class="keyword">true</span>, <span class="keyword">false</span>, message.<span class="function">as_bytes</span>().<span class="function">to_vec</span>(), <span class="function">Table</span>::<span class="function">new</span>())?;
+    
+    <span class="function">println!</span>(<span class="string">"Sent: {}"</span>, message);
+    channel.<span class="function">close</span>(<span class="number">200</span>, <span class="string">"Bye"</span>)?;
+    session.<span class="function">close</span>(<span class="number">200</span>, <span class="string">"Bye"</span>);
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows RabbitMQ for async task processing in a microservices context. Add <code>amqp = "0.1"</code> to <code>Cargo.toml</code>. Requires RabbitMQ running locally.</p>
+        <h3>Interview Tip</h3>
+        <p>Compare REST (simpler) vs. GraphQL (flexible queries) and when to use message queues (e.g., decoupling services).</p>
+    </section>
+
+    <section id="security">
+        <h2>5. Security Considerations</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Authentication: OAuth, JWT for user verification.</li>
+            <li>Rate limiting: Prevent abuse (e.g., DDoS).</li>
+            <li>Data encryption: TLS, data-at-rest encryption.</li>
+        </ul>
+        <h3>Example: Rate Limiting with Actix</h3>
+        <p>Implements basic rate limiting in an Actix-web server.</p>
+        <pre><code>
+<span class="keyword">use</span> actix_web::{<span class="function">web</span>, <span class="function">App</span>, <span class="function">HttpResponse</span>, <span class="function">HttpServer</span>};
+<span class="keyword">use</span> std::collections::<span class="function">HashMap</span>;
+<span class="keyword">use</span> std::sync::{<span class="keyword">Arc</span>, <span class="keyword">Mutex</span>};
+<span class="keyword">use</span> std::time::{<span class="function">SystemTime</span>, <span class="keyword">UNIX_EPOCH</span>};
+
+<span class="keyword">struct</span> AppState {
+    rate_limits: <span class="keyword">Arc</span>&lt;<span class="keyword">Mutex</span>&lt;<span class="function">HashMap</span>&lt;<span class="keyword">String</span>, (<span class="keyword">u32</span>, <span class="keyword">u64</span>)&gt;&gt;&gt;,
+}
+
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">index</span>(state: <span class="function">web</span>::<span class="function">Data</span>&lt;<span class="keyword">AppState</span>&gt;) -> <span class="keyword">impl</span> <span class="function">actix_web</span>::<span class="keyword">Responder</span> {
+    <span class="keyword">let</span> client_ip = <span class="string">"127.0.0.1"</span>.<span class="function">to_string</span>(); <span class="comment">// Mock IP</span>
+    <span class="keyword">let</span> <span class="keyword">mut</span> limits = state.rate_limits.<span class="function">lock</span>().<span class="function">unwrap</span>();
+    <span class="keyword">let</span> now = <span class="function">SystemTime</span>::<span class="function">now</span>()
+        .<span class="function">duration_since</span>(<span class="keyword">UNIX_EPOCH</span>).<span class="function">unwrap</span>().<span class="function">as_secs</span>();
+
+    <span class="keyword">let</span> (count, timestamp) = limits.<span class="function">entry</span>(client_ip.<span class="function">clone</span>()).<span class="function">or_insert</span>((<span class="number">0</span>, now));
+    <span class="keyword">if</span> now - *timestamp > <span class="number">60</span> {
+        *count = <span class="number">0</span>;
+        *timestamp = now;
+    }
+
+    <span class="keyword">if</span> *count >= <span class="number">5</span> {
+        <span class="function">HttpResponse</span>::<span class="function">TooManyRequests</span>().<span class="function">body</span>(<span class="string">"Rate limit exceeded"</span>)
+    } <span class="keyword">else</span> {
+        *count += <span class="number">1</span>;
+        <span class="function">HttpResponse</span>::<span class="function">Ok</span>().<span class="function">body</span>(<span class="string">"Welcome!"</span>)
+    }
+}
+
+#[<span class="function">actix_web</span>::<span class="function">main</span>]
+<span class="keyword">async</span> <span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">std</span>::<span class="function">io</span>::<span class="keyword">Result</span>&lt;()&gt; {
+    <span class="keyword">let</span> state = <span class="function">web</span>::<span class="function">Data</span>::<span class="function">new</span>(<span class="keyword">AppState</span> {
+        rate_limits: <span class="keyword">Arc</span>::<span class="function">new</span>(<span class="keyword">Mutex</span>::<span class="function">new</span>(<span class="function">HashMap</span>::<span class="function">new</span>())),
+    });
+
+    <span class="function">HttpServer</span>::<span class="function">new</span>(<span class="keyword">move</span> || {
+        <span class="function">App</span>::<span class="function">new</span>()
+            .<span class="function">app_data</span>(state.<span class="function">clone</span>())
+            .<span class="function">route</span>(<span class="string">"/"</span>, <span class="function">web</span>::<span class="function">get</span>().<span class="function">to</span>(index))
+    })
+    .<span class="function">bind</span>(<span class="string">"127.0.0.1:8080"</span>)?
+    .<span class="function">run</span>()
+    .<span class="keyword">await</span>
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Implements a simple rate limiter using Actix-web. Add <code>actix-web = "4"</code> to <code>Cargo.toml</code>. In production, use Redis for distributed rate limiting.</p>
+        <h3>Interview Tip</h3>
+        <p>Discuss JWT vs. OAuth and encryption standards (e.g., AES-256).</p>
+    </section>
+
+    <section id="performance">
+        <h2>6. Performance Optimization</h2>
+        <h3>Concepts Covered</h3>
+        <ul>
+            <li>Indexing: Speed up database queries.</li>
+            <li>Query optimization: Avoid N+1 queries.</li>
+            <li>Handling high traffic: Load balancing, caching.</li>
+        </ul>
+        <h3>Example: Optimized Database Query with Diesel</h3>
+        <p>Avoids N+1 queries using eager loading.</p>
+        <pre><code>
+<span class="keyword">use</span> diesel::{<span class="function">prelude</span>::*, <span class="function">SqliteConnection</span>};
+
+<span class="keyword">table!</span> {
+    posts (id) {
+        id -> <span class="keyword">Integer</span>,
+        user_id -> <span class="keyword">Integer</span>,
+        title -> <span class="keyword">Text</span>,
+    }
+}
+
+<span class="keyword">table!</span> {
+    users (id) {
+        id -> <span class="keyword">Integer</span>,
+        name -> <span class="keyword">Text</span>,
+    }
+}
+
+#[<span class="function">derive</span>(<span class="function">Queryable</span>, <span class="function">Associations</span>)]
+#[diesel(belongs_to(User))]
+#[diesel(table_name = posts)]
+<span class="keyword">struct</span> Post {
+    id: <span class="keyword">i32</span>,
+    user_id: <span class="keyword">i32</span>,
+    title: <span class="keyword">String</span>,
+}
+
+#[<span class="function">derive</span>(<span class="function">Queryable</span>)]
+#[diesel(table_name = users)]
+<span class="keyword">struct</span> User {
+    id: <span class="keyword">i32</span>,
+    name: <span class="keyword">String</span>,
+}
+
+<span class="keyword">fn</span> <span class="function">main</span>() -> <span class="keyword">Result</span>&lt;(), <span class="keyword">Box</span>&lt;<span class="keyword">dyn</span> <span class="keyword">std</span>::<span class="function">error</span>::<span class="keyword">Error</span>&gt;&gt; {
+    <span class="keyword">let</span> conn = &amp;<span class="keyword">mut</span> <span class="function">SqliteConnection</span>::<span class="function">establish</span>(<span class="string">"test.db"</span>)?;
+    
+    <span class="keyword">let</span> posts_with_users = posts::table
+        .<span class="function">inner_join</span>(users::table)
+        .<span class="function">load</span>::&lt;(<span class="keyword">Post</span>, <span class="keyword">User</span>)&gt;(conn)?;
+    
+    <span class="keyword">for</span> (post, user) <span class="keyword">in</span> posts_with_users {
+        <span class="function">println!</span>(<span class="string">"Post: {}, Author: {}"</span>, post.title, user.name);
+    }
+    <span class="keyword">Ok</span>(())
+}
+        </code></pre>
+        <h3>Why This Example?</h3>
+        <p>Shows eager loading to avoid N+1 queries. Add <code>diesel = { version = "2.0", features = ["sqlite"] }</code>, <code>libsqlite3-sys = { version = "0.24", features = ["bundled"] }</code> to <code>Cargo.toml</code>. Requires SQLite database with proper schema.</p>
+        <h3>Interview Tip</h3>
+        <p>Explain indexing (e.g., B-tree) and how to analyze query performance (EXPLAIN plans).</p>
+    </section>
+
+    <section id="how-to-prepare">
+        <h2>How to Prepare</h2>
+        <p>Start by understanding core principles from books like "Designing Data-Intensive Applications" by Martin Kleppmann. Practice designing systems on paper or whiteboard, explaining trade-offs. Use resources like Grokking the System Design Interview (Educative.io) or LeetCode's system design section. Mock interviews on platforms like Pramp or Interviewing.io are great for verbalizing your thought process. Focus on real-world examples and justify choices (e.g., why choose eventual consistency over strong consistency).</p>
+    </section>
+
+    <footer>
+        <p>Prepared by Grok | Best of luck with your interview on August 14, 2025!</p>
+    </footer>
+</body>
+</html>
