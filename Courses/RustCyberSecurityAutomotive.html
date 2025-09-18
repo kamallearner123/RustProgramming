@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Essentials for Cyber Security Engineer — Rust + Automotive{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root{
+    --bg:#0b1220; --panel:#121a2b; --ink:#eaf0ff; --muted:#a9b4c9; --accent:#7aa2ff; --line:#1d2740;
+    --ok:#2bd48a; --warn:#ffcf5a; --bad:#ff6b6b; --rust:#ff7b29; --auto:#ffc107; --blue:#7aa2ff;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg); color:var(--ink); line-height:1.6}
+  a{color:var(--blue)}
+  .wrap{max-width:1200px; margin:0 auto; padding:24px}
+  .hero{background:linear-gradient(135deg,rgba(122,162,255,.15),transparent); border:1px solid var(--line);
+        border-radius:16px; padding:24px; margin-bottom:24px}
+  .hero h1{margin:0 0 12px; font-size:30px}
+  .meta{color:var(--muted); font-size:14px}
+  .grid{display:grid; gap:18px}
+  @media(min-width:1000px){ .grid{grid-template-columns:280px 1fr} }
+  .toc{position:sticky; top:12px; border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--panel)}
+  .toc h3{margin:0 0 8px; font-size:15px; color:var(--muted); letter-spacing:.3px}
+  .toc a{display:block; color:var(--ink); text-decoration:none; padding:6px 8px; border-radius:8px; font-size:14px}
+  .toc a:hover{background:#0f1830}
+  .card{border:1px solid var(--line); background:var(--panel); border-radius:14px; padding:18px; margin-bottom:18px}
+  .card h2{margin:0 0 8px; font-size:22px}
+  .pill{display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; margin:2px; border:1px solid var(--line)}
+  .pill.ok{background:var(--ok); color:#000}
+  .pill.bad{background:var(--bad); color:#fff}
+  .pill.warn{background:var(--warn); color:#000}
+  .pill.rust{background:var(--rust); color:#fff}
+  .pill.auto{background:var(--auto); color:#000}
+  .list-tight li{margin:.25rem 0}
+  .highlight-rust{color:var(--rust); font-weight:bold}
+  .highlight-bad{color:var(--bad); font-weight:bold}
+  .highlight-ok{color:var(--ok); font-weight:bold}
+  .highlight-warn{color:var(--warn); font-weight:bold}
+  .highlight-auto{color:var(--auto); font-weight:bold}
+  .two-col{display:grid; gap:14px}
+  @media(min-width:800px){ .two-col{grid-template-columns:1fr 1fr} }
+  .three-col{display:grid; gap:14px}
+  @media(min-width:1100px){ .three-col{grid-template-columns:1fr 1fr 1fr} }
+  .btn{display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid var(--line); text-decoration:none; color:var(--ink); background:#0f1830}
+  .btn:hover{background:#0d1528}
+  code, pre{background:#0e1526; border:1px solid var(--line); padding:2px 6px; border-radius:8px}
+  .tag{display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; border:1px solid var(--line); margin:2px}
+  .tag.rust{background:rgba(255,123,41,.15); color:var(--rust)}
+  .tag.auto{background:rgba(255,193,7,.15); color:var(--auto)}
+  .tag.sec{background:rgba(43,212,138,.15); color:var(--ok)}
+  .tag.warn{background:rgba(255,207,90,.15); color:var(--warn)}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrap">
+  <section class="hero">
+    <h1>Essentials for Cyber Security Engineer
+      <span class="pill rust">Rust</span>
+      <span class="pill auto">Automotive</span>
+      <span class="pill ok">Security-First</span>
+    </h1>
+    <div class="meta">
+      Design and defend modern vehicle software with a <span class="highlight-rust">Rust-first</span> approach:
+      in-vehicle networks (CAN/LIN/Ethernet), V2X, secure boot & OTA, IDS, forensics, and DevSecOps.
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- TOC -->
+    <aside class="toc">
+      <h3>Quick Nav</h3>
+      <a href="#overview">Overview & Outcomes</a>
+      <a href="#prereq">Prerequisites & Toolchain</a>
+      <a href="#rust-track">Deep Rust Track</a>
+      <a href="#modules">Modules (Full Curriculum)</a>
+      <a href="#labs">Hands-on Rust Labs</a>
+      <a href="#projects">Capstone Ideas</a>
+      <a href="#schedule">10-Week Plan</a>
+      <a href="#assessment">Assessment</a>
+      <a href="#standards">Standards & Frameworks</a>
+      <a href="#django-notes">Django Integration</a>
+    </aside>
+
+    <!-- Main -->
+    <main>
+      <section id="overview" class="card">
+        <h2>Overview & Learning Outcomes</h2>
+        <p>
+          This course blends <strong>Automotive Cybersecurity</strong> with a <strong class="highlight-rust">Rust</strong> systems
+          track. Students learn why most historical exploits arise from <span class="highlight-bad">memory-unsafe</span> code and how
+          Rust’s model prevents entire classes of bugs.
+        </p>
+        <ul class="list-tight">
+          <li>Explain automotive attack surfaces (ECUs, <span class="highlight-auto">CAN/FlexRay/Ethernet</span>, V2X) and mitigations.</li>
+          <li>Build secure, memory-safe parsers, servers, and IDS tooling in <span class="highlight-rust">Rust</span>.</li>
+          <li>Implement <span class="highlight-ok">secure boot</span>, firmware signing, and OTA verification utilities.</li>
+          <li>Adopt <span class="highlight-warn">DevSecOps</span> for Rust: linting, auditing, fuzzing, SCA, SBOMs.</li>
+          <li>Operate with standards: <span class="highlight-auto">ISO 21434</span>, UNECE R155/R156, and ISO 26262 (ASIL).</li>
+        </ul>
+      </section>
+
+      <section id="prereq" class="card two-col">
+        <div>
+          <h2>Prerequisites</h2>
+          <ul class="list-tight">
+            <li>Programming: Python/C/C++ basics. <span class="highlight-rust">Rust taught in-course.</span></li>
+            <li>Networking: TCP/IP, Linux shell.</li>
+            <li>Security: CIA triad, crypto basics helpful.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Toolchain</h2>
+          <ul class="list-tight">
+            <li><span class="tag rust">Rust</span> <code>rustup</code>, <code>cargo</code>, <code>clippy</code>, <code>rustfmt</code>, <code>cargo-audit</code>, <code>cargo-deny</code>, <code>cargo-fuzz</code></li>
+            <li><span class="tag auto">Embedded</span> <code>probe-rs</code>, QEMU, ARM/RISC-V targets, <code>embedded-hal</code>, <code>rtic</code>, <code>heapless</code></li>
+            <li><span class="tag sec">Security</span> Wireshark, Zeek/Suricata (PCAPs provided), OpenSSL tools</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Deep Rust Track -->
+      <section id="rust-track" class="card">
+        <h2>Deep Rust Track (Security-Centered)</h2>
+        <div class="three-col">
+          <div>
+            <h3 class="highlight-rust">Language & Safety</h3>
+            <ul class="list-tight">
+              <li>Ownership, borrowing, lifetimes (refs vs pointers)</li>
+              <li>Traits & generics; type bounds; <code>From</code>/<code>TryFrom</code>, <code>Deref</code>, <code>Drop</code></li>
+              <li>Error handling: <code>Result</code>/<code>Option</code>, custom errors (<code>thiserror</code>), context (<code>anyhow</code>)</li>
+              <li>Collections & iterators; zero-copy patterns (<code>bytes</code>, <code>zerocopy</code>, <code>bytemuck</code>)</li>
+            </ul>
+            <h4>Testing & Quality</h4>
+            <ul class="list-tight">
+              <li>Unit/integration tests, <code>proptest</code> (property testing)</li>
+              <li>Fuzzing with <code>cargo-fuzz</code></li>
+              <li>Benchmarking with <code>criterion</code></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="highlight-rust">Concurrency & Async</h3>
+            <ul class="list-tight">
+              <li>Threading primitives: <code>Send</code>/<code>Sync</code>, <code>Arc</code>, <code>Mutex</code>, <code>RwLock</code></li>
+              <li>Lock-free patterns & atomics (ring buffers, MPSC)</li>
+              <li>Async Rust: futures, <code>Pin</code>, <code>tokio</code>/<code>async-std</code>, cancellation</li>
+              <li>Backpressure & timeouts; structured concurrency</li>
+            </ul>
+            <h4>Unsafe & FFI</h4>
+            <ul class="list-tight">
+              <li>FFI to C; <code>#[repr(C)]</code> invariants</li>
+              <li>Memory layout, aliasing, and safety boundaries</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="highlight-rust">Security, Networking & Embedded</h3>
+            <ul class="list-tight">
+              <li>Crypto: <code>ring</code>, <code>rustls</code>, <code>argon2</code>, <code>sha2</code>, secrets (<code>zeroize</code>, <code>secrecy</code>)</li>
+              <li>Packet/protocol parsing: <code>nom</code>, <code>pnet</code>, <code>smoltcp</code></li>
+              <li>Web backends: <code>axum</code>/<code>actix-web</code>, safe parsing via <code>serde</code></li>
+              <li><code>no_std</code>, <code>embedded-hal</code>, <code>rtic</code>, ISR-safe code, heapless queues</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Full Curriculum Modules -->
+      <section id="modules" class="card">
+        <h2>Modules (Full Curriculum)</h2>
+        <ol>
+          <li><strong class="highlight-auto">Automotive Security Landscape</strong> —
+            ISO 21434, UNECE WP.29 R155/R156; attack surfaces: ECUs, OTA, telematics; case studies (Jeep hack, Tesla patches).</li>
+          <li><strong class="highlight-rust">Rust Fundamentals vs C Pitfalls</strong> —
+            ownership/borrowing; stack/heap; UAF/buffer overflow in C vs compile-time safety in Rust.</li>
+          <li><strong class="highlight-auto">In-Vehicle Networks</strong> —
+            CAN/LIN/FlexRay/Ethernet; spoofing/replay; secure gateways; timestamping & rate-limits.</li>
+          <li><strong class="highlight-bad">Memory Safety & Exploits</strong> —
+            stack smashing, integer overflow, race conditions; mitigations and Rust patterns.</li>
+          <li><strong class="highlight-ok">Cryptography & PKI for Vehicles</strong> —
+            ECC for constrained devices; secure boot chain; RNG pitfalls; HSM basics.</li>
+          <li><strong class="highlight-warn">V2X Security</strong> —
+            DSRC/C-V2X; auth, anti-replay, Sybil risks; rate-limiting strategies.</li>
+          <li><strong class="highlight-ok">Secure Firmware & OTA</strong> —
+            signing & verification; versioning/rollback protection; secure channels.</li>
+          <li><strong class="highlight-auto">Intrusion Detection (Vehicle)</strong> —
+            rule- and anomaly-based; high-rate CAN parsing; perf & memory constraints.</li>
+          <li><strong class="highlight-warn">Incident Response & Forensics</strong> —
+            log collection, ECU forensics, chain of custody; Rust log tooling.</li>
+          <li><strong class="highlight-rust">DevSecOps for Rust</strong> —
+            clippy/rustfmt; <code>cargo-audit</code>/<code>cargo-deny</code>; fuzzing; SBOM (CycloneDX); reproducible builds.</li>
+        </ol>
+      </section>
+
+      <!-- Labs -->
+      <section id="labs" class="card">
+        <h2>Hands-on Rust Labs</h2>
+        <div class="two-col">
+          <div>
+            <ul class="list-tight">
+              <li><span class="tag rust">Tokio + nom</span> TCP Echo with hardened parser (malformed input defense)</li>
+              <li><span class="tag auto">CAN IDS</span> Parse frames, detect replay/spoof, rate-limit floods</li>
+              <li><span class="tag ok">Firmware Verifier</span> ECDSA/Ed25519 signatures, semantic-version rollback rules</li>
+              <li><span class="tag sec">Packet Sniffer</span> <code>pnet</code> filters + flow stats, DoS heuristics</li>
+              <li><span class="tag rust">Web Microservice</span> <code>axum</code> + Argon2, CSRF, input validation</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="list-tight">
+              <li><span class="tag rust">Async Concurrency</span> channels, backpressure, cancellation; load testing</li>
+              <li><span class="tag warn">Fuzzing & Proptests</span> <code>cargo-fuzz</code> + <code>proptest</code> for parsers</li>
+              <li><span class="tag auto">no_std Demo</span> ISR-safe ring buffer + heapless queue (sim/QEMU)</li>
+              <li><span class="tag warn">Supply Chain</span> <code>cargo-audit</code>, <code>cargo-deny</code>, SBOM generation</li>
+              <li><span class="tag sec">Forensics</span> Rust CLI to parse CAN/logs, extract anomalies</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capstone -->
+      <section id="projects" class="card">
+        <h2>Capstone Project Ideas</h2>
+        <ul class="list-tight">
+          <li><strong>Vehicle Edge Security Agent (Rust)</strong> — CAN parser + rules engine + signed config updates; SBOM + audit in CI.</li>
+          <li><strong>Secure OTA Pipeline</strong> — firmware signer/verifier CLI, rollback-prevention, attestation logs.</li>
+          <li><strong>V2X Validator</strong> — verify message signatures, reject replays/Sybil patterns, telemetry dashboard.</li>
+          <li><strong>Embedded Safe Logger</strong> — <code>no_std</code> logging with integrity seals and efficient storage.</li>
+        </ul>
+      </section>
+
+      <!-- Schedule -->
+      <section id="schedule" class="card">
+        <h2>Suggested 10-Week Schedule</h2>
+        <ol class="list-tight">
+          <li><strong>W1</strong> — Automotive threats & standards; install Rust; ownership & borrowing intro.</li>
+          <li><strong>W2</strong> — Lifetimes; error handling; C overflow demo vs Rust safety; tests & clippy.</li>
+          <li><strong>W3</strong> — Traits/generics; iterators; <span class="highlight-rust">nom</span> parser lab; property tests.</li>
+          <li><strong>W4</strong> — In-vehicle networks; CAN parsing in Rust; replay detection; perf notes.</li>
+          <li><strong>W5</strong> — Async Rust (<span class="highlight-rust">tokio</span>); timeouts/backpressure; secure server patterns.</li>
+          <li><strong>W6</strong> — Crypto & PKI; <span class="highlight-rust">ring/rustls</span>; firmware signature verifier lab.</li>
+          <li><strong>W7</strong> — V2X simulation; authentication & anti-replay; rate-limiting strategies.</li>
+          <li><strong>W8</strong> — OTA/secure boot; versioning & rollback protection; SBOM + <span class="highlight-warn">cargo-deny</span>.</li>
+          <li><strong>W9</strong> — IDS pipeline in Rust; fuzz the parser; telemetry/logging with <code>tracing</code>.</li>
+          <li><strong>W10</strong> — Incident response & forensics; capstone integration, demo & review.</li>
+        </ol>
+      </section>
+
+      <!-- Assessment -->
+      <section id="assessment" class="card">
+        <h2>Assessment</h2>
+        <ul class="list-tight">
+          <li>Weekly labs (40%): correctness + security (no panics, bounds-safe, tests pass, clippy clean).</li>
+          <li>Quizzes (10%): standards, protocols, Rust semantics.</li>
+          <li>Capstone (40%): end-to-end Rust tool (e.g., CAN IDS + firmware verifier + SBOM check).</li>
+          <li>Participation (10%): code reviews, threat modeling exercises.</li>
+        </ul>
+      </section>
+
+      <!-- Standards -->
+      <section id="standards" class="card">
+        <h2>Standards & Frameworks</h2>
+        <ul class="list-tight">
+          <li><span class="highlight-auto">Automotive</span>: ISO 21434, UNECE WP.29 R155/R156, ISO 26262 (ASIL)</li>
+          <li><span class="highlight-warn">Security</span>: OWASP, NIST CSF, CIS Controls, MITRE ATT&CK (enterprise/ICS)</li>
+          <li><span class="highlight-ok">DevSecOps</span>: SCA, SBOM (CycloneDX), code signing, CI policies</li>
+        </ul>
+      </section>
+
+      <!-- Django notes -->
+      <section id="django-notes" class="card">
+        <h2>Django Integration</h2>
+        <ul class="list-tight">
+          <li>Place this file at <code>templates/courses/automotive_rust_cyber.html</code>.</li>
+          <li>Ensure <code>base.html</code> defines blocks:
+            <code>{% raw %}{% block title %}{% endblock %}{% endraw %}</code>,
+            <code>{% raw %}{% block extra_css %}{% endblock %}{% endraw %}</code>,
+            <code>{% raw %}{% block content %}{% endblock %}{% endraw %}</code>,
+            <code>{% raw %}{% block extra_js %}{% endblock %}{% endraw %}</code>.
+          </li>
+          <li>Add a URL & view:
+            <pre><code># urls.py
+from django.urls import path
+from django.views.generic import TemplateView
+
+urlpatterns = [
+    path(
+      "courses/automotive-rust-cyber/",
+      TemplateView.as_view(template_name="courses/automotive_rust_cyber.html"),
+      name="course-automotive-rust-cyber",
+    ),
+]
+</code></pre>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Smooth-scroll for TOC
+  document.querySelectorAll('.toc a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const href = a.getAttribute('href');
+      if(href && href.startsWith('#')){
+        e.preventDefault();
+        document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+</script>
+{% endblock %}
+

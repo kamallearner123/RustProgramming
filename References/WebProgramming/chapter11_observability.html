@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>11. Logging &amp; Observability – Rust Web Book</title>
+  <style>
+  :root{ --sidebar: 280px; --accent:#2563eb; --accent2:#10b981; --dark:#0f172a; --bg:#ffffff; --soft:#f8fafc; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{ margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:#111827; }
+  .layout{ display:flex; min-height:100vh; }
+  aside{ width:var(--sidebar); background:var(--soft); border-right:1px solid #e5e7eb; position:sticky; top:0; height:100vh; padding:18px 12px; }
+  .brand{ font-weight:800; font-size:18px; color:var(--dark); margin-bottom:8px; }
+  .tag{ display:inline-block; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:12px; font-size:12px; }
+  .search{ margin:12px 8px 16px; }
+  .search input{ width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; }
+  nav a{ display:block; padding:10px 12px; margin:4px 6px; text-decoration:none; border-radius:10px; color:#111827; border:1px solid transparent; font-weight:500; }
+  nav a.active{ background:#dbeafe; border-color:#bfdbfe; color:#1e3a8a; }
+  nav a:hover{ background:#f1f5f9; }
+  main{ flex:1; padding:32px 36px; max-width: 1140px; }
+  h1{ margin-top:0; font-size:30px; }
+  h2{ font-size:22px; color:#0f766e; margin-top:28px; }
+  h3{ font-size:18px; color:#374151; margin-top:20px; }
+  p.lede{ font-size:18px; color:#334155; }
+  pre{ background:#0b1020; color:#e5e7eb; padding:14px; border-radius:12px; overflow:auto; }
+  code{ font-family: ui-monosace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  .grid{ display:grid; gap:14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card{ border:1px solid #e5e7eb; border-radius:12px; padding:14px; background:#fff; }
+  .callout{ border-radius:12px; padding:14px; margin:16px 0; }
+  .info{ background:#eef2ff; border:1px solid #c7d2fe; }
+  .success{ background:#ecfeff; border:1px solid #a5f3fc; }
+  .warn{ background:#fff7ed; border:1px solid #fed7aa; }
+  .danger{ background:#ffe4e6; border:1px solid #fecdd3; }
+  .kbd{ padding:2px 6px; border:1px solid #e5e7eb; border-bottom-width:2px; border-radius:6px; background:#f8fafc; font-family:inherit; font-size:12px; }
+  footer{ color:#64748b; padding:20px 0; }
+  .emoji{ font-size: 22px; margin-right:6px; }
+  .tok-kw{ color:#93c5fd; }
+  .tok-ty{ color:#fca5a5; }
+  .tok-str{ color:#86efac; }
+  .tok-num{ color:#fcd34d; }
+  .tok-com{ color:#9ca3af; font-style:italic; }
+  .tok-macro{ color:#a78bfa; }
+  .tok-attr{ color:#60a5fa; }
+  .tok-lt{ color:#67e8f9; }
+  .tok-fn{ color:#f9a8d4; }
+  @media (max-width: 960px){
+    aside{ position:fixed; transform: translateX(-100%); transition: transform .2s ease; z-index:999; }
+    aside.open{ transform: translateX(0); }
+    .menu-btn{ display:inline-block; margin-bottom:16px; background:#111827; color:#fff; padding:8px 10px; border-radius:10px; border:0; }
+    main{ padding:20px; }
+  }
+</style>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const blocks = document.querySelectorAll('pre code.language-rust');
+  for (const block of blocks) {
+    block.innerHTML = highlightRust(block.textContent);
+  }
+});
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function highlightRust(src){
+  let s = esc(src);
+  s = s.replace(/\/\*[\s\S]*?\*\//g, m => `<span class="tok-com">${m}</span>`);
+  s = s.replace(/(^|[^:])\/\/.*$/gm, (m, p1) => `${p1}<span class="tok-com">${m.slice(p1.length)}</span>`);
+  s = s.replace(/#\[[^\]]*\]/g, m => `<span class="tok-attr">${m}</span>`);
+  s = s.replace(/"(?:\\.|[^"\\])*"/g, m => `<span class="tok-str">${m}</span>`);
+  s = s.replace(/'(?:\\.|[^'\\])'/g, m => `<span class="tok-str">${m}</span>`);
+  s = s.replace(/'[_a-zA-Z]\w*/g, m => `<span class="tok-lt">${m}</span>`);
+  s = s.replace(/\b\d[\d_]*(?:\.\d[\d_]*)?(?:[ui]size|[ui](?:8|16|32|64|128))?\b/g, m => `<span class="tok-num">${m}</span>`);
+  s = s.replace(/\b([a-zA-Z_]\w*)!/g, (m, g1) => `<span class="tok-macro">${g1}</span>!`);
+  const kw = ['fn','let','mut','pub','struct','enum','impl','trait','async','await','use','mod','crate','super','self','Self','const','static','ref','move','match','if','else','loop','while','for','in','return','continue','break','where','type','dyn','unsafe','extern','as','box'];
+  const kwRe = new RegExp('\\b(' + kw.join('|') + ')\\b','g');
+  s = s.replace(kwRe, '<span class="tok-kw">$1</span>');
+  const ty = ['i8','i16','i32','i64','i128','isize','u8','u16','u32','u64','u128','usize','f32','f64','String','str','bool','Option','Result','Vec','Box','Arc','Rc','HashMap','HashSet','Cow'];
+  const tyRe = new RegExp('\\b(' + ty.join('|') + ')\\b','g');
+  s = s.replace(tyRe, '<span class="tok-ty">$1</span>');
+  s = s.replace(/(\bfn\s+)([a-zA-Z_]\w*)/g, (m, p1, p2) => `${p1}<span class="tok-fn">${p2}</span>`);
+  return s;
+}
+</script>
+  <script>function toggleMenu(){document.querySelector('aside').classList.toggle('open');}</script>
+</head>
+<body>
+  <div class="layout">
+    <aside><div class="brand">🦀 Rust Web Book <span class="tag">v2</span></div><div class="search"><input type="text" placeholder="Search (Cmd/Ctrl+F)"></div><nav><a class="" href="index.html">Overview</a>
+<a class="" href="chapter1_foundations.html">1. Foundations</a>
+<a class="" href="chapter2_html_templates.html">2. HTML &amp; Templates</a>
+<a class="" href="chapter3_json_serde.html">3. JSON APIs (Serde)</a>
+<a class="" href="chapter4_routing_middleware.html">4. Routing &amp; Middleware</a>
+<a class="" href="chapter5_db_diesel_seaorm.html">5. DB &amp; ORM</a>
+<a class="" href="chapter6_migrations_queries.html">6. Migrations &amp; Queries</a>
+<a class="" href="chapter7_auth_sessions_jwt.html">7. Auth: Sessions &amp; JWT</a>
+<a class="" href="chapter8_static_uploads_otp.html">8. Static &amp; Uploads</a>
+<a class="" href="chapter9_testing_ci.html">9. Testing &amp; CI</a>
+<a class="" href="chapter10_client_examples.html">10. Clients (HTML &amp; JS)</a>
+<a class="active" href="chapter11_observability.html">11. Logging &amp; Observability</a>
+<a class="" href="chapter12_deploy_docker.html">12. Docker &amp; Deploy</a>
+<a class="" href="chapter13_ai_integration.html">13. AI Integration</a>
+<a class="" href="chapter14_blockchain_basics.html">14. Blockchain Basics</a></nav></aside>
+    <main>
+      <button class="menu-btn" onclick="toggleMenu()" style="display:none;">☰ Menu</button>
+      <h1>🔭 Chapter 11: Logging & Observability</h1><p class="lede">Use <code>tracing</code> for structured logs and instrument your endpoints.</p><h2>Tracing</h2><pre><code class="language-toml">tracing = &quot;0.1&quot;
+tracing-subscriber = { version = &quot;0.3&quot;, features = [&quot;fmt&quot;,&quot;env-filter&quot;] }</code></pre><pre><code class="language-rust">use tracing::{info, instrument};
+#[instrument]
+async fn compute(x:i32) -&gt; i32 { info!(x, &quot;computing&quot;); x * 2 }</code></pre><div class="callout success">✅ Add correlation IDs and propagate trace context across services.</div>
+      <footer>© Rust Web Book – Highlighted Edition</footer>
+    </main>
+  </div>
+  <script>(function(){ if (matchMedia("(max-width: 960px)").matches) document.querySelector(".menu-btn").style.display="inline-block"; })();</script>
+</body>
+</html>

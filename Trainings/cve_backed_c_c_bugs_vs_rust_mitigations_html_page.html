@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVE‑backed C/C++ Bugs vs Rust Mitigations</title>
+  <style>
+    :root{
+      --blue:#0d47a1; /* deep blue */
+      --black:#111;
+      --muted:#5f6b7a;
+      --bg:#f7f9fc;
+      --card:#fff;
+      --ok:#0b8457;
+      --warn:#b23a48;
+      --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--black);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}
+    header{background:linear-gradient(90deg,var(--blue),#1b74d4);color:#fff;padding:28px 20px;border-bottom:8px solid var(--blue)}
+    h1{margin:0 0 6px 0;font-size:28px;letter-spacing:0.2px}
+    .sub{opacity:.95}
+    main{max-width:1100px;margin:24px auto;padding:0 16px 60px}
+    .card{background:var(--card);border:2px solid var(--blue);border-radius:14px;box-shadow:0 8px 24px rgba(13,71,161,.08);padding:18px;margin:16px 0}
+    .toc ol{margin:10px 0 0 18px}
+    .toc a{color:var(--blue);text-decoration:none}
+    .toc a:hover{text-decoration:underline}
+    h2{margin:8px 0 6px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px;color:var(--blue)}
+    .meta{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 12px}
+    .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:#e6eefc;color:var(--blue);border:1px solid var(--blue)}
+    .impact{color:var(--warn);font-weight:600}
+    pre{background:#0f172a;color:#e5e7eb;border-radius:10px;padding:12px;overflow:auto;border:1px solid #0b1a3a}
+    code{font-family:var(--mono);font-size:13.5px}
+    .refs a{color:var(--blue);text-decoration:none}
+    .refs a:hover{text-decoration:underline}
+    .split{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:880px){.split{grid-template-columns:1.1fr .9fr}}
+    .backtop{margin-top:8px}
+    .backtop a{color:var(--muted);text-decoration:none}
+    footer{margin:28px 0;color:var(--muted);font-size:13px}
+    .note{font-size:14px;color:var(--muted)}
+  </style>
+</head>
+<body>
+<header>
+  <h1>CVE‑backed C/C++ Bugs vs Rust Mitigations</h1>
+  <div class="sub">A teaching aid: reproducible root causes, real CVEs, and how Rust fences them off.</div>
+</header>
+<main>
+  <section class="card toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#cve-2014-0160">OpenSSL Heartbleed — CVE‑2014‑0160</a></li>
+      <li><a href="#cve-2015-0235">glibc “GHOST” — CVE‑2015‑0235</a></li>
+      <li><a href="#cve-2015-7547">glibc getaddrinfo — CVE‑2015‑7547</a></li>
+      <li><a href="#cve-2015-3824">Android Stagefright — CVE‑2015‑3824</a></li>
+      <li><a href="#cve-2016-0777">OpenSSH roaming — CVE‑2016‑0777</a></li>
+      <li><a href="#cve-2016-5195">Linux Dirty COW — CVE‑2016‑5195</a></li>
+      <li><a href="#cve-2015-3456">QEMU “VENOM” — CVE‑2015‑3456</a></li>
+      <li><a href="#cve-2019-11477">Linux TCP SACK Panic — CVE‑2019‑11477</a></li>
+      <li><a href="#cve-2022-0847">Linux Dirty Pipe — CVE‑2022‑0847</a></li>
+      <li><a href="#cve-2023-4863">libwebp heap overflow — CVE‑2023‑4863</a></li>
+      <li><a href="#cve-2017-14491">dnsmasq overflow — CVE‑2017‑14491</a></li>
+      <li><a href="#cve-2018-25032">zlib deflate corruption — CVE‑2018‑25032</a></li>
+      <li><a href="#cve-2021-3156">sudo “Baron Samedit” — CVE‑2021‑3156</a></li>
+    </ol>
+    <p class="note">Snippets are minimal repro-style and illustrative, not vendor code.</p>
+  </section>
+
+  <!-- 1 Heartbleed -->
+  <section id="cve-2014-0160" class="card vuln">
+    <h2>1) OpenSSL Heartbleed <span class="tag">CVE‑2014‑0160</span></h2>
+    <div class="meta">
+      <span class="tag">Buffer over‑read</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2014-0160">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> length from untrusted input used without bounds check, causing read past the end of a buffer.</p>
+<pre><code class="language-c">// pseudo-repro
+uint16_t len = attacker_claims;           // unchecked
+memcpy(reply, payload, len);              // reads past payload
+</code></pre>
+        <p class="impact">Impact: TLS secrets, cookies, and memory leaked in ~64KB chunks.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li><code>&amp;[u8]</code> slice indexing is bounds-checked in safe code.</li>
+          <li>Copying uses length-checked APIs (<code>copy_from_slice</code>).</li>
+        </ul>
+<pre><code class="language-rust">fn echo(payload: &amp;[u8], n: usize) -&gt; Vec&lt;u8&gt; {
+    let n = n.min(payload.len()); // explicit cap
+    payload[..n].to_vec()
+}
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2014-0160">CVE‑2014‑0160</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 2 GHOST -->
+  <section id="cve-2015-0235" class="card vuln">
+    <h2>2) glibc “GHOST” <span class="tag">CVE‑2015‑0235</span></h2>
+    <div class="meta">
+      <span class="tag">Heap overflow</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-0235">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> unchecked C‑string copies when resolving hostnames.</p>
+<pre><code class="language-c">char buf[256];
+strcpy(buf, attacker_name); // overflows when name is longer
+</code></pre>
+        <p class="impact">Impact: RCE in network‑exposed services using glibc resolver.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Length‑tracked <code>String</code> / <code>Vec&lt;u8&gt;</code>; no implicit NUL termination.</li>
+          <li>Copy APIs validate lengths (<code>clone_from_slice</code>).</li>
+        </ul>
+<pre><code class="language-rust">fn safe_copy(name: &amp;str) -&gt; String { name.to_owned() }
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-0235">CVE‑2015‑0235</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 3 glibc getaddrinfo -->
+  <section id="cve-2015-7547" class="card vuln">
+    <h2>3) glibc getaddrinfo <span class="tag">CVE‑2015‑7547</span></h2>
+    <div class="meta">
+      <span class="tag">Stack overflow</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-7547">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> oversized DNS response copied into fixed stack buffer.</p>
+<pre><code class="language-c">char ans[2048];
+ssize_t n = recvfrom(sock, ans, 4096, 0); // writes past ans
+</code></pre>
+        <p class="impact">Impact: remote crash/RCE via crafted DNS.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Slice‑based IO (<code>read</code>/<code>read_exact</code>) works with buffer length.</li>
+          <li>Higher‑level DNS crates validate lengths.</li>
+        </ul>
+<pre><code class="language-rust">let mut buf = [0u8; 2048];
+let n = sock.read(&amp;mut buf)?; // never writes past buf
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-7547">CVE‑2015‑7547</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 4 Stagefright -->
+  <section id="cve-2015-3824" class="card vuln">
+    <h2>4) Android Stagefright <span class="tag">CVE‑2015‑3824</span></h2>
+    <div class="meta">
+      <span class="tag">Integer overflow → heap overwrite</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-3824">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> arithmetic overflow shrinks allocation; later writes overflow.</p>
+<pre><code class="language-c">size_t size = header + count * entry; // may wrap small
+uint8_t *p = malloc(size);
+for (size_t i=0; i&lt;count; i++) p[i*entry] = 0; // OOB
+</code></pre>
+        <p class="impact">Impact: MMS/MP4 could achieve remote code execution.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Checked math via <code>checked_add</code>/<code>checked_mul</code> or <code>Vec</code> capacity growth.</li>
+          <li>Indexing is bounds-checked in safe code.</li>
+        </ul>
+<pre><code class="language-rust">let size = header.checked_add(count.checked_mul(entry)?).ok_or("overflow")?;
+let mut v = Vec::with_capacity(size);
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-3824">CVE‑2015‑3824</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 5 OpenSSH roaming -->
+  <section id="cve-2016-0777" class="card vuln">
+    <h2>5) OpenSSH roaming <span class="tag">CVE‑2016‑0777</span></h2>
+    <div class="meta">
+      <span class="tag">Info leak (UAF/uninit)</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2016-0777">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> freed/reused buffers exposed to server.</p>
+<pre><code class="language-c">free(kbuf);
+char *buf = malloc(sz);
+send(sockfd, buf, sz, 0); // may leak prior secrets
+</code></pre>
+        <p class="impact">Impact: client private key material leaked to a rogue server.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>No use‑after‑free in safe code; moved values become inaccessible.</li>
+          <li>Zeroization crates (e.g., <code>zeroize</code>) for explicit key scrubbing.</li>
+        </ul>
+<pre><code class="language-rust">use zeroize::Zeroize;
+let mut k = secret_key_bytes;
+// ...
+k.zeroize();
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2016-0777">CVE‑2016‑0777</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 6 Dirty COW -->
+  <section id="cve-2016-5195" class="card vuln">
+    <h2>6) Linux Dirty COW <span class="tag">CVE‑2016‑5195</span></h2>
+    <div class="meta">
+      <span class="tag">Race condition</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2016-5195">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> COW race on read‑only mappings allowed write‑escalation.</p>
+        <p class="impact">Impact: local privilege escalation to root.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates (userland)</h3>
+        <ul>
+          <li>Data races are disallowed in safe Rust; shared mutation requires <code>Mutex/RwLock/Atomic</code>.</li>
+          <li>In kernel contexts, Rust types encode aliasing/ownership, reducing UB windows.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2016-5195">CVE‑2016‑5195</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 7 VENOM -->
+  <section id="cve-2015-3456" class="card vuln">
+    <h2>7) QEMU “VENOM” <span class="tag">CVE‑2015‑3456</span></h2>
+    <div class="meta">
+      <span class="tag">Off‑by‑one / OOB write</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-3456">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> device emulator copied bytes past end of a fixed buffer.</p>
+<pre><code class="language-c">uint8_t buf[512];
+for (size_t i=0; i&lt;=len; i++) buf[i] = in[i]; // off-by-one
+</code></pre>
+        <p class="impact">Impact: VM escape to host.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Bounds‑checked indexing; iterators avoid manual index math.</li>
+          <li>Parsing with slices and <code>take()</code> style combinators.</li>
+        </ul>
+<pre><code class="language-rust">for (dst, src) in buf.iter_mut().zip(in.iter()) { *dst = *src; }
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2015-3456">CVE‑2015‑3456</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 8 TCP SACK Panic -->
+  <section id="cve-2019-11477" class="card vuln">
+    <h2>8) Linux TCP SACK Panic <span class="tag">CVE‑2019‑11477</span></h2>
+    <div class="meta">
+      <span class="tag">Integer overflow → DoS</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2019-11477">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> 16‑bit arithmetic overflow in TCP segment calculations.</p>
+<pre><code class="language-c">u16 segs = skb-&gt;gso_segs;
+segs *= mss; // overflow wraps
+</code></pre>
+        <p class="impact">Impact: remote panic via crafted SACKs.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Checked math (<code>checked_mul</code>) and explicit types; fuzz harnesses are ergonomic.</li>
+        </ul>
+<pre><code class="language-rust">let segs = segs.checked_mul(mss).ok_or("overflow")?;
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2019-11477">CVE‑2019‑11477</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 9 Dirty Pipe -->
+  <section id="cve-2022-0847" class="card vuln">
+    <h2>9) Linux Dirty Pipe <span class="tag">CVE‑2022‑0847</span></h2>
+    <div class="meta">
+      <span class="tag">Uninitialized struct flags</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2022-0847">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> stale flag bit allowed writes into page cache for RO files.</p>
+        <p class="impact">Impact: local overwrite → privilege escalation.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Reading uninitialized memory is impossible in safe Rust.</li>
+          <li>Type states and constructors enforce valid invariants.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2022-0847">CVE‑2022‑0847</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 10 libwebp -->
+  <section id="cve-2023-4863" class="card vuln">
+    <h2>10) libwebp heap overflow <span class="tag">CVE‑2023‑4863</span></h2>
+    <div class="meta">
+      <span class="tag">Heap overflow in codec</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2023-4863">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> crafted chunk triggers miscomputed output size and OOB write.</p>
+<pre><code class="language-c">size_t out = width * height * bpp; // may overflow
+uint8_t *dst = malloc(out);
+</code></pre>
+        <p class="impact">Impact: widely exploited zero‑day → browser/app RCE.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Checked arithmetic and slice writes; image crates favor safe APIs.</li>
+        </ul>
+<pre><code class="language-rust">let out = width.checked_mul(height)?.checked_mul(bpp)?;
+let mut v = vec![0u8; out];
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2023-4863">CVE‑2023‑4863</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 11 dnsmasq -->
+  <section id="cve-2017-14491" class="card vuln">
+    <h2>11) dnsmasq overflow <span class="tag">CVE‑2017‑14491</span></h2>
+    <div class="meta">
+      <span class="tag">Heap overflow</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2017-14491">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> attacker‑controlled length used for memcpy when composing DNS replies.</p>
+<pre><code class="language-c">memcpy(reply_ptr, rr, rr_len); // rr_len attacker-influenced
+</code></pre>
+        <p class="impact">Impact: RCE/DoS on routers &amp; IoT devices.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li><code>copy_from_slice</code> requires equal lengths; builders grow <code>Vec</code> safely.</li>
+        </ul>
+<pre><code class="language-rust">reply.extend_from_slice(&amp;rr[..rr.len().min(budget)]);
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2017-14491">CVE‑2017‑14491</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 12 zlib -->
+  <section id="cve-2018-25032" class="card vuln">
+    <h2>12) zlib deflate corruption <span class="tag">CVE‑2018‑25032</span></h2>
+    <div class="meta">
+      <span class="tag">Memory corruption</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2018-25032">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> crafted inputs trigger out‑of‑bounds writes during compression.</p>
+        <p class="impact">Impact: corruption/Crash across consumers of zlib.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Pure‑Rust codecs use slices and checked math; unsafe code is minimized and audited.</li>
+          <li>Fuzzing integrated via <code>cargo‑fuzz</code>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2018-25032">CVE‑2018‑25032</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <!-- 13 sudo Baron Samedit -->
+  <section id="cve-2021-3156" class="card vuln">
+    <h2>13) sudo “Baron Samedit” <span class="tag">CVE‑2021‑3156</span></h2>
+    <div class="meta">
+      <span class="tag">Heap overflow in parser</span>
+      <a class="tag" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2021-3156">NVD entry</a>
+    </div>
+    <div class="split">
+      <div>
+        <p><strong>Root cause:</strong> off‑by‑one/escape handling bug in argument parser.</p>
+<pre><code class="language-c">// constructing an argv with trailing '\\' tickles mis-sized buffer
+</code></pre>
+        <p class="impact">Impact: local user → root on default configs.</p>
+      </div>
+      <div>
+        <h3>How Rust mitigates</h3>
+        <ul>
+          <li>Parser crates treat input as data; <code>String</code>/<code>Vec</code> track length.</li>
+          <li>Iterators make escape handling explicit and testable.</li>
+        </ul>
+<pre><code class="language-rust">for ch in arg.chars() { /* state machine with explicit bounds */ }
+</code></pre>
+      </div>
+    </div>
+    <div class="refs">Ref: <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2021-3156">CVE‑2021‑3156</a></div>
+    <div class="backtop"><a href="#top">↑ Back to top</a></div>
+  </section>
+
+  <footer>
+    <div><strong>Tip:</strong> Use these examples as slides: one line for root cause, one for exploit vector, one for Rust fence.</div>
+    <div class="note">All CVE links point to official NVD entries. C snippets are simplified to illustrate the specific class of bug, not the exact vendor source.</div>
+  </footer>
+</main>
+</body>
+</html>
