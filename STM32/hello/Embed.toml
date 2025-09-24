@@ -1,0 +1,17 @@
+[default.probe]
+protocol = "Swd"
+
+[default.flashing]
+enabled = true
+
+[default.reset]
+enabled = true
+
+[default.general]
+chip = "STM32L476RG"
+
+[default.rtt]
+enabled = false
+
+[default.gdb]
+enabled = false

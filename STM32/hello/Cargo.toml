@@ -1,0 +1,15 @@
+[package]
+name = "hello"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+panic-halt = "0.2"
+stm32l4xx-hal = { version = "0.7", features = ["stm32l476", "rt"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+

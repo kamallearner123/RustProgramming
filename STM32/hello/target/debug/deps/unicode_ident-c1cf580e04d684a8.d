@@ -1,0 +1,8 @@
+/Users/kamalmukiri/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/libunicode_ident-c1cf580e04d684a8.rmeta: /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/lib.rs /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/tables.rs
+
+/Users/kamalmukiri/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/libunicode_ident-c1cf580e04d684a8.rlib: /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/lib.rs /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/tables.rs
+
+/Users/kamalmukiri/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/unicode_ident-c1cf580e04d684a8.d: /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/lib.rs /Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/tables.rs
+
+/Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/lib.rs:
+/Users/kamalmukiri/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.19/src/tables.rs:
