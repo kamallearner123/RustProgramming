@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+
+{% block title %}Cargo Project Structure{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        white-space: pre;
+        line-height: 1.5;
+    }
+
+    /* Rust Syntax Highlighting */
+    .keyword { color: #c678dd; font-weight: bold; }
+    .function { color: #61afef; }
+    .string { color: #98c379; }
+    .number { color: #d19a66; }
+    .comment { color: #5c6370; font-style: italic; }
+    .macro { color: #e5c07b; }
+    .type { color: #e5c07b; }
+    .operator { color: #56b6c2; }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+
+    .tree-structure {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-left: 4px solid #667eea;
+        font-family: 'Courier New', monospace;
+        line-height: 1.8;
+        white-space: pre;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📁 Cargo Project Structure</h1>
+
+<div class="info-box">
+    <strong>📌 Key Concept:</strong> Cargo follows a standard project layout convention. This consistency makes it easy for Rust developers to understand and navigate any Rust project.
+</div>
+
+<div class="section">
+    <h2>Standard Package Layout</h2>
+    <p>A typical Rust package has this structure:</p>
+
+    <div class="tree-structure">
+my_package/
+├── Cargo.toml          # Package manifest
+├── Cargo.lock          # Dependency lock file
+├── src/                # Source code
+│   ├── main.rs         # Binary entry point
+│   ├── lib.rs          # Library entry point
+│   └── bin/            # Additional binaries
+│       ├── tool1.rs
+│       └── tool2.rs
+├── tests/              # Integration tests
+│   └── integration_test.rs
+├── benches/            # Benchmarks
+│   └── my_benchmark.rs
+├── examples/           # Example programs
+│   └── simple.rs
+├── target/             # Build output (generated)
+│   ├── debug/
+│   └── release/
+├── build.rs            # Build script (optional)
+└── README.md           # Documentation
+    </div>
+</div>
+
+<div class="section">
+    <h2>Core Files</h2>
+
+    <h3>Cargo.toml</h3>
+    <p>The manifest file containing package metadata and dependencies.</p>
+    <div class="code-block">
+[package]
+name = "my_package"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1.0"
+    </div>
+
+    <h3>Cargo.lock</h3>
+    <p>Automatically generated file with exact dependency versions.</p>
+    <ul>
+        <li><strong>Binary projects:</strong> Commit to version control</li>
+        <li><strong>Library projects:</strong> Add to .gitignore</li>
+    </ul>
+
+    <h3>README.md</h3>
+    <p>Project documentation displayed on crates.io and GitHub.</p>
+</div>
+
+<div class="section">
+    <h2>Source Directory (src/)</h2>
+
+    <h3>src/main.rs</h3>
+    <p>Entry point for a binary crate (executable).</p>
+    <div class="code-block">
+fn main() {
+    println!("Hello, world!");
+}
+    </div>
+
+    <h3>src/lib.rs</h3>
+    <p>Root module for a library crate.</p>
+    <div class="code-block">
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+        assert_eq!(add(2, 2), 4);
+    }
+}
+    </div>
+
+    <h3>Hybrid Packages</h3>
+    <p>A package can have both <code>lib.rs</code> and <code>main.rs</code>:</p>
+    <div class="tree-structure">
+my_package/
+├── Cargo.toml
+└── src/
+    ├── lib.rs     # Library code
+    └── main.rs    # Binary using the library
+    </div>
+
+    <div class="code-block">
+// src/main.rs
+use my_package::add;  // Import from lib.rs
+
+fn main() {
+    println!("2 + 2 = {}", add(2, 2));
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>Multiple Binaries (src/bin/)</h2>
+    <p>Create multiple executable programs in one package:</p>
+
+    <div class="tree-structure">
+my_package/
+├── Cargo.toml
+└── src/
+    ├── lib.rs
+    ├── main.rs           # Default binary
+    └── bin/
+        ├── client.rs     # Additional binary
+        └── server.rs     # Additional binary
+    </div>
+
+    <p>Run specific binaries:</p>
+    <div class="code-block">
+$ cargo run                  # Runs main.rs
+$ cargo run --bin client     # Runs src/bin/client.rs
+$ cargo run --bin server     # Runs src/bin/server.rs
+    </div>
+</div>
+
+<div class="section">
+    <h2>Tests Directory (tests/)</h2>
+    <p>Integration tests go in the <code>tests/</code> directory:</p>
+
+    <div class="tree-structure">
+my_package/
+├── Cargo.toml
+├── src/
+│   └── lib.rs
+└── tests/
+    ├── integration_test.rs
+    └── common/
+        └── mod.rs        # Shared test utilities
+    </div>
+
+    <div class="code-block">
+// tests/integration_test.rs
+use my_package::add;
+
+#[test]
+fn test_integration() {
+    assert_eq!(add(5, 5), 10);
+}
+    </div>
+
+    <p>Run tests:</p>
+    <div class="code-block">
+$ cargo test
+    </div>
+</div>
+
+<div class="section">
+    <h2>Examples Directory (examples/)</h2>
+    <p>Demonstrate how to use your library:</p>
+
+    <div class="tree-structure">
+my_package/
+└── examples/
+    ├── basic.rs
+    └── advanced.rs
+    </div>
+
+    <div class="code-block">
+// examples/basic.rs
+use my_package::add;
+
+fn main() {
+    let result = add(10, 20);
+    println!("Result: {}", result);
+}
+    </div>
+
+    <p>Run examples:</p>
+    <div class="code-block">
+$ cargo run --example basic
+$ cargo run --example advanced
+    </div>
+</div>
+
+<div class="section">
+    <h2>Benchmarks Directory (benches/)</h2>
+    <p>Performance benchmarks (requires nightly Rust):</p>
+
+    <div class="tree-structure">
+my_package/
+└── benches/
+    └── my_benchmark.rs
+    </div>
+
+    <div class="code-block">
+// benches/my_benchmark.rs
+#![feature(test)]
+extern crate test;
+use test::Bencher;
+use my_package::add;
+
+#[bench]
+fn bench_add(b: &mut Bencher) {
+    b.iter(|| add(2, 2));
+}
+    </div>
+
+    <div class="code-block">
+$ cargo +nightly bench
+    </div>
+</div>
+
+<div class="section">
+    <h2>Build Scripts (build.rs)</h2>
+    <p>Optional script that runs before compilation:</p>
+
+    <div class="code-block">
+// build.rs
+fn main() {
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rustc-env=BUILD_TIME={}", "2024-01-01");
+}
+    </div>
+
+    <p>Use cases:</p>
+    <ul>
+        <li>Compile C/C++ code</li>
+        <li>Generate code</li>
+        <li>Check system dependencies</li>
+        <li>Set environment variables</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Target Directory (target/)</h2>
+    <p>Cargo places all build artifacts here:</p>
+
+    <div class="tree-structure">
+target/
+├── debug/              # Debug builds
+│   ├── my_package      # Binary executable
+│   ├── deps/           # Compiled dependencies
+│   └── libmy_package.rlib  # Library artifact
+└── release/            # Release builds (--release)
+    ├── my_package
+    └── deps/
+    </div>
+
+    <div class="info-box">
+        <strong>💡 Note:</strong> Always add <code>target/</code> to <code>.gitignore</code>. It's large and can be regenerated.
+    </div>
+</div>
+
+<div class="section">
+    <h2>Module Organization</h2>
+    <p>Organize code into modules using files and directories:</p>
+
+    <div class="tree-structure">
+src/
+├── main.rs
+├── lib.rs
+└── utils/
+    ├── mod.rs          # Module root
+    ├── parser.rs       # Submodule
+    └── formatter.rs    # Submodule
+    </div>
+
+    <div class="code-block">
+// src/lib.rs
+pub mod utils;
+
+// src/utils/mod.rs
+pub mod parser;
+pub mod formatter;
+
+// src/utils/parser.rs
+pub fn parse(input: &str) -> Vec<String> {
+    // ...
+}
+    </div>
+
+    <p>Or use the newer style (Rust 2018+):</p>
+
+    <div class="tree-structure">
+src/
+├── main.rs
+├── lib.rs
+├── utils.rs            # Module root
+└── utils/
+    ├── parser.rs
+    └── formatter.rs
+    </div>
+</div>
+
+<div class="section">
+    <h2>Complete Real-World Example</h2>
+
+    <div class="tree-structure">
+my_web_app/
+├── Cargo.toml
+├── Cargo.lock
+├── README.md
+├── .gitignore
+├── src/
+│   ├── main.rs           # Application entry point
+│   ├── lib.rs            # Library code
+│   ├── config.rs         # Configuration module
+│   ├── models/
+│   │   ├── mod.rs
+│   │   ├── user.rs
+│   │   └── post.rs
+│   ├── handlers/
+│   │   ├── mod.rs
+│   │   └── api.rs
+│   └── bin/
+│       └── cli.rs        # CLI tool
+├── tests/
+│   ├── integration_test.rs
+│   └── common/
+│       └── mod.rs
+├── examples/
+│   ├── basic.rs
+│   └── advanced.rs
+└── benches/
+    └── performance.rs
+    </div>
+</div>
+
+<div class="success-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li><code>Cargo.toml</code> - Package manifest</li>
+        <li><code>src/main.rs</code> - Binary entry point</li>
+        <li><code>src/lib.rs</code> - Library root module</li>
+        <li><code>src/bin/</code> - Additional binaries</li>
+        <li><code>tests/</code> - Integration tests</li>
+        <li><code>examples/</code> - Usage examples</li>
+        <li><code>benches/</code> - Performance benchmarks</li>
+        <li><code>target/</code> - Build output (don't commit)</li>
+        <li>Following conventions makes projects easy to understand</li>
+    </ul>
+</div>
+
+<a href="{% url 'cargo_overview' %}" class="back-link">← Back to Cargo Overview</a>
+{% endblock %}

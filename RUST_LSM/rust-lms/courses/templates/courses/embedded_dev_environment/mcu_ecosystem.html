@@ -1,0 +1,595 @@
+{% extends 'base.html' %}
+
+{% block title %}MCU Ecosystem Maturity & Supported Vendors{% endblock %}
+
+{% block content %}
+<style>
+    .content-section {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    h1 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+    }
+    
+    h2 {
+        color: #764ba2;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    h3 {
+        color: #667eea;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        font-size: 1.4em;
+    }
+    
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 15px 0;
+        border-left: 4px solid #667eea;
+        font-family: 'Courier New', monospace;
+        white-space: pre;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #2196F3;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .maturity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+    
+    .maturity-badge {
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        color: white;
+    }
+    
+    .maturity-excellent {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+    
+    .maturity-good {
+        background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+    }
+    
+    .maturity-growing {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    }
+    
+    .maturity-emerging {
+        background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+    }
+    
+    .vendor-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        color: white;
+    }
+    
+    .vendor-card h3 {
+        color: white;
+        margin-top: 0;
+    }
+    
+    .support-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+    }
+    
+    .support-table th {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+    
+    .support-table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+    }
+    
+    .support-table tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .feature-list li {
+        padding: 5px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .feature-list li:before {
+        content: "●";
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    
+    .ecosystem-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #764ba2;
+    }
+    
+    .rating {
+        display: inline-block;
+        color: #ffc107;
+        font-size: 1.2em;
+    }
+</style>
+
+<div class="content-section">
+    <h1>MCU Ecosystem Maturity & Supported Vendors</h1>
+    
+    <p>The embedded Rust ecosystem has grown significantly in recent years, with varying levels of support across different microcontroller vendors. Understanding ecosystem maturity helps you make informed decisions about which platforms to target for your projects.</p>
+
+    <h2>Ecosystem Maturity Overview</h2>
+
+    <p>The embedded Rust ecosystem can be evaluated across several dimensions:</p>
+
+    <ul class="feature-list">
+        <li><strong>HAL Quality:</strong> Hardware Abstraction Layer completeness and API stability</li>
+        <li><strong>Documentation:</strong> Availability of guides, examples, and API docs</li>
+        <li><strong>Community Support:</strong> Active maintainers, forum activity, issue response time</li>
+        <li><strong>Peripheral Coverage:</strong> Support for MCU-specific features (DMA, USB, CAN, etc.)</li>
+        <li><strong>Tooling Integration:</strong> Debug probe support, IDE integration, testing frameworks</li>
+        <li><strong>Production Usage:</strong> Real-world deployment in commercial products</li>
+    </ul>
+
+    <h2>Maturity Levels by Vendor</h2>
+
+    <div class="maturity-grid">
+        <div class="maturity-badge maturity-excellent">
+            <div style="font-size: 2em;">⭐⭐⭐⭐⭐</div>
+            <div style="font-size: 1.2em; margin-top: 10px;">EXCELLENT</div>
+            <div style="font-size: 0.9em; margin-top: 5px; opacity: 0.9;">Production-ready, comprehensive support</div>
+        </div>
+        
+        <div class="maturity-badge maturity-good">
+            <div style="font-size: 2em;">⭐⭐⭐⭐</div>
+            <div style="font-size: 1.2em; margin-top: 10px;">GOOD</div>
+            <div style="font-size: 0.9em; margin-top: 5px; opacity: 0.9;">Stable, suitable for most projects</div>
+        </div>
+        
+        <div class="maturity-badge maturity-growing">
+            <div style="font-size: 2em;">⭐⭐⭐</div>
+            <div style="font-size: 1.2em; margin-top: 10px;">GROWING</div>
+            <div style="font-size: 0.9em; margin-top: 5px; opacity: 0.9;">Active development, some gaps</div>
+        </div>
+        
+        <div class="maturity-badge maturity-emerging">
+            <div style="font-size: 2em;">⭐⭐</div>
+            <div style="font-size: 1.2em; margin-top: 10px;">EMERGING</div>
+            <div style="font-size: 0.9em; margin-top: 5px; opacity: 0.9;">Early stage, experimental</div>
+        </div>
+    </div>
+
+    <h2>Tier 1: Excellent Support</h2>
+
+    <div class="vendor-card">
+        <h3>🏆 STMicroelectronics (STM32)</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Why Tier 1:</strong></p>
+        <ul class="feature-list">
+            <li>Most comprehensive HAL ecosystem in embedded Rust</li>
+            <li>Support for nearly all STM32 families (F0, F1, F3, F4, F7, H7, L0, L1, L4, L5, G0, G4, U5)</li>
+            <li>Used in "The Embedded Rust Book" - excellent learning resources</li>
+            <li>Active community with multiple maintainers per HAL</li>
+            <li>Production deployments in commercial products</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">stm32f0xx-hal   # STM32F0 series (Cortex-M0)
+stm32f1xx-hal   # STM32F1 series (Cortex-M3) - "Blue Pill"
+stm32f3xx-hal   # STM32F3 series (Cortex-M4F) - Discovery board
+stm32f4xx-hal   # STM32F4 series (Cortex-M4F) - Popular choice
+stm32f7xx-hal   # STM32F7 series (Cortex-M7)
+stm32h7xx-hal   # STM32H7 series (Cortex-M7) - High performance
+stm32l4xx-hal   # STM32L4 series (Cortex-M4F) - Low power
+stm32l5xx-hal   # STM32L5 series (Cortex-M33) - TrustZone</div>
+        
+        <p><strong>Peripheral Support:</strong> GPIO, UART, SPI, I2C, USB, CAN, ADC, DAC, DMA, Timers, RTC, Watchdog</p>
+        
+        <p><strong>Community Resources:</strong></p>
+        <ul class="feature-list">
+            <li>Matrix: #stm32-rs:matrix.org</li>
+            <li>GitHub: github.com/stm32-rs</li>
+            <li>Hundreds of example projects</li>
+        </ul>
+    </div>
+
+    <div class="vendor-card">
+        <h3>🏆 Nordic Semiconductor</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Why Tier 1:</strong></p>
+        <ul class="feature-list">
+            <li>First-class BLE and wireless protocol support</li>
+            <li>Official Nordic involvement in Rust community</li>
+            <li>Excellent documentation and examples</li>
+            <li>Production-grade BLE stack (SoftDevice integration)</li>
+            <li>Strong async/await support via Embassy</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">nrf51-hal       # NRF51 series - BLE 4.x
+nrf52840-hal    # NRF52840 - BLE 5.0, USB, high-performance
+nrf9160-hal     # NRF9160 - Cellular IoT (LTE-M/NB-IoT)
+rubble          # Pure Rust BLE stack
+nrf-softdevice  # Nordic SoftDevice BLE stack bindings</div>
+        
+        <p><strong>Unique Strengths:</strong></p>
+        <ul class="feature-list">
+            <li>Best-in-class wireless support in embedded Rust</li>
+            <li>Mature BLE stack with production usage</li>
+            <li>Excellent low-power optimization examples</li>
+        </ul>
+    </div>
+
+    <div class="vendor-card">
+        <h3>🏆 Raspberry Pi Foundation</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Why Tier 1:</strong></p>
+        <ul class="feature-list">
+            <li>RP2040 launched with day-one Rust support commitment</li>
+            <li>Extremely active community development</li>
+            <li>Excellent documentation and examples</li>
+            <li>Unique PIO (Programmable I/O) abstraction</li>
+            <li>Ultra-affordable hardware ($4)</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">rp-hal          # RP2040 HAL
+rp-pico         # Board Support Package for Raspberry Pi Pico
+pio             # Programmable I/O support
+rp2040-boot2    # Second-stage bootloader</div>
+        
+        <p><strong>Unique Features:</strong></p>
+        <ul class="feature-list">
+            <li>PIO state machines for custom protocols</li>
+            <li>Dual-core Cortex-M0+ with excellent sync primitives</li>
+            <li>USB device/host support</li>
+            <li>Extensive educational resources</li>
+        </ul>
+    </div>
+
+    <h2>Tier 2: Good Support</h2>
+
+    <div class="vendor-card" style="background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);">
+        <h3>Espressif (ESP32)</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Strengths:</strong></p>
+        <ul class="feature-list">
+            <li>Official Espressif support for Rust</li>
+            <li>WiFi and Bluetooth Low Energy support</li>
+            <li>RISC-V architecture (ESP32-C3, C6)</li>
+            <li>Rapidly maturing ecosystem</li>
+            <li>Active development by Espressif team</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">esp-hal         # HAL for ESP32-C3, ESP32-C6
+esp-wifi        # WiFi driver in Rust
+esp-println     # Debugging output
+esp-backtrace   # Panic handler with backtraces</div>
+        
+        <p><strong>Current Limitations:</strong></p>
+        <ul class="feature-list">
+            <li>Some advanced WiFi features still in development</li>
+            <li>Documentation improving but less comprehensive than Tier 1</li>
+            <li>Xtensa architecture (ESP32, ESP32-S3) requires custom toolchain</li>
+        </ul>
+        
+        <p><strong>Best for:</strong> WiFi/BLE IoT projects, ESP32-C3 RISC-V learning</p>
+    </div>
+
+    <div class="vendor-card" style="background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);">
+        <h3>NXP Semiconductors</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Supported Families:</strong></p>
+        <ul class="feature-list">
+            <li>LPC series (LPC8xx, LPC11xx, LPC55xx)</li>
+            <li>i.MX RT crossover processors (Cortex-M7, up to 600 MHz)</li>
+            <li>Kinetis series (limited support)</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">lpc8xx-hal      # LPC800 series
+lpc55-hal       # LPC55xx series with TrustZone
+imxrt-hal       # i.MX RT high-performance series
+teensy4-bsp     # Teensy 4.x boards (community-driven)</div>
+        
+        <p><strong>Strengths:</strong></p>
+        <ul class="feature-list">
+            <li>High-performance i.MX RT support</li>
+            <li>Security-focused with TrustZone support</li>
+            <li>Growing commercial adoption</li>
+        </ul>
+    </div>
+
+    <div class="vendor-card" style="background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);">
+        <h3>Microchip (Atmel)</h3>
+        <p><strong>Maturity Rating:</strong> <span class="rating">⭐⭐⭐⭐</span></p>
+        
+        <p><strong>Supported Families:</strong></p>
+        <ul class="feature-list">
+            <li>SAMDx series (ARM Cortex-M0+/M4)</li>
+            <li>SAME5x/S7x series (Cortex-M4F)</li>
+            <li>AVR microcontrollers (Arduino)</li>
+        </ul>
+        
+        <p><strong>Key Crates:</strong></p>
+        <div class="code-block">atsamd-hal      # SAMD21, SAMD51 support
+atsame5x-hal    # SAME5x series
+avr-hal         # AVR support (Arduino Uno, Mega, etc.)</div>
+        
+        <p><strong>Notable:</strong> Arduino Zero uses SAMD21 with good Rust support</p>
+    </div>
+
+    <h2>Tier 3: Growing Support</h2>
+
+    <table class="support-table">
+        <thead>
+            <tr>
+                <th>Vendor</th>
+                <th>MCU Families</th>
+                <th>Maturity</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Texas Instruments</strong></td>
+                <td>TM4C, MSP432</td>
+                <td><span class="rating">⭐⭐⭐</span></td>
+                <td>Community-driven, basic HAL available</td>
+            </tr>
+            <tr>
+                <td><strong>Silicon Labs</strong></td>
+                <td>EFM32, EFR32</td>
+                <td><span class="rating">⭐⭐⭐</span></td>
+                <td>Low-power focus, growing support</td>
+            </tr>
+            <tr>
+                <td><strong>GigaDevice</strong></td>
+                <td>GD32V (RISC-V)</td>
+                <td><span class="rating">⭐⭐⭐</span></td>
+                <td>RISC-V alternative to STM32, improving</td>
+            </tr>
+            <tr>
+                <td><strong>WCH (Nanjing Qinheng)</strong></td>
+                <td>CH32V series (RISC-V)</td>
+                <td><span class="rating">⭐⭐⭐</span></td>
+                <td>Low-cost RISC-V, community support</td>
+            </tr>
+            <tr>
+                <td><strong>Infineon</strong></td>
+                <td>XMC series</td>
+                <td><span class="rating">⭐⭐⭐</span></td>
+                <td>Industrial focus, basic HAL</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Ecosystem Components</h2>
+
+    <h3>Core Infrastructure</h3>
+
+    <div class="ecosystem-card">
+        <h4>embedded-hal</h4>
+        <p>The foundation of embedded Rust ecosystem - hardware abstraction traits</p>
+        <div class="code-block">use embedded_hal::digital::v2::OutputPin;
+use embedded_hal::spi::SpiBus;
+use embedded_hal::i2c::I2c;</div>
+        <p><strong>Status:</strong> v1.0 released - stable API, production-ready</p>
+        <p><strong>Importance:</strong> Enables portable driver development across all vendors</p>
+    </div>
+
+    <div class="ecosystem-card">
+        <h4>Embassy</h4>
+        <p>Modern async/await runtime for embedded systems</p>
+        <div class="code-block">use embassy_executor::Spawner;
+use embassy_time::{Duration, Timer};
+
+#[embassy_executor::main]
+async fn main(spawner: Spawner) {
+    loop {
+        Timer::after(Duration::from_millis(1000)).await;
+    }
+}</div>
+        <p><strong>Status:</strong> Rapidly maturing, production usage growing</p>
+        <p><strong>Supported:</strong> STM32, NRF, RP2040, ESP32</p>
+    </div>
+
+    <div class="ecosystem-card">
+        <h4>RTIC (Real-Time Interrupt-driven Concurrency)</h4>
+        <p>Zero-overhead task scheduler with compile-time guarantees</p>
+        <p><strong>Status:</strong> v2.0 stable, proven in production</p>
+        <p><strong>Best for:</strong> Hard real-time systems, deterministic timing</p>
+    </div>
+
+    <h3>Debugging and Tooling</h3>
+
+    <div class="ecosystem-card">
+        <h4>probe-rs</h4>
+        <p>Modern debugging toolkit - flash, debug, and log</p>
+        <p><strong>Status:</strong> Mature, actively maintained</p>
+        <p><strong>Supported Probes:</strong> ST-Link, J-Link, CMSIS-DAP, DAPLink</p>
+        <p><strong>Supported Chips:</strong> 1000+ MCUs from major vendors</p>
+    </div>
+
+    <div class="ecosystem-card">
+        <h4>defmt</h4>
+        <p>Efficient logging framework - defers formatting to host</p>
+        <div class="code-block">defmt::info!("Sensor reading: {} C", temperature);
+defmt::warn!("Low battery: {}%", battery_level);</div>
+        <p><strong>Status:</strong> Stable, widely adopted</p>
+        <p><strong>Benefits:</strong> Minimal overhead, powerful formatting</p>
+    </div>
+
+    <h2>Production Readiness Assessment</h2>
+
+    <h3>✅ Production-Ready (2025)</h3>
+    <ul class="feature-list">
+        <li><strong>STM32 families:</strong> F0, F1, F3, F4, F7, H7, L4</li>
+        <li><strong>Nordic:</strong> NRF52 series with BLE</li>
+        <li><strong>RP2040:</strong> Raspberry Pi Pico</li>
+        <li><strong>Core ecosystem:</strong> embedded-hal v1.0, probe-rs, defmt</li>
+    </ul>
+
+    <h3>⚠️ Suitable for Most Projects</h3>
+    <ul class="feature-list">
+        <li><strong>ESP32-C3/C6:</strong> WiFi/BLE rapidly maturing</li>
+        <li><strong>STM32:</strong> G0, G4, U5, L5 series</li>
+        <li><strong>NXP:</strong> i.MX RT series</li>
+        <li><strong>Embassy runtime:</strong> Growing production adoption</li>
+    </ul>
+
+    <h3>🔧 Experimental / Early Stage</h3>
+    <ul class="feature-list">
+        <li><strong>RISC-V:</strong> GD32V, CH32V (improving quickly)</li>
+        <li><strong>Xtensa ESP32:</strong> ESP32, ESP32-S3 (requires custom LLVM)</li>
+        <li><strong>Less common vendors:</strong> Silicon Labs, Infineon</li>
+    </ul>
+
+    <h2>Community and Resources</h2>
+
+    <h3>Communication Channels</h3>
+    <ul class="feature-list">
+        <li><strong>Matrix:</strong> #rust-embedded:matrix.org (main channel)</li>
+        <li><strong>GitHub:</strong> github.com/rust-embedded</li>
+        <li><strong>Forum:</strong> users.rust-lang.org (embedded category)</li>
+        <li><strong>Awesome List:</strong> github.com/rust-embedded/awesome-embedded-rust</li>
+    </ul>
+
+    <h3>Working Groups</h3>
+    <ul class="feature-list">
+        <li><strong>Resources Team:</strong> Documentation and learning materials</li>
+        <li><strong>HAL Team:</strong> embedded-hal maintenance</li>
+        <li><strong>Tools Team:</strong> probe-rs, cargo-embed development</li>
+        <li><strong>Cortex-M Team:</strong> ARM Cortex-M support</li>
+    </ul>
+
+    <h2>Vendor Investment in Rust</h2>
+
+    <table class="support-table">
+        <thead>
+            <tr>
+                <th>Vendor</th>
+                <th>Official Support</th>
+                <th>Investment Level</th>
+                <th>Future Outlook</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Espressif</strong></td>
+                <td>✅ Yes</td>
+                <td>High - dedicated Rust team</td>
+                <td>🟢 Excellent</td>
+            </tr>
+            <tr>
+                <td><strong>Nordic</strong></td>
+                <td>✅ Yes</td>
+                <td>High - community engagement</td>
+                <td>🟢 Excellent</td>
+            </tr>
+            <tr>
+                <td><strong>Raspberry Pi</strong></td>
+                <td>✅ Yes</td>
+                <td>Medium - community-friendly</td>
+                <td>🟢 Excellent</td>
+            </tr>
+            <tr>
+                <td><strong>STMicroelectronics</strong></td>
+                <td>❌ No</td>
+                <td>None - community-driven</td>
+                <td>🟢 Excellent (community)</td>
+            </tr>
+            <tr>
+                <td><strong>NXP</strong></td>
+                <td>❌ No</td>
+                <td>None - community-driven</td>
+                <td>🟡 Good (growing)</td>
+            </tr>
+            <tr>
+                <td><strong>Microchip</strong></td>
+                <td>❌ No</td>
+                <td>None - community-driven</td>
+                <td>🟡 Good (stable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Key Takeaways</h2>
+
+    <div class="info-box">
+        <h4>For Production Projects in 2025:</h4>
+        <ul class="feature-list">
+            <li>STM32 families offer the most mature and comprehensive support</li>
+            <li>Nordic NRF52 is the gold standard for BLE applications</li>
+            <li>RP2040 provides excellent value and unique features</li>
+            <li>ESP32-C3/C6 are great choices for WiFi/BLE IoT devices</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h4>Ecosystem Trends:</h4>
+        <ul class="feature-list">
+            <li>Embedded Rust is production-ready for many use cases</li>
+            <li>Vendor involvement increasing (Espressif, Nordic)</li>
+            <li>RISC-V support rapidly improving</li>
+            <li>Async/await (Embassy) becoming mainstream</li>
+            <li>Tooling (probe-rs, defmt) reaching excellent maturity</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h4>2025 Outlook:</h4>
+        <p>The embedded Rust ecosystem is thriving with strong momentum. While not every vendor has official support, community-driven efforts have created production-quality tools for major MCU families. The combination of safety, performance, and modern tooling makes Rust increasingly attractive for embedded development.</p>
+    </div>
+</div>
+{% endblock %}

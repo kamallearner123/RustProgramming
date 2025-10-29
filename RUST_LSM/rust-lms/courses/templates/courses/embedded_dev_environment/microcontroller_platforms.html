@@ -1,0 +1,666 @@
+{% extends 'base.html' %}
+
+{% block title %}Exploring Microcontroller Families & Platforms{% endblock %}
+
+{% block content %}
+<style>
+    .content-section {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    h1 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+    }
+    
+    h2 {
+        color: #764ba2;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    h3 {
+        color: #667eea;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        font-size: 1.4em;
+    }
+    
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 15px 0;
+        border-left: 4px solid #667eea;
+        font-family: 'Courier New', monospace;
+        white-space: pre;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #2196F3;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .platform-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .platform-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        border-radius: 12px;
+        color: white;
+        transition: transform 0.3s;
+    }
+    
+    .platform-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    
+    .platform-card h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.4em;
+    }
+    
+    .family-card {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border: 3px solid #667eea;
+    }
+    
+    .family-card h3 {
+        color: #764ba2;
+        margin-top: 0;
+    }
+    
+    .specs-table {
+        width: 100%;
+        margin: 15px 0;
+    }
+    
+    .specs-table td {
+        padding: 8px;
+        vertical-align: top;
+    }
+    
+    .specs-table td:first-child {
+        font-weight: bold;
+        color: #667eea;
+        width: 40%;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .feature-list li {
+        padding: 5px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .feature-list li:before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-weight: bold;
+    }
+    
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    .comparison-table th {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 0.9em;
+    }
+    
+    .comparison-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+</style>
+
+<div class="content-section">
+    <h1>Exploring Microcontroller Families & Platforms</h1>
+    
+    <p>Rust embedded development supports a wide range of microcontroller architectures and platforms. Understanding the characteristics, strengths, and use cases of different MCU families helps you choose the right hardware for your project.</p>
+
+    <h2>ARM Cortex-M Family</h2>
+    
+    <p>ARM Cortex-M processors are the most popular choice for embedded Rust development, offering excellent ecosystem support, comprehensive documentation, and mature tooling.</p>
+
+    <div class="family-card">
+        <h3>Cortex-M0/M0+/M1 - Entry Level</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Architecture:</td>
+                <td>ARMv6-M</td>
+            </tr>
+            <tr>
+                <td>Target:</td>
+                <td><code>thumbv6m-none-eabi</code></td>
+            </tr>
+            <tr>
+                <td>CPU Frequency:</td>
+                <td>Up to 48 MHz (typical)</td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>Ultra-low power consumption</li>
+                        <li>Minimal silicon area (cost-effective)</li>
+                        <li>32-bit instruction set (Thumb)</li>
+                        <li>Simple interrupt handling</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Use Cases:</td>
+                <td>IoT sensors, wearables, battery-powered devices, simple control systems</td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>STM32F0:</strong> STMicroelectronics entry-level series</li>
+                        <li><strong>NRF51:</strong> Nordic Semiconductor Bluetooth LE</li>
+                        <li><strong>LPC11xx:</strong> NXP low-power series</li>
+                        <li><strong>SAMD21:</strong> Microchip (used in Arduino Zero)</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="family-card">
+        <h3>Cortex-M3 - Mainstream</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Architecture:</td>
+                <td>ARMv7-M</td>
+            </tr>
+            <tr>
+                <td>Target:</td>
+                <td><code>thumbv7m-none-eabi</code></td>
+            </tr>
+            <tr>
+                <td>CPU Frequency:</td>
+                <td>Up to 120 MHz</td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>Hardware divide instructions</li>
+                        <li>Enhanced debugging (ETM trace)</li>
+                        <li>Memory Protection Unit (MPU)</li>
+                        <li>Better interrupt latency</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Use Cases:</td>
+                <td>Motor control, industrial automation, data acquisition, communication protocols</td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>STM32F1:</strong> Classic "Blue Pill" board</li>
+                        <li><strong>STM32L1:</strong> Low-power variant</li>
+                        <li><strong>LPC17xx:</strong> NXP mainstream series</li>
+                        <li><strong>EFM32:</strong> Silicon Labs energy-efficient MCUs</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="family-card">
+        <h3>Cortex-M4/M4F - Digital Signal Processing</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Architecture:</td>
+                <td>ARMv7E-M</td>
+            </tr>
+            <tr>
+                <td>Target:</td>
+                <td><code>thumbv7em-none-eabi</code> (no FPU)<br><code>thumbv7em-none-eabihf</code> (with FPU)</td>
+            </tr>
+            <tr>
+                <td>CPU Frequency:</td>
+                <td>Up to 180 MHz</td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>DSP instructions (SIMD)</li>
+                        <li>Optional single-precision FPU</li>
+                        <li>Saturating arithmetic</li>
+                        <li>Fast multiply-accumulate</li>
+                        <li>Memory Protection Unit</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Use Cases:</td>
+                <td>Audio processing, sensor fusion, motor control, machine learning inference, communication</td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>STM32F3:</strong> F3Discovery board (popular for learning)</li>
+                        <li><strong>STM32F4:</strong> High-performance with FPU</li>
+                        <li><strong>NRF52:</strong> Bluetooth 5.0 with strong Rust support</li>
+                        <li><strong>STM32L4:</strong> Ultra-low-power with FPU</li>
+                        <li><strong>TEENSY 4.x:</strong> i.MX RT1062 (600 MHz!)</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="family-card">
+        <h3>Cortex-M7 - High Performance</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Architecture:</td>
+                <td>ARMv7E-M</td>
+            </tr>
+            <tr>
+                <td>Target:</td>
+                <td><code>thumbv7em-none-eabihf</code></td>
+            </tr>
+            <tr>
+                <td>CPU Frequency:</td>
+                <td>Up to 550 MHz</td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>Superscalar dual-issue pipeline</li>
+                        <li>64-bit double-precision FPU</li>
+                        <li>L1 instruction and data caches</li>
+                        <li>Tightly Coupled Memory (TCM)</li>
+                        <li>Advanced branch prediction</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Use Cases:</td>
+                <td>Real-time video processing, complex control systems, high-speed communication, edge AI</td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>STM32F7:</strong> High-performance series</li>
+                        <li><strong>STM32H7:</strong> Dual-core variants available</li>
+                        <li><strong>IMXRT10xx:</strong> NXP's crossover MCUs (up to 600 MHz)</li>
+                        <li><strong>SAME70:</strong> Microchip high-performance</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="family-card">
+        <h3>Cortex-M33/M35P - Security & TrustZone</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Architecture:</td>
+                <td>ARMv8-M Mainline</td>
+            </tr>
+            <tr>
+                <td>Target:</td>
+                <td><code>thumbv8m.main-none-eabi</code> (no FPU)<br><code>thumbv8m.main-none-eabihf</code> (with FPU)</td>
+            </tr>
+            <tr>
+                <td>CPU Frequency:</td>
+                <td>Up to 160 MHz</td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>TrustZone security technology</li>
+                        <li>Secure/Non-secure memory regions</li>
+                        <li>Hardware stack limit checking</li>
+                        <li>Optional DSP and FPU</li>
+                        <li>Co-processor interface</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Use Cases:</td>
+                <td>Secure IoT devices, payment systems, cryptography, secure boot, OTA updates</td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>STM32L5:</strong> Ultra-low-power with TrustZone</li>
+                        <li><strong>STM32U5:</strong> Latest ultra-low-power series</li>
+                        <li><strong>NRF5340:</strong> Dual-core Bluetooth with TrustZone</li>
+                        <li><strong>LPC55S6x:</strong> NXP secure MCUs</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>RISC-V Architecture</h2>
+
+    <p>RISC-V is an open-source instruction set architecture gaining rapid adoption in embedded systems. Rust has excellent RISC-V support with growing ecosystem maturity.</p>
+
+    <div class="family-card">
+        <h3>RISC-V 32-bit Embedded</h3>
+        <table class="specs-table">
+            <tr>
+                <td>Targets:</td>
+                <td>
+                    <code>riscv32i-unknown-none-elf</code> (base)<br>
+                    <code>riscv32imac-unknown-none-elf</code> (with multiply, atomic, compressed)<br>
+                    <code>riscv32imc-unknown-none-elf</code> (without atomic)
+                </td>
+            </tr>
+            <tr>
+                <td>Features:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li>Open-source ISA (no licensing fees)</li>
+                        <li>Modular instruction set extensions</li>
+                        <li>Simple, clean architecture</li>
+                        <li>Excellent code density</li>
+                        <li>Growing ecosystem support</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Popular MCUs:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><strong>GD32VF103:</strong> GigaDevice 108 MHz RISC-V</li>
+                        <li><strong>ESP32-C3:</strong> Espressif WiFi+BLE with Rust support</li>
+                        <li><strong>ESP32-C6:</strong> WiFi 6 + BLE 5</li>
+                        <li><strong>SiFive FE310:</strong> Freedom E310 (HiFive1 board)</li>
+                        <li><strong>CH32V:</strong> WCH low-cost RISC-V series</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Rust Support:</td>
+                <td>
+                    <ul class="feature-list">
+                        <li><code>riscv</code> crate for core functionality</li>
+                        <li><code>riscv-rt</code> for runtime support</li>
+                        <li>HAL crates for specific chips</li>
+                        <li>embassy async runtime support</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Popular Development Boards</h2>
+
+    <p>Here are some popular development boards excellent for learning embedded Rust:</p>
+
+    <div class="platform-grid">
+        <div class="platform-card">
+            <h4>STM32F3DISCOVERY</h4>
+            <p><strong>MCU:</strong> STM32F303VCT6 (Cortex-M4F)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>72 MHz, 256KB Flash, 48KB RAM</li>
+                <li>Onboard sensors (gyro, accel, mag)</li>
+                <li>8 LEDs, USB, ST-Link debugger</li>
+            </ul>
+            <p><strong>Why choose:</strong> Used in "The Embedded Rust Book", excellent documentation, affordable (~$15)</p>
+        </div>
+
+        <div class="platform-card">
+            <h4>BBC micro:bit v2</h4>
+            <p><strong>MCU:</strong> NRF52833 (Cortex-M4F)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>64 MHz, 512KB Flash, 128KB RAM</li>
+                <li>Bluetooth 5.0, 5x5 LED matrix</li>
+                <li>Accelerometer, compass, microphone</li>
+            </ul>
+            <p><strong>Why choose:</strong> Educational focus, wireless capabilities, strong Rust support via <code>microbit</code> crate</p>
+        </div>
+
+        <div class="platform-card">
+            <h4>Raspberry Pi Pico</h4>
+            <p><strong>MCU:</strong> RP2040 (Dual Cortex-M0+)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>133 MHz, 264KB RAM, 2MB Flash</li>
+                <li>Unique PIO (Programmable I/O)</li>
+                <li>USB device/host support</li>
+            </ul>
+            <p><strong>Why choose:</strong> Extremely affordable ($4), excellent <code>rp-hal</code> support, innovative PIO system</p>
+        </div>
+
+        <div class="platform-card">
+            <h4>ESP32-C3</h4>
+            <p><strong>MCU:</strong> ESP32-C3 (RISC-V)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>160 MHz, 400KB RAM, 4MB Flash</li>
+                <li>WiFi 4 + Bluetooth 5.0 LE</li>
+                <li>22 GPIOs, USB Serial/JTAG</li>
+            </ul>
+            <p><strong>Why choose:</strong> WiFi/BLE connectivity, RISC-V learning, growing <code>esp-hal</code> ecosystem</p>
+        </div>
+
+        <div class="platform-card">
+            <h4>STM32F411 Black Pill</h4>
+            <p><strong>MCU:</strong> STM32F411CEU6 (Cortex-M4F)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>100 MHz, 512KB Flash, 128KB RAM</li>
+                <li>USB OTG, small form factor</li>
+                <li>Breadboard-friendly</li>
+            </ul>
+            <p><strong>Why choose:</strong> Very affordable (~$4), powerful, excellent <code>stm32f4xx-hal</code> support</p>
+        </div>
+
+        <div class="platform-card">
+            <h4>Nordic NRF52840 DK</h4>
+            <p><strong>MCU:</strong> NRF52840 (Cortex-M4F)</p>
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>64 MHz, 1MB Flash, 256KB RAM</li>
+                <li>Bluetooth 5.0, NFC, USB</li>
+                <li>Onboard debugger</li>
+            </ul>
+            <p><strong>Why choose:</strong> Professional BLE development, excellent <code>nrf-hal</code> support, strong ecosystem</p>
+        </div>
+    </div>
+
+    <h2>Comparison Table: Choosing Your Platform</h2>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>MCU Family</th>
+                <th>Best For</th>
+                <th>Rust Maturity</th>
+                <th>Learning Curve</th>
+                <th>Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cortex-M0/M0+</strong></td>
+                <td>Ultra-low-power, simple projects</td>
+                <td>⭐⭐⭐⭐</td>
+                <td>Easiest</td>
+                <td>$</td>
+            </tr>
+            <tr>
+                <td><strong>Cortex-M3</strong></td>
+                <td>General-purpose, learning Rust embedded</td>
+                <td>⭐⭐⭐⭐⭐</td>
+                <td>Easy</td>
+                <td>$</td>
+            </tr>
+            <tr>
+                <td><strong>Cortex-M4F</strong></td>
+                <td>DSP, motor control, sensor fusion</td>
+                <td>⭐⭐⭐⭐⭐</td>
+                <td>Moderate</td>
+                <td>$-$$</td>
+            </tr>
+            <tr>
+                <td><strong>Cortex-M7</strong></td>
+                <td>High-performance, real-time processing</td>
+                <td>⭐⭐⭐⭐</td>
+                <td>Moderate-Hard</td>
+                <td>$$-$$$</td>
+            </tr>
+            <tr>
+                <td><strong>Cortex-M33</strong></td>
+                <td>Secure IoT, cryptography</td>
+                <td>⭐⭐⭐⭐</td>
+                <td>Moderate</td>
+                <td>$$</td>
+            </tr>
+            <tr>
+                <td><strong>RISC-V</strong></td>
+                <td>Open-source hardware, WiFi/BLE</td>
+                <td>⭐⭐⭐⭐</td>
+                <td>Moderate</td>
+                <td>$-$$</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Vendor HAL Support</h2>
+
+    <h3>STMicroelectronics</h3>
+    <ul class="feature-list">
+        <li><code>stm32f0xx-hal</code>, <code>stm32f1xx-hal</code>, <code>stm32f3xx-hal</code>, <code>stm32f4xx-hal</code>, <code>stm32f7xx-hal</code></li>
+        <li><code>stm32l0xx-hal</code>, <code>stm32l1xx-hal</code>, <code>stm32l4xx-hal</code>, <code>stm32l5xx-hal</code></li>
+        <li><code>stm32h7xx-hal</code>, <code>stm32g0xx-hal</code>, <code>stm32g4xx-hal</code></li>
+        <li>Excellent documentation and community support</li>
+    </ul>
+
+    <h3>Nordic Semiconductor</h3>
+    <ul class="feature-list">
+        <li><code>nrf51-hal</code>, <code>nrf52840-hal</code>, <code>nrf9160-hal</code></li>
+        <li>Strong BLE and wireless protocol support</li>
+        <li><code>rubble</code> - Pure Rust BLE stack</li>
+    </ul>
+
+    <h3>Raspberry Pi</h3>
+    <ul class="feature-list">
+        <li><code>rp-hal</code> - Excellent RP2040 support</li>
+        <li>Unique PIO (Programmable I/O) abstractions</li>
+        <li>Very active community development</li>
+    </ul>
+
+    <h3>Espressif</h3>
+    <ul class="feature-list">
+        <li><code>esp-hal</code> - ESP32-C3, ESP32-C6 support</li>
+        <li>WiFi and Bluetooth integration</li>
+        <li><code>esp-wifi</code> - Rust WiFi driver</li>
+        <li>Rapidly maturing ecosystem</li>
+    </ul>
+
+    <h3>NXP</h3>
+    <ul class="feature-list">
+        <li><code>lpc8xx-hal</code>, <code>lpc55-hal</code></li>
+        <li><code>imxrt-hal</code> for high-performance Cortex-M7</li>
+        <li>Growing ecosystem with commercial focus</li>
+    </ul>
+
+    <h2>Choosing the Right Platform</h2>
+
+    <div class="info-box">
+        <strong>For Beginners:</strong>
+        <ul class="feature-list">
+            <li><strong>STM32F3DISCOVERY</strong> - Best documentation, "The Embedded Rust Book" uses this</li>
+            <li><strong>micro:bit v2</strong> - Educational focus, wireless capabilities</li>
+            <li><strong>Raspberry Pi Pico</strong> - Most affordable, unique features</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <strong>For IoT/Wireless Projects:</strong>
+        <ul class="feature-list">
+            <li><strong>ESP32-C3</strong> - WiFi + BLE, RISC-V architecture</li>
+            <li><strong>NRF52840</strong> - Professional BLE development</li>
+            <li><strong>STM32WL</strong> - LoRa and sub-GHz radio</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <strong>For High Performance:</strong>
+        <ul class="feature-list">
+            <li><strong>STM32H7</strong> - Dual-core, up to 480 MHz</li>
+            <li><strong>TEENSY 4.1</strong> - 600 MHz Cortex-M7</li>
+            <li><strong>i.MX RT1060</strong> - Crossover MCU with high speed</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <strong>For Open Hardware Enthusiasts:</strong>
+        <ul class="feature-list">
+            <li><strong>ESP32-C3/C6</strong> - Open documentation, WiFi/BLE</li>
+            <li><strong>GD32VF103</strong> - RISC-V alternative to STM32</li>
+            <li><strong>SiFive HiFive1</strong> - Open-source RISC-V reference</li>
+        </ul>
+    </div>
+
+    <h2>Next Steps</h2>
+
+    <p>Once you've selected your microcontroller platform:</p>
+    <ul class="feature-list">
+        <li>Install the appropriate Rust target for your architecture</li>
+        <li>Find the HAL crate for your specific MCU</li>
+        <li>Review vendor documentation and datasheets</li>
+        <li>Explore example projects in the HAL repository</li>
+        <li>Join the embedded Rust community on Matrix/Discord</li>
+    </ul>
+</div>
+{% endblock %}

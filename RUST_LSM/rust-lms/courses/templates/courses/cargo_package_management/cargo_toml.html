@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+
+{% block title %}Cargo.toml Guide{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        white-space: pre;
+        line-height: 1.5;
+    }
+
+    /* Rust Syntax Highlighting */
+    .keyword { color: #c678dd; font-weight: bold; }
+    .function { color: #61afef; }
+    .string { color: #98c379; }
+    .number { color: #d19a66; }
+    .comment { color: #5c6370; font-style: italic; }
+    .macro { color: #e5c07b; }
+    .type { color: #e5c07b; }
+    .operator { color: #56b6c2; }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+    }
+
+    table th, table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #667eea;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📄 Cargo.toml Guide</h1>
+
+<div class="info-box">
+    <strong>📌 What is Cargo.toml?</strong><br>
+    <code>Cargo.toml</code> is the manifest file written in TOML format that contains all metadata needed to compile your package.
+</div>
+
+<div class="section">
+    <h2>Complete Example</h2>
+    <div class="code-block">
+[package]
+name = "my_awesome_project"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <you@example.com>"]
+description = "A short description of my package"
+documentation = "https://docs.rs/my_awesome_project"
+homepage = "https://example.com/my_awesome_project"
+repository = "https://github.com/yourusername/my_awesome_project"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+keywords = ["web", "api", "async"]
+categories = ["web-programming"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+reqwest = "0.11"
+
+[dev-dependencies]
+mockall = "0.11"
+
+[build-dependencies]
+cc = "1.0"
+    </div>
+</div>
+
+<div class="section">
+    <h2>The [package] Section</h2>
+    
+    <h3>Required Fields</h3>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+            <th>Example</th>
+        </tr>
+        <tr>
+            <td><code>name</code></td>
+            <td>Package name (used for imports)</td>
+            <td><code>"my_project"</code></td>
+        </tr>
+        <tr>
+            <td><code>version</code></td>
+            <td>Semantic version</td>
+            <td><code>"0.1.0"</code></td>
+        </tr>
+        <tr>
+            <td><code>edition</code></td>
+            <td>Rust edition</td>
+            <td><code>"2021"</code></td>
+        </tr>
+    </table>
+
+    <h3>Optional Metadata</h3>
+    <div class="code-block">
+[package]
+authors = ["Alice <alice@example.com>", "Bob <bob@example.com>"]
+description = "A library for doing awesome things"
+documentation = "https://docs.rs/my_crate"
+homepage = "https://my-crate.com"
+repository = "https://github.com/user/my_crate"
+readme = "README.md"
+license = "MIT"
+license-file = "LICENSE.txt"
+keywords = ["cli", "tools"]  # Max 5 keywords
+categories = ["command-line-utilities"]
+publish = true  # or false to prevent publishing
+    </div>
+</div>
+
+<div class="section">
+    <h2>Dependencies</h2>
+
+    <h3>Simple Version</h3>
+    <div class="code-block">
+[dependencies]
+serde = "1.0"
+regex = "1.5"
+    </div>
+
+    <h3>Detailed Version</h3>
+    <div class="code-block">
+[dependencies]
+# Version with features
+serde = { version = "1.0", features = ["derive"] }
+
+# Git dependency
+my_lib = { git = "https://github.com/user/my_lib", branch = "main" }
+
+# Path dependency (local)
+my_local_crate = { path = "../my_local_crate" }
+
+# Optional dependency
+openssl = { version = "0.10", optional = true }
+
+# Platform-specific
+[target.'cfg(windows)'.dependencies]
+winapi = "0.3"
+    </div>
+
+    <h3>Version Requirements</h3>
+    <table>
+        <tr>
+            <th>Syntax</th>
+            <th>Meaning</th>
+            <th>Example</th>
+        </tr>
+        <tr>
+            <td><code>1.2.3</code></td>
+            <td>Exactly version 1.2.3</td>
+            <td><code>serde = "=1.2.3"</code></td>
+        </tr>
+        <tr>
+            <td><code>1.2</code></td>
+            <td>Compatible (^1.2.0)</td>
+            <td><code>serde = "1.2"</code></td>
+        </tr>
+        <tr>
+            <td><code>^1.2.3</code></td>
+            <td>≥1.2.3, <2.0.0</td>
+            <td><code>serde = "^1.2.3"</code></td>
+        </tr>
+        <tr>
+            <td><code>~1.2.3</code></td>
+            <td>≥1.2.3, <1.3.0</td>
+            <td><code>serde = "~1.2.3"</code></td>
+        </tr>
+        <tr>
+            <td><code>*</code></td>
+            <td>Any version</td>
+            <td><code>serde = "*"</code></td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Dependency Types</h2>
+
+    <h3>[dev-dependencies]</h3>
+    <p>Used only for tests, examples, and benchmarks:</p>
+    <div class="code-block">
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.0"
+mockall = "0.11"
+    </div>
+
+    <h3>[build-dependencies]</h3>
+    <p>Used only in build scripts (build.rs):</p>
+    <div class="code-block">
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.60"
+    </div>
+</div>
+
+<div class="section">
+    <h2>Features</h2>
+    <p>Conditional compilation flags:</p>
+
+    <div class="code-block">
+[features]
+default = ["std"]
+std = []
+serde_support = ["serde", "serde_json"]
+experimental = []
+
+[dependencies]
+serde = { version = "1.0", optional = true }
+serde_json = { version = "1.0", optional = true }
+    </div>
+
+    <p>Enable features:</p>
+    <div class="code-block">
+$ cargo build --features serde_support
+$ cargo build --all-features
+$ cargo build --no-default-features
+    </div>
+
+    <p>In code:</p>
+    <div class="code-block">
+#[cfg(feature = "serde_support")]
+use serde::{Serialize, Deserialize};
+    </div>
+</div>
+
+<div class="section">
+    <h2>Profiles</h2>
+    <p>Customize compilation settings:</p>
+
+    <div class="code-block">
+[profile.dev]
+opt-level = 0  # No optimizations
+
+[profile.release]
+opt-level = 3  # Maximum optimizations
+lto = true     # Link-time optimization
+codegen-units = 1
+
+[profile.test]
+opt-level = 1  # Some optimization for tests
+    </div>
+
+    <h3>Optimization Levels</h3>
+    <ul>
+        <li><code>0</code> - No optimization (fast compile, slow runtime)</li>
+        <li><code>1</code> - Basic optimization</li>
+        <li><code>2</code> - Some optimization</li>
+        <li><code>3</code> - Maximum optimization (slow compile, fast runtime)</li>
+        <li><code>"s"</code> - Optimize for size</li>
+        <li><code>"z"</code> - Optimize aggressively for size</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Workspace Configuration</h2>
+    <p>For projects with multiple crates:</p>
+
+    <div class="code-block">
+[workspace]
+members = [
+    "crate1",
+    "crate2",
+    "tools/*",
+]
+exclude = ["old-crate"]
+
+[workspace.dependencies]
+serde = "1.0"  # Shared dependency version
+    </div>
+</div>
+
+<div class="section">
+    <h2>Target-Specific Dependencies</h2>
+    <p>Platform-conditional dependencies:</p>
+
+    <div class="code-block">
+# Windows only
+[target.'cfg(windows)'.dependencies]
+winapi = "0.3"
+
+# Unix only
+[target.'cfg(unix)'.dependencies]
+nix = "0.26"
+
+# Specific architecture
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+    </div>
+</div>
+
+<div class="section">
+    <h2>Metadata Table</h2>
+    <p>Custom metadata for tools:</p>
+
+    <div class="code-block">
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[package.metadata.my_tool]
+setting1 = "value1"
+setting2 = 42
+    </div>
+</div>
+
+<div class="success-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li><code>Cargo.toml</code> is written in TOML format</li>
+        <li><code>[package]</code> section contains package metadata</li>
+        <li><code>[dependencies]</code> for regular dependencies</li>
+        <li><code>[dev-dependencies]</code> for test/development only</li>
+        <li><code>[build-dependencies]</code> for build scripts</li>
+        <li><code>[features]</code> for conditional compilation</li>
+        <li><code>[profile.*]</code> for build configuration</li>
+        <li>Version requirements use SemVer conventions</li>
+    </ul>
+</div>
+
+<a href="{% url 'cargo_overview' %}" class="back-link">← Back to Cargo Overview</a>
+{% endblock %}

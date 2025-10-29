@@ -1,0 +1,537 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuring Toolchains & Environment{% endblock %}
+
+{% block content %}
+<style>
+    .content-section {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    h1 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+    }
+    
+    h2 {
+        color: #764ba2;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    h3 {
+        color: #667eea;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        font-size: 1.4em;
+    }
+    
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 15px 0;
+        border-left: 4px solid #667eea;
+        font-family: 'Courier New', monospace;
+        white-space: pre;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #2196F3;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .warning-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .success-box {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .config-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 2px solid #667eea;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .feature-list li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .feature-list li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    table th {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+    
+    table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+    
+    table tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+</style>
+
+<div class="content-section">
+    <h1>Configuring Toolchains & Environment</h1>
+    
+    <p>After installing the Rust toolchain and embedded targets, proper configuration is essential for efficient embedded development. This guide covers toolchain management, cross-compilation setup, linker configuration, and environment optimization.</p>
+
+    <h2>Understanding Toolchains</h2>
+    
+    <p>A Rust toolchain consists of several components working together:</p>
+    
+    <ul class="feature-list">
+        <li><strong>rustc:</strong> The Rust compiler that generates machine code</li>
+        <li><strong>cargo:</strong> Build system and package manager</li>
+        <li><strong>std/core:</strong> Standard or core library for your target</li>
+        <li><strong>rustfmt:</strong> Code formatter for consistent style</li>
+        <li><strong>clippy:</strong> Linter for catching common mistakes</li>
+    </ul>
+
+    <h2>Toolchain Channels</h2>
+
+    <p>Rust offers three release channels, each serving different purposes:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Channel</th>
+                <th>Update Frequency</th>
+                <th>Use Case</th>
+                <th>Stability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Stable</strong></td>
+                <td>Every 6 weeks</td>
+                <td>Production code, recommended for most projects</td>
+                <td>Highest - fully tested releases</td>
+            </tr>
+            <tr>
+                <td><strong>Beta</strong></td>
+                <td>Same as stable</td>
+                <td>Testing upcoming features before stable release</td>
+                <td>High - release candidates</td>
+            </tr>
+            <tr>
+                <td><strong>Nightly</strong></td>
+                <td>Daily</td>
+                <td>Cutting-edge features, experimental APIs</td>
+                <td>Variable - may have bugs</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Installing Different Channels</h3>
+    <div class="code-block">rustup install stable
+rustup install beta
+rustup install nightly</div>
+
+    <h3>Setting Default Toolchain</h3>
+    <div class="code-block">rustup default stable
+rustup default nightly  # If you need nightly features</div>
+
+    <h3>Per-Project Toolchain Override</h3>
+    <p>Use a specific toolchain for a particular project:</p>
+    <div class="code-block">cd my-embedded-project
+rustup override set stable
+rustup override set nightly  # For projects needing nightly</div>
+
+    <div class="info-box">
+        <strong>Recommendation:</strong> Use <strong>stable</strong> channel for embedded projects unless you specifically need nightly features. The embedded ecosystem is well-supported on stable Rust.
+    </div>
+
+    <h2>Cross-Compilation Configuration</h2>
+
+    <h3>Understanding Cross-Compilation</h3>
+    <p>Cross-compilation means building code on one architecture (your computer) to run on a different architecture (microcontroller). This requires proper toolchain configuration.</p>
+
+    <h3>Project Configuration File: .cargo/config.toml</h3>
+    
+    <p>Create a <code>.cargo/config.toml</code> file in your project root to configure build behavior:</p>
+
+    <div class="config-card">
+        <h4>Example Configuration for STM32F3 (Cortex-M4F)</h4>
+        <div class="code-block">[build]
+# Set default compilation target
+target = "thumbv7em-none-eabihf"
+
+[target.thumbv7em-none-eabihf]
+# Use custom linker script
+rustflags = [
+  "-C", "link-arg=-Tlink.x",
+  "-C", "link-arg=--nmagic",
+]
+
+# Use rust-lld linker (LLVM linker shipped with Rust)
+linker = "rust-lld"
+
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+# Runner for executing code on hardware/emulator
+runner = "probe-rs run --chip STM32F303VCTx"</div>
+    </div>
+
+    <div class="config-card">
+        <h4>Configuration for QEMU Emulation</h4>
+        <div class="code-block">[build]
+target = "thumbv7m-none-eabi"
+
+[target.thumbv7m-none-eabi]
+runner = "qemu-system-arm -cpu cortex-m3 -machine lm3s6965evb -nographic -semihosting-config enable=on,target=native -kernel"</div>
+    </div>
+
+    <h3>Linker Script Configuration</h3>
+
+    <p>Embedded systems require custom memory layouts defined in linker scripts. The <code>cortex-m-rt</code> crate provides a linker script template.</p>
+
+    <div class="code-block"># In Cargo.toml
+[dependencies]
+cortex-m = "0.7"
+cortex-m-rt = "0.7"</div>
+
+    <p>Create <code>memory.x</code> in your project root defining memory regions:</p>
+
+    <div class="code-block">MEMORY
+{
+  /* STM32F303VC memory layout */
+  FLASH : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 40K
+}</div>
+
+    <div class="info-box">
+        <strong>Where to find memory layout info:</strong> Consult your microcontroller's datasheet or reference manual. Key sections: "Memory organization" or "Memory mapping".
+    </div>
+
+    <h2>Environment Variables</h2>
+
+    <h3>Important Rust Environment Variables</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Variable</th>
+                <th>Purpose</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>RUSTFLAGS</code></td>
+                <td>Pass flags to rustc compiler</td>
+                <td><code>-C link-arg=-Tlink.x</code></td>
+            </tr>
+            <tr>
+                <td><code>CARGO_BUILD_TARGET</code></td>
+                <td>Set default build target</td>
+                <td><code>thumbv7em-none-eabihf</code></td>
+            </tr>
+            <tr>
+                <td><code>DEFMT_LOG</code></td>
+                <td>Set logging level for defmt</td>
+                <td><code>debug</code>, <code>info</code>, <code>warn</code></td>
+            </tr>
+            <tr>
+                <td><code>PROBE_RS_CHIP</code></td>
+                <td>Specify target chip for probe-rs</td>
+                <td><code>STM32F303VCTx</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Setting Environment Variables</h3>
+
+    <p><strong>Linux/macOS (temporary):</strong></p>
+    <div class="code-block">export RUSTFLAGS="-C link-arg=-Tlink.x"
+export CARGO_BUILD_TARGET=thumbv7em-none-eabihf</div>
+
+    <p><strong>Linux/macOS (permanent - add to ~/.bashrc or ~/.zshrc):</strong></p>
+    <div class="code-block">echo 'export CARGO_BUILD_TARGET=thumbv7em-none-eabihf' >> ~/.bashrc
+source ~/.bashrc</div>
+
+    <p><strong>Windows PowerShell:</strong></p>
+    <div class="code-block">$env:RUSTFLAGS="-C link-arg=-Tlink.x"
+$env:CARGO_BUILD_TARGET="thumbv7em-none-eabihf"</div>
+
+    <h2>Managing Multiple Targets</h2>
+
+    <h3>Listing Installed Targets</h3>
+    <div class="code-block">rustup target list --installed</div>
+
+    <h3>Building for Specific Target</h3>
+    <div class="code-block">cargo build --target thumbv7em-none-eabihf
+cargo build --target thumbv6m-none-eabi
+cargo build --target riscv32imac-unknown-none-elf</div>
+
+    <h3>Target-Specific Dependencies</h3>
+    <p>Configure dependencies for specific targets in <code>Cargo.toml</code>:</p>
+
+    <div class="code-block">[dependencies]
+cortex-m = "0.7"
+
+# Only include on ARM targets
+[target.'cfg(target_arch = "arm")'.dependencies]
+cortex-m-rt = "0.7"
+
+# Only include on RISC-V targets
+[target.'cfg(target_arch = "riscv32")'.dependencies]
+riscv-rt = "0.11"</div>
+
+    <h2>Workspace Configuration</h2>
+
+    <h3>Setting Up a Cargo Workspace</h3>
+    <p>For projects with multiple embedded targets or shared code:</p>
+
+    <div class="code-block"># Workspace Cargo.toml at root
+[workspace]
+members = [
+    "firmware-stm32",
+    "firmware-nrf",
+    "shared-drivers",
+]
+
+[workspace.dependencies]
+# Shared dependencies
+embedded-hal = "1.0"
+defmt = "0.3"</div>
+
+    <h3>Using Workspace Dependencies</h3>
+    <div class="code-block"># In member Cargo.toml
+[dependencies]
+embedded-hal = { workspace = true }
+defmt = { workspace = true }</div>
+
+    <h2>Optimization Settings</h2>
+
+    <h3>Build Profiles</h3>
+    <p>Configure optimization levels in <code>Cargo.toml</code>:</p>
+
+    <div class="code-block">[profile.dev]
+# Fast compilation, larger binary, no optimizations
+opt-level = 0
+debug = true
+
+[profile.release]
+# Optimized for speed, smaller binary
+opt-level = 3
+debug = false
+lto = true  # Link-Time Optimization
+
+[profile.release-with-debug]
+# Optimized but with debug symbols
+inherits = "release"
+debug = true
+
+[profile.release-size]
+# Optimized for binary size
+inherits = "release"
+opt-level = "z"  # Optimize for size
+lto = true
+codegen-units = 1  # Better optimization, slower build
+strip = true  # Remove debug symbols</div>
+
+    <div class="info-box">
+        <strong>Optimization Levels:</strong>
+        <ul>
+            <li><code>0</code> = No optimization (fastest compile, largest binary)</li>
+            <li><code>1</code> = Basic optimization</li>
+            <li><code>2</code> = Standard optimization</li>
+            <li><code>3</code> = Aggressive optimization (slowest compile, best performance)</li>
+            <li><code>s</code> = Optimize for size</li>
+            <li><code>z</code> = Aggressively optimize for size</li>
+        </ul>
+    </div>
+
+    <h2>Debugging Configuration</h2>
+
+    <h3>VS Code Integration</h3>
+    <p>Create <code>.vscode/launch.json</code> for debugging:</p>
+
+    <div class="code-block">{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "probe-rs-debug",
+            "request": "launch",
+            "name": "Debug (probe-rs)",
+            "cwd": "${workspaceFolder}",
+            "chip": "STM32F303VCTx",
+            "flashingConfig": {
+                "flashingEnabled": true,
+                "resetAfterFlashing": true,
+                "haltAfterReset": true
+            },
+            "coreConfigs": [
+                {
+                    "coreIndex": 0,
+                    "programBinary": "target/thumbv7em-none-eabihf/debug/${workspaceFolderBasename}"
+                }
+            ]
+        }
+    ]
+}</div>
+
+    <h3>Embed.toml for probe-rs</h3>
+    <p>Create <code>Embed.toml</code> for probe-rs configuration:</p>
+
+    <div class="code-block">[default.general]
+chip = "STM32F303VCTx"
+
+[default.reset]
+halt_afterwards = true
+
+[default.rtt]
+enabled = true
+channels = [
+    { up = 0, name = "Terminal", format = "String" }
+]
+
+[default.gdb]
+enabled = true
+gdb_connection_string = "127.0.0.1:1337"</div>
+
+    <h2>Feature Flags and Conditional Compilation</h2>
+
+    <h3>Defining Features</h3>
+    <div class="code-block"># Cargo.toml
+[features]
+default = ["stm32f303"]
+stm32f303 = []
+stm32f401 = []
+use-semihosting = []</div>
+
+    <h3>Using Features in Code</h3>
+    <div class="code-block">#[cfg(feature = "stm32f303")]
+use stm32f3xx_hal as hal;
+
+#[cfg(feature = "stm32f401")]
+use stm32f4xx_hal as hal;
+
+#[cfg(feature = "use-semihosting")]
+use cortex_m_semihosting::hprintln;</div>
+
+    <h3>Building with Features</h3>
+    <div class="code-block">cargo build --features stm32f303
+cargo build --features "stm32f401,use-semihosting"
+cargo build --no-default-features --features stm32f401</div>
+
+    <h2>Toolchain Components</h2>
+
+    <h3>Adding Components</h3>
+    <div class="code-block"># Add rustfmt for code formatting
+rustup component add rustfmt
+
+# Add clippy for linting
+rustup component add clippy
+
+# Add rust-src for building core library
+rustup component add rust-src
+
+# Add LLVM tools
+rustup component add llvm-tools</div>
+
+    <h3>Using Components</h3>
+    <div class="code-block"># Format code
+cargo fmt
+
+# Run linter
+cargo clippy
+
+# Check binary size
+cargo size --release -- -A
+
+# Disassemble binary
+cargo objdump --release -- -d > output.asm</div>
+
+    <h2>Troubleshooting Common Configuration Issues</h2>
+
+    <h3>Issue: "error: linking with `rust-lld` failed"</h3>
+    <div class="warning-box">
+        <strong>Possible causes:</strong>
+        <ul>
+            <li>Missing <code>memory.x</code> linker script</li>
+            <li>Incorrect memory layout in <code>memory.x</code></li>
+            <li>Missing <code>cortex-m-rt</code> dependency</li>
+        </ul>
+        <strong>Solution:</strong> Verify <code>memory.x</code> exists and has correct memory regions. Ensure <code>cortex-m-rt</code> is in dependencies.
+    </div>
+
+    <h3>Issue: "cannot find -lc"</h3>
+    <div class="warning-box">
+        <strong>Cause:</strong> Trying to link against standard C library in no_std environment.
+        <br><strong>Solution:</strong> Use <code>#![no_std]</code> and avoid dependencies that require std.
+    </div>
+
+    <h3>Issue: Target not found</h3>
+    <div class="warning-box">
+        <strong>Solution:</strong> Install the target:
+        <div class="code-block">rustup target add thumbv7em-none-eabihf</div>
+    </div>
+
+    <h2>Best Practices</h2>
+
+    <ul class="feature-list">
+        <li>Keep <code>.cargo/config.toml</code> in version control for consistent team builds</li>
+        <li>Document required toolchain version in README</li>
+        <li>Use workspace dependencies for multi-target projects</li>
+        <li>Enable LTO for production releases to reduce binary size</li>
+        <li>Use feature flags to support multiple hardware variants</li>
+        <li>Keep toolchain updated: <code>rustup update</code></li>
+        <li>Use stable channel unless nightly features are essential</li>
+    </ul>
+
+    <div class="success-box">
+        <strong>Configuration Complete!</strong> Your embedded Rust environment is now properly configured for cross-compilation and development. You're ready to build and flash firmware to microcontrollers.
+    </div>
+</div>
+{% endblock %}

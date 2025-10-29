@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Cargo & Package Management - Overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .module-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+
+    .module-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .module-card p {
+        color: #f0f0f0;
+        line-height: 1.6;
+    }
+
+    .intro-section {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .cargo-logo {
+        text-align: center;
+        margin: 2rem 0;
+        font-size: 3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cargo-logo">📦</div>
+
+<h1>Cargo & Package Management</h1>
+
+<div class="intro-section">
+    <h2>What is Cargo?</h2>
+    <p>
+        <strong>Cargo</strong> is Rust's official package manager and build system. It handles many tasks including:
+    </p>
+    <ul>
+        <li>🔨 <strong>Building your code</strong> with <code>cargo build</code></li>
+        <li>▶️ <strong>Running your project</strong> with <code>cargo run</code></li>
+        <li>✅ <strong>Testing your code</strong> with <code>cargo test</code></li>
+        <li>📦 <strong>Managing dependencies</strong> from crates.io</li>
+        <li>📚 <strong>Generating documentation</strong> with <code>cargo doc</code></li>
+        <li>🚀 <strong>Publishing packages</strong> to crates.io</li>
+    </ul>
+    <p style="margin-top: 1rem;">
+        Cargo comes bundled with Rust when you install it using <code>rustup</code>. It's the primary tool you'll use for Rust development.
+    </p>
+</div>
+
+<h2>Learning Modules</h2>
+
+<div class="module-grid">
+    <a href="{% url 'cargo_intro' %}" class="module-card">
+        <h3>📖 1. Introduction to Cargo</h3>
+        <p>Learn what Cargo is, why it exists, and how it simplifies Rust development. Understand the philosophy behind Rust's package manager.</p>
+    </a>
+
+    <a href="{% url 'cargo_getting_started' %}" class="module-card">
+        <h3>🚀 2. Getting Started</h3>
+        <p>Install Cargo, create your first project, and understand the basic project structure. Run your first Rust program with Cargo.</p>
+    </a>
+
+    <a href="{% url 'cargo_project_structure' %}" class="module-card">
+        <h3>📁 3. Project Structure</h3>
+        <p>Understand Cargo's standard project layout, directory organization, and file conventions for Rust projects.</p>
+    </a>
+
+    <a href="{% url 'cargo_toml_guide' %}" class="module-card">
+        <h3>📄 4. Cargo.toml Guide</h3>
+        <p>Master the Cargo manifest file: package metadata, dependencies, features, and configuration options.</p>
+    </a>
+
+    <a href="{% url 'cargo_dependencies' %}" class="module-card">
+        <h3>📚 5. Managing Dependencies</h3>
+        <p>Add, update, and manage external crates. Learn about version specifications, dev dependencies, and dependency resolution.</p>
+    </a>
+
+    <a href="{% url 'cargo_commands' %}" class="module-card">
+        <h3>⚡ 6. Essential Cargo Commands</h3>
+        <p>Comprehensive guide to cargo build, run, test, check, clean, update, and more essential commands.</p>
+    </a>
+
+    <a href="{% url 'cargo_build_modes' %}" class="module-card">
+        <h3>⚙️ 7. Build Modes & Profiles</h3>
+        <p>Understand debug vs release builds, optimization levels, and custom build profiles for different scenarios.</p>
+    </a>
+
+    <a href="{% url 'cargo_workspaces' %}" class="module-card">
+        <h3>🏢 8. Workspaces</h3>
+        <p>Organize multiple related packages into a single workspace. Share dependencies and manage monorepos.</p>
+    </a>
+
+    <a href="{% url 'cargo_publishing' %}" class="module-card">
+        <h3>🌐 9. Publishing to crates.io</h3>
+        <p>Package your crate, write documentation, and publish your library to the Rust community's package registry.</p>
+    </a>
+
+    <a href="{% url 'cargo_best_practices' %}" class="module-card">
+        <h3>✨ 10. Best Practices</h3>
+        <p>Learn Cargo workflow tips, project organization strategies, and community conventions for professional Rust development.</p>
+    </a>
+</div>
+
+<div style="margin-top: 3rem; padding: 2rem; background-color: #f9f9f9; border-radius: 8px;">
+    <h2>🎯 Learning Path</h2>
+    <p>We recommend following the modules in order, especially if you're new to Cargo:</p>
+    <ol style="margin-top: 1rem; line-height: 2;">
+        <li>Start with <strong>Introduction to Cargo</strong> to understand the "why"</li>
+        <li>Move to <strong>Getting Started</strong> for hands-on practice</li>
+        <li>Learn <strong>Project Structure</strong> and <strong>Cargo.toml</strong> for project organization</li>
+        <li>Master <strong>Dependencies</strong> and <strong>Commands</strong> for daily workflow</li>
+        <li>Explore <strong>advanced topics</strong> like Workspaces and Publishing as needed</li>
+    </ol>
+</div>
+
+{% endblock %}

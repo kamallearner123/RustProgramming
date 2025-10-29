@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}Getting Started with Cargo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        white-space: pre;
+        line-height: 1.5;
+    }
+
+    /* Rust Syntax Highlighting */
+    .keyword { color: #c678dd; font-weight: bold; }
+    .function { color: #61afef; }
+    .string { color: #98c379; }
+    .number { color: #d19a66; }
+    .comment { color: #5c6370; font-style: italic; }
+    .macro { color: #e5c07b; }
+    .type { color: #e5c07b; }
+    .operator { color: #56b6c2; }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+
+    .command-output {
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        white-space: pre;
+        line-height: 1.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🚀 Getting Started with Cargo</h1>
+
+<div class="info-box">
+    <strong>📌 Prerequisites:</strong> Cargo comes bundled with Rust when you install it using rustup. If you haven't installed Rust yet, visit <a href="https://rustup.rs/" target="_blank">rustup.rs</a> and follow the installation instructions.
+</div>
+
+<div class="section">
+    <h2>1. Verifying Cargo Installation</h2>
+    <p>First, verify that Cargo is installed:</p>
+
+    <div class="code-block">
+$ cargo --version
+    </div>
+
+    <div class="command-output">
+cargo 1.83.0 (5ffbef321 2024-10-29)
+    </div>
+
+    <p>If you see a version number, Cargo is installed correctly!</p>
+</div>
+
+<div class="section">
+    <h2>2. Creating a New Project with cargo new</h2>
+    <p>The easiest way to start a Rust project is with <code>cargo new</code>:</p>
+
+    <h3>Creating a Binary (Executable) Project</h3>
+    <div class="code-block">
+$ cargo new hello_world
+$ cd hello_world
+    </div>
+
+    <div class="command-output">
+     Created binary (application) `hello_world` package
+    </div>
+
+    <h3>Creating a Library Project</h3>
+    <div class="code-block">
+$ cargo new my_library --lib
+    </div>
+
+    <div class="command-output">
+     Created library `my_library` package
+    </div>
+
+    <div class="info-box">
+        <strong>💡 Binary vs Library:</strong>
+        <ul>
+            <li><strong>Binary (default):</strong> Creates an executable application with <code>src/main.rs</code></li>
+            <li><strong>Library (--lib):</strong> Creates a reusable library with <code>src/lib.rs</code></li>
+        </ul>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. Understanding Project Structure</h2>
+    <p>Let's explore what <code>cargo new</code> created:</p>
+
+    <div class="code-block">
+hello_world/
+├── Cargo.toml          # Package manifest
+├── .gitignore          # Git ignore file
+└── src/
+    └── main.rs         # Main source file
+    </div>
+
+    <h3>Cargo.toml Contents</h3>
+    <div class="code-block">
+[package]
+name = "hello_world"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+    </div>
+
+    <ul>
+        <li><code>name</code>: Package name (used when importing)</li>
+        <li><code>version</code>: Current version (follows SemVer)</li>
+        <li><code>edition</code>: Rust edition (2015, 2018, 2021, or 2024)</li>
+        <li><code>[dependencies]</code>: External crates your project needs</li>
+    </ul>
+
+    <h3>src/main.rs Contents</h3>
+    <div class="code-block">
+fn main() {
+    println!("Hello, world!");
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. Building Your Project</h2>
+    <p>Compile your project with <code>cargo build</code>:</p>
+
+    <div class="code-block">
+$ cargo build
+    </div>
+
+    <div class="command-output">
+   Compiling hello_world v0.1.0 (/path/to/hello_world)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.50s
+    </div>
+
+    <p>This creates:</p>
+    <ul>
+        <li><code>target/debug/hello_world</code> - Your compiled executable</li>
+        <li><code>Cargo.lock</code> - Dependency lock file</li>
+    </ul>
+
+    <h3>Debug vs Release Builds</h3>
+    <div class="code-block">
+# Debug build (default, faster compilation, slower execution)
+$ cargo build
+
+# Release build (slower compilation, optimized for speed)
+$ cargo build --release
+    </div>
+
+    <div class="info-box">
+        <strong>When to use each:</strong>
+        <ul>
+            <li><strong>Debug:</strong> Development, testing, fast iteration</li>
+            <li><strong>Release:</strong> Production, benchmarking, final distribution</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section">
+    <h2>5. Running Your Project</h2>
+    <p>Instead of building and then running separately, use <code>cargo run</code>:</p>
+
+    <div class="code-block">
+$ cargo run
+    </div>
+
+    <div class="command-output">
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/hello_world`
+Hello, world!
+    </div>
+
+    <p><code>cargo run</code> automatically:</p>
+    <ol>
+        <li>Checks if code has changed</li>
+        <li>Compiles if necessary</li>
+        <li>Runs the resulting binary</li>
+    </ol>
+
+    <h3>Passing Arguments</h3>
+    <div class="code-block">
+# Arguments after -- are passed to your program
+$ cargo run -- arg1 arg2
+    </div>
+</div>
+
+<div class="section">
+    <h2>6. Checking Your Code</h2>
+    <p>Use <code>cargo check</code> to quickly verify code compiles without generating an executable:</p>
+
+    <div class="code-block">
+$ cargo check
+    </div>
+
+    <div class="command-output">
+    Checking hello_world v0.1.0 (/path/to/hello_world)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Pro Tip:</strong> <code>cargo check</code> is much faster than <code>cargo build</code>. Use it frequently during development to catch errors quickly!
+    </div>
+</div>
+
+<div class="section">
+    <h2>7. Using cargo init</h2>
+    <p>If you already have a directory, use <code>cargo init</code> instead of <code>cargo new</code>:</p>
+
+    <div class="code-block">
+$ mkdir my_project
+$ cd my_project
+$ cargo init
+    </div>
+
+    <div class="command-output">
+     Created binary (application) package
+    </div>
+
+    <p>This creates <code>Cargo.toml</code> and <code>src/</code> in the current directory.</p>
+
+    <h3>Differences between cargo new and cargo init</h3>
+    <ul>
+        <li><code>cargo new &lt;name&gt;</code>: Creates a new directory with the project</li>
+        <li><code>cargo init</code>: Initializes project in existing directory</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>8. Additional Options</h2>
+
+    <h3>Specify Edition</h3>
+    <div class="code-block">
+$ cargo new my_project --edition 2021
+    </div>
+
+    <h3>Version Control Options</h3>
+    <div class="code-block">
+# Don't initialize git repository
+$ cargo new my_project --vcs none
+
+# Use git (default)
+$ cargo new my_project --vcs git
+
+# Use mercurial
+$ cargo new my_project --vcs hg
+    </div>
+
+    <h3>Custom Name</h3>
+    <div class="code-block">
+# Create project with name different from directory
+$ cargo new my-app --name my_app
+    </div>
+</div>
+
+<div class="section">
+    <h2>9. First Complete Example</h2>
+    <p>Let's create and run a complete project:</p>
+
+    <div class="code-block">
+# Step 1: Create project
+$ cargo new greeting_app
+$ cd greeting_app
+
+# Step 2: Edit src/main.rs
+# (use your favorite editor)
+
+# Step 3: Build and run
+$ cargo run
+    </div>
+
+    <h3>Modified src/main.rs:</h3>
+    <div class="code-block">
+use std::io;
+
+fn main() {
+    println!("What's your name?");
+    
+    let mut name = String::new();
+    io::stdin()
+        .read_line(&mut name)
+        .expect("Failed to read line");
+    
+    println!("Hello, {}!", name.trim());
+}
+    </div>
+
+    <h3>Running the Program:</h3>
+    <div class="command-output">
+$ cargo run
+   Compiling greeting_app v0.1.0
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.75s
+     Running `target/debug/greeting_app`
+What's your name?
+Alice
+Hello, Alice!
+    </div>
+</div>
+
+<div class="section">
+    <h2>10. Understanding the Target Directory</h2>
+    <p>After building, your project structure looks like:</p>
+
+    <div class="code-block">
+hello_world/
+├── Cargo.toml
+├── Cargo.lock
+├── src/
+│   └── main.rs
+└── target/
+    └── debug/
+        ├── hello_world      # Your executable
+        ├── deps/            # Compiled dependencies
+        └── build/           # Build scripts output
+    </div>
+
+    <div class="info-box">
+        <strong>📝 Note:</strong> The <code>target/</code> directory can be safely deleted. Cargo will recreate it when you build again. It's typically excluded from version control.
+    </div>
+</div>
+
+<div class="section">
+    <h2>11. Cleaning Build Artifacts</h2>
+    <p>Remove compiled files to free up space:</p>
+
+    <div class="code-block">
+$ cargo clean
+    </div>
+
+    <p>This removes the entire <code>target/</code> directory.</p>
+</div>
+
+<div class="section">
+    <h2>12. Getting Help</h2>
+    <p>Cargo has built-in help for all commands:</p>
+
+    <div class="code-block">
+# General help
+$ cargo help
+
+# Help for specific command
+$ cargo help build
+$ cargo help run
+$ cargo help new
+    </div>
+
+    <p>Or use the <code>--help</code> flag:</p>
+    <div class="code-block">
+$ cargo build --help
+$ cargo run --help
+    </div>
+</div>
+
+<div class="success-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li><code>cargo new &lt;name&gt;</code> - Create a new project</li>
+        <li><code>cargo new &lt;name&gt; --lib</code> - Create a library project</li>
+        <li><code>cargo init</code> - Initialize project in current directory</li>
+        <li><code>cargo build</code> - Compile your project</li>
+        <li><code>cargo run</code> - Compile and run your project</li>
+        <li><code>cargo check</code> - Quick syntax and type check</li>
+        <li><code>cargo build --release</code> - Optimized production build</li>
+        <li><code>cargo clean</code> - Remove build artifacts</li>
+        <li>Debug builds go in <code>target/debug/</code></li>
+        <li>Release builds go in <code>target/release/</code></li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Common Beginner Mistakes</h3>
+    <ul>
+        <li>Running the binary directly instead of using <code>cargo run</code></li>
+        <li>Forgetting to use <code>--release</code> for performance testing</li>
+        <li>Committing the <code>target/</code> directory to version control</li>
+        <li>Not using <code>cargo check</code> for quick feedback during development</li>
+    </ul>
+</div>
+
+<a href="{% url 'cargo_overview' %}" class="back-link">← Back to Cargo Overview</a>
+{% endblock %}

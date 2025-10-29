@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Introduction to Cargo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        white-space: pre;
+        line-height: 1.5;
+    }
+
+    /* Rust Syntax Highlighting */
+    .keyword { color: #c678dd; font-weight: bold; }
+    .function { color: #61afef; }
+    .string { color: #98c379; }
+    .number { color: #d19a66; }
+    .comment { color: #5c6370; font-style: italic; }
+    .macro { color: #e5c07b; }
+    .type { color: #e5c07b; }
+    .operator { color: #56b6c2; }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+
+    .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .feature-item {
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📖 Introduction to Cargo</h1>
+
+<div class="info-box">
+    <strong>📌 What is Cargo?</strong><br>
+    Cargo is the Rust <strong>package manager</strong>. It downloads your Rust package's dependencies, compiles your packages, makes distributable packages, and uploads them to <a href="https://crates.io" target="_blank">crates.io</a>, the Rust community's package registry.
+</div>
+
+<div class="section">
+    <h2>Why Cargo Exists</h2>
+    <p>
+        Cargo was created to solve common problems in software development:
+    </p>
+    
+    <h3>1. Dependency Management</h3>
+    <p>
+        Modern software rarely exists in isolation. Most projects depend on external libraries (called <strong>crates</strong> in Rust). Managing these dependencies manually is error-prone and time-consuming.
+    </p>
+    <ul>
+        <li>Which version of a library should you use?</li>
+        <li>How do you ensure everyone on your team uses the same versions?</li>
+        <li>What happens when a dependency has its own dependencies?</li>
+    </ul>
+    <p><strong>Cargo solves this</strong> by automatically downloading, building, and managing all dependencies.</p>
+
+    <h3>2. Build Automation</h3>
+    <p>
+        Compiling Rust code involves many steps: resolving dependencies, determining compilation order, passing correct flags to the compiler, and organizing output files.
+    </p>
+    <p><strong>Cargo handles all of this</strong> with a single command: <code>cargo build</code></p>
+
+    <h3>3. Standardization</h3>
+    <p>
+        Without a standard tool, every Rust project would have a different structure, build process, and dependency management approach.
+    </p>
+    <p><strong>Cargo provides conventions</strong> that the entire Rust community follows, making it easy to understand and contribute to any Rust project.</p>
+</div>
+
+<div class="section">
+    <h2>Key Features of Cargo</h2>
+
+    <div class="feature-list">
+        <div class="feature-item">
+            <h3>🔨 Build System</h3>
+            <p>Compiles your code with <code>cargo build</code>. Handles incremental compilation and caching for fast rebuilds.</p>
+        </div>
+
+        <div class="feature-item">
+            <h3>📦 Package Manager</h3>
+            <p>Downloads and manages dependencies from crates.io. Resolves version conflicts automatically.</p>
+        </div>
+
+        <div class="feature-item">
+            <h3>▶️ Task Runner</h3>
+            <p>Run your program with <code>cargo run</code>, execute tests with <code>cargo test</code>, and more.</p>
+        </div>
+
+        <div class="feature-item">
+            <h3>📚 Documentation</h3>
+            <p>Generate HTML documentation for your project and dependencies with <code>cargo doc</code>.</p>
+        </div>
+
+        <div class="feature-item">
+            <h3>🚀 Publishing</h3>
+            <p>Package and publish your library to crates.io with <code>cargo publish</code>.</p>
+        </div>
+
+        <div class="feature-item">
+            <h3>⚙️ Configuration</h3>
+            <p>Customize builds with profiles, features, and platform-specific settings.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Cargo vs Other Package Managers</h2>
+    <p>If you've used other programming languages, Cargo is similar to:</p>
+    <ul>
+        <li><strong>npm</strong> (JavaScript/Node.js) - Package management and scripts</li>
+        <li><strong>pip</strong> (Python) - Installing packages</li>
+        <li><strong>Maven/Gradle</strong> (Java) - Build automation and dependency management</li>
+        <li><strong>Composer</strong> (PHP) - Dependency management</li>
+        <li><strong>Bundler</strong> (Ruby) - Dependency resolution</li>
+    </ul>
+    <p>However, Cargo integrates all these functions into a single, cohesive tool.</p>
+</div>
+
+<div class="section">
+    <h2>Basic Cargo Workflow</h2>
+    <p>A typical Cargo workflow looks like this:</p>
+
+    <div class="code-block">
+# 1. Create a new project
+$ cargo new my_project
+$ cd my_project
+
+# 2. Add dependencies to Cargo.toml
+# (edit Cargo.toml file)
+
+# 3. Build the project
+$ cargo build
+
+# 4. Run the project
+$ cargo run
+
+# 5. Test the project
+$ cargo test
+
+# 6. Build for release
+$ cargo build --release
+    </div>
+</div>
+
+<div class="section">
+    <h2>Understanding Crates</h2>
+    <p>In Rust's ecosystem:</p>
+    
+    <div class="info-box">
+        <ul>
+            <li><strong>Crate</strong>: A compilation unit in Rust. It's a binary or library.</li>
+            <li><strong>Package</strong>: One or more crates that provide functionality. Defined by Cargo.toml.</li>
+            <li><strong>crates.io</strong>: The central repository where the Rust community publishes packages.</li>
+        </ul>
+    </div>
+
+    <h3>Types of Crates</h3>
+    <ul>
+        <li><strong>Binary crate</strong>: Executable programs (has a <code>main</code> function)</li>
+        <li><strong>Library crate</strong>: Reusable code that other projects can depend on</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Cargo.toml - The Manifest File</h2>
+    <p>Every Cargo project has a <code>Cargo.toml</code> file called the <strong>manifest</strong>. It describes your package:</p>
+
+    <div class="code-block">
+[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+    </div>
+
+    <p>This file is written in <a href="https://toml.io/" target="_blank">TOML</a> (Tom's Obvious, Minimal Language), a simple configuration file format.</p>
+</div>
+
+<div class="section">
+    <h2>Cargo.lock - Reproducible Builds</h2>
+    <p>
+        When Cargo builds your project for the first time, it creates a <code>Cargo.lock</code> file. This file contains the exact versions of all dependencies that were used.
+    </p>
+    
+    <div class="success-box">
+        <strong>✅ Why is this important?</strong>
+        <ul>
+            <li>Ensures everyone on your team builds with the same dependency versions</li>
+            <li>Makes builds reproducible months or years later</li>
+            <li>Prevents "works on my machine" problems</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <strong>📝 Note:</strong>
+        <ul>
+            <li><strong>Binary projects</strong>: Commit <code>Cargo.lock</code> to version control</li>
+            <li><strong>Library projects</strong>: Usually don't commit <code>Cargo.lock</code> (let users resolve dependencies)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section">
+    <h2>The Cargo Home Directory</h2>
+    <p>Cargo stores downloaded crates and compiled artifacts in the <strong>Cargo home directory</strong>:</p>
+    
+    <div class="code-block">
+# Linux/macOS
+~/.cargo/
+
+# Windows
+%USERPROFILE%\.cargo\
+    </div>
+
+    <p>This directory contains:</p>
+    <ul>
+        <li><code>bin/</code> - Installed binary programs</li>
+        <li><code>registry/</code> - Downloaded crate metadata and source code</li>
+        <li><code>git/</code> - Git dependencies</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Cargo Philosophy</h2>
+    <p>Cargo follows several key principles:</p>
+
+    <div class="info-box">
+        <h3>Convention Over Configuration</h3>
+        <p>Cargo provides sensible defaults. Most projects work out-of-the-box without configuration.</p>
+
+        <h3>Semantic Versioning</h3>
+        <p>Cargo uses <a href="https://semver.org/" target="_blank">SemVer</a> (Semantic Versioning) to manage dependency versions, ensuring compatibility.</p>
+
+        <h3>Fast Iteration</h3>
+        <p>Incremental compilation, parallel builds, and caching make development fast.</p>
+
+        <h3>Reliability</h3>
+        <p>Reproducible builds through <code>Cargo.lock</code> ensure consistent behavior across environments.</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>What Cargo Does for You</h2>
+    <p>When you run <code>cargo build</code>, Cargo:</p>
+    <ol>
+        <li>Reads <code>Cargo.toml</code> to understand your project</li>
+        <li>Downloads dependencies from crates.io (if not already cached)</li>
+        <li>Builds dependencies in the correct order</li>
+        <li>Compiles your code with the right settings</li>
+        <li>Links everything together</li>
+        <li>Places the output in the <code>target/</code> directory</li>
+    </ol>
+    <p>All of this happens automatically with a single command!</p>
+</div>
+
+<div class="success-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li>Cargo is Rust's official package manager and build tool</li>
+        <li>It manages dependencies, builds projects, runs tests, and generates documentation</li>
+        <li>Cargo provides a standardized workflow for all Rust projects</li>
+        <li><code>Cargo.toml</code> describes your package metadata and dependencies</li>
+        <li><code>Cargo.lock</code> ensures reproducible builds</li>
+        <li>Cargo uses semantic versioning for dependency management</li>
+        <li>The entire Rust ecosystem revolves around Cargo and crates.io</li>
+    </ul>
+</div>
+
+<a href="{% url 'cargo_overview' %}" class="back-link">← Back to Cargo Overview</a>
+{% endblock %}

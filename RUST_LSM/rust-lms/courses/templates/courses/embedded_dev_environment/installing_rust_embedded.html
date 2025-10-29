@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+
+{% block title %}Installing Rust for Embedded Systems{% endblock %}
+
+{% block content %}
+<style>
+    .content-section {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    h1 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+    }
+    
+    h2 {
+        color: #764ba2;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+    
+    h3 {
+        color: #667eea;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        font-size: 1.4em;
+    }
+    
+    .code-block {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 15px 0;
+        border-left: 4px solid #667eea;
+        font-family: 'Courier New', monospace;
+        white-space: pre;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #2196F3;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .warning-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .architecture-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .arch-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border: 2px solid #667eea;
+    }
+    
+    .arch-card h4 {
+        color: #764ba2;
+        margin-bottom: 10px;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    
+    .feature-list li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    
+    .feature-list li:before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-weight: bold;
+    }
+    
+    .step-number {
+        background: #667eea;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="content-section">
+    <h1>Installing Rust for Embedded Systems Development</h1>
+    
+    <p>Setting up Rust for embedded systems development requires installing the Rust toolchain along with specific targets and tools for cross-compilation. This guide walks you through the complete installation process.</p>
+
+    <h2>Prerequisites</h2>
+    
+    <h3>System Requirements</h3>
+    <ul class="feature-list">
+        <li>Operating System: Linux, Windows, or macOS</li>
+        <li>Internet connection for downloading tools</li>
+        <li>Sufficient disk space (approximately 2-3 GB)</li>
+        <li>Administrator/sudo access for system-level installations</li>
+    </ul>
+
+    <div class="warning-box">
+        <strong>Windows Users:</strong> You will need C++ Build Tools for Visual Studio 2019 or later. Download from the <a href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019" target="_blank">Microsoft website</a>.
+    </div>
+
+    <h2>Step 1: Install Rustup</h2>
+    
+    <p><span class="step-number">1</span><strong>Rustup</strong> is the official Rust toolchain installer and version manager. It allows you to install multiple Rust versions and manage toolchain components.</p>
+
+    <h3>Installation Command</h3>
+    <div class="code-block">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</div>
+
+    <div class="info-box">
+        <strong>What this does:</strong> Downloads and runs the rustup installation script using secure HTTPS and TLS 1.2.
+    </div>
+
+    <h3>During Installation</h3>
+    <p>The installer will present you with installation options:</p>
+    <div class="code-block">1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation</div>
+
+    <p>For most users, selecting option 1 (default) is recommended. This installs:</p>
+    <ul class="feature-list">
+        <li>The stable Rust compiler (rustc)</li>
+        <li>Cargo (Rust's package manager and build tool)</li>
+        <li>Standard library</li>
+        <li>Rustup for managing toolchains</li>
+    </ul>
+
+    <h3>Verify Installation</h3>
+    <p>After installation, restart your terminal and verify the installation:</p>
+    <div class="code-block">rustc --version
+cargo --version
+rustup --version</div>
+
+    <p>Expected output:</p>
+    <div class="code-block">rustc 1.83.0 (90b35a623 2024-11-26)
+cargo 1.83.0 (5ffbef321 2024-10-29)
+rustup 1.27.1 (54dd3d00f 2024-04-24)</div>
+
+    <div class="info-box">
+        <strong>Note:</strong> Ensure you have Rust 1.31 or newer for embedded development. The version numbers shown above are examples and will vary.
+    </div>
+
+    <h2>Step 2: Install Embedded Targets</h2>
+
+    <p><span class="step-number">2</span>Embedded systems use different processor architectures than desktop computers. You need to add cross-compilation support for your target microcontroller architecture.</p>
+
+    <h3>ARM Cortex-M Architectures</h3>
+    
+    <p>ARM Cortex-M processors are the most common in embedded Rust development. Choose the appropriate target based on your microcontroller:</p>
+
+    <div class="architecture-grid">
+        <div class="arch-card">
+            <h4>Cortex-M0/M0+/M1</h4>
+            <p><strong>Architecture:</strong> ARMv6-M</p>
+            <div class="code-block">rustup target add thumbv6m-none-eabi</div>
+            <p><strong>Common MCUs:</strong> STM32F0, NRF51, LPC11xx</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M3</h4>
+            <p><strong>Architecture:</strong> ARMv7-M</p>
+            <div class="code-block">rustup target add thumbv7m-none-eabi</div>
+            <p><strong>Common MCUs:</strong> STM32F1, STM32L1, LPC17xx</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M4/M7 (No FPU)</h4>
+            <p><strong>Architecture:</strong> ARMv7E-M</p>
+            <div class="code-block">rustup target add thumbv7em-none-eabi</div>
+            <p><strong>Common MCUs:</strong> STM32F3 (basic), STM32F4 (basic)</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M4F/M7F (With FPU)</h4>
+            <p><strong>Architecture:</strong> ARMv7E-M + HW Float</p>
+            <div class="code-block">rustup target add thumbv7em-none-eabihf</div>
+            <p><strong>Common MCUs:</strong> STM32F3, STM32F4, STM32F7, STM32H7</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M23</h4>
+            <p><strong>Architecture:</strong> ARMv8-M Baseline</p>
+            <div class="code-block">rustup target add thumbv8m.base-none-eabi</div>
+            <p><strong>Common MCUs:</strong> STM32L0, NRF9160</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M33/M35P (No FPU)</h4>
+            <p><strong>Architecture:</strong> ARMv8-M Mainline</p>
+            <div class="code-block">rustup target add thumbv8m.main-none-eabi</div>
+            <p><strong>Common MCUs:</strong> STM32L5, NRF5340</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M33F/M35PF (With FPU)</h4>
+            <p><strong>Architecture:</strong> ARMv8-M Mainline + HW Float</p>
+            <div class="code-block">rustup target add thumbv8m.main-none-eabihf</div>
+            <p><strong>Common MCUs:</strong> STM32L5, STM32U5, NRF5340</p>
+        </div>
+
+        <div class="arch-card">
+            <h4>Cortex-M55</h4>
+            <p><strong>Architecture:</strong> ARMv8.1-M + MVE</p>
+            <div class="code-block">rustup target add thumbv8m.main-none-eabihf</div>
+            <p><strong>Note:</strong> Uses same target as M33F with additional vector extensions</p>
+        </div>
+    </div>
+
+    <h3>RISC-V Targets</h3>
+    <p>For RISC-V microcontrollers like GigaDevice GD32V and SiFive FE310:</p>
+    <div class="code-block">rustup target add riscv32imac-unknown-none-elf
+rustup target add riscv32imc-unknown-none-elf</div>
+
+    <h3>Verify Target Installation</h3>
+    <p>List all installed targets:</p>
+    <div class="code-block">rustup target list --installed</div>
+
+    <h2>Step 3: Install Essential Tools</h2>
+
+    <p><span class="step-number">3</span>Several additional tools are essential for embedded development:</p>
+
+    <h3>cargo-binutils</h3>
+    <p>Provides LLVM tools (objdump, nm, size, etc.) as Cargo subcommands:</p>
+    <div class="code-block">cargo install cargo-binutils
+rustup component add llvm-tools</div>
+
+    <p><strong>Why use cargo-binutils?</strong></p>
+    <ul class="feature-list">
+        <li>Single installation command works on all operating systems</li>
+        <li>Supports all architectures that rustc supports</li>
+        <li>No need for architecture-specific GNU binutils</li>
+        <li>Integrates seamlessly with Cargo workflow</li>
+    </ul>
+
+    <h3>cargo-generate</h3>
+    <p>Creates new projects from templates:</p>
+    <div class="code-block">cargo install cargo-generate</div>
+
+    <div class="info-box">
+        <strong>Linux Note:</strong> On Ubuntu/Debian, you may need to install dependencies first:
+        <div class="code-block">sudo apt install libssl-dev pkg-config</div>
+    </div>
+
+    <h3>cargo-embed and probe-rs</h3>
+    <p>Modern tools for flashing and debugging embedded devices:</p>
+    <div class="code-block">cargo install cargo-embed probe-rs-cli</div>
+
+    <p><strong>Features:</strong></p>
+    <ul class="feature-list">
+        <li>Flash firmware to microcontrollers</li>
+        <li>Real-time logging via RTT (Real-Time Transfer)</li>
+        <li>GDB server for debugging</li>
+        <li>Supports multiple debug probes (ST-Link, J-Link, CMSIS-DAP)</li>
+    </ul>
+
+    <h3>cargo-flash and cargo-size</h3>
+    <p>Additional utilities for embedded development:</p>
+    <div class="code-block">cargo install cargo-flash
+cargo install cargo-size</div>
+
+    <h2>Step 4: Install Debugging Tools</h2>
+
+    <p><span class="step-number">4</span>Debugging embedded systems requires additional software:</p>
+
+    <h3>GDB with ARM Support</h3>
+    
+    <p><strong>Linux (Ubuntu/Debian):</strong></p>
+    <div class="code-block">sudo apt install gdb-multiarch</div>
+
+    <p><strong>macOS:</strong></p>
+    <div class="code-block">brew install armmbed/formulae/arm-none-eabi-gcc</div>
+
+    <p><strong>Windows:</strong></p>
+    <p>Download ARM GCC from the <a href="https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads" target="_blank">ARM Developer website</a>.</p>
+
+    <h3>OpenOCD (Optional)</h3>
+    <p>Open On-Chip Debugger for advanced debugging scenarios:</p>
+    
+    <p><strong>Linux:</strong></p>
+    <div class="code-block">sudo apt install openocd</div>
+
+    <p><strong>macOS:</strong></p>
+    <div class="code-block">brew install openocd</div>
+
+    <h3>QEMU for ARM</h3>
+    <p>Emulator for testing without hardware:</p>
+    
+    <p><strong>Linux:</strong></p>
+    <div class="code-block">sudo apt install qemu-system-arm</div>
+
+    <p><strong>macOS:</strong></p>
+    <div class="code-block">brew install qemu</div>
+
+    <h2>Step 5: Verify Complete Setup</h2>
+
+    <p><span class="step-number">5</span>Verify all components are correctly installed:</p>
+
+    <div class="code-block"># Check Rust toolchain
+rustc --version
+cargo --version
+
+# Check installed targets
+rustup target list --installed
+
+# Check cargo tools
+cargo --list | grep -E "binutils|generate|embed|flash|size"
+
+# Check LLVM tools
+cargo objdump --version
+
+# Check GDB
+arm-none-eabi-gdb --version  # or gdb-multiarch --version
+
+# Check QEMU (optional)
+qemu-system-arm --version</div>
+
+    <h2>Common Installation Issues</h2>
+
+    <h3>Issue: cargo install fails with linker errors</h3>
+    <div class="warning-box">
+        <strong>Solution:</strong> Install build dependencies:
+        <ul>
+            <li><strong>Ubuntu/Debian:</strong> <code>sudo apt install build-essential</code></li>
+            <li><strong>macOS:</strong> Install Xcode Command Line Tools: <code>xcode-select --install</code></li>
+            <li><strong>Windows:</strong> Install Visual Studio Build Tools</li>
+        </ul>
+    </div>
+
+    <h3>Issue: rustup command not found after installation</h3>
+    <div class="warning-box">
+        <strong>Solution:</strong> The installation adds Rust to your PATH, but you need to restart your terminal or run:
+        <div class="code-block">source $HOME/.cargo/env</div>
+    </div>
+
+    <h3>Issue: Permission denied errors on Linux/macOS</h3>
+    <div class="warning-box">
+        <strong>Solution:</strong> Don't use sudo with cargo install. If you have permission issues, fix cargo directory ownership:
+        <div class="code-block">sudo chown -R $USER:$USER ~/.cargo</div>
+    </div>
+
+    <h2>Next Steps</h2>
+
+    <p>With your Rust embedded development environment installed, you're ready to:</p>
+    <ul class="feature-list">
+        <li>Configure your toolchain for specific targets</li>
+        <li>Create your first embedded Rust project</li>
+        <li>Set up debugging with your hardware probe</li>
+        <li>Explore microcontroller platforms and ecosystems</li>
+    </ul>
+
+    <div class="info-box">
+        <strong>Pro Tip:</strong> Keep your toolchain updated regularly:
+        <div class="code-block">rustup update</div>
+        This ensures you have the latest features, bug fixes, and security patches.
+    </div>
+</div>
+{% endblock %}
