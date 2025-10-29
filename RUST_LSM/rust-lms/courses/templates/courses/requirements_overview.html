@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Pre-Training Setup - Requirements Overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    .requirements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .requirement-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+    }
+
+    .requirement-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .requirement-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .requirement-card p {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .intro-section {
+        background-color: #f8f9fa;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        border-left: 4px solid #667eea;
+    }
+
+    .intro-section h2 {
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Pre-Training Setup: S/W and H/W Requirements</h1>
+
+<div class="intro-section">
+    <h2>Welcome to Rust Programming!</h2>
+    <p>Before diving into Rust programming, it's essential to ensure your development environment meets the necessary software and hardware requirements. This section will guide you through everything you need to get started.</p>
+    <p><strong>Why is this important?</strong> Having the right setup ensures smooth learning, faster compilation times, and an optimal development experience.</p>
+</div>
+
+<h2>Topics Covered</h2>
+<div class="requirements-grid">
+    <a href="{% url 'hardware_requirements' %}" class="requirement-card">
+        <div class="icon">💻</div>
+        <h3>Hardware Requirements</h3>
+        <p>Minimum and recommended system specifications for Rust development</p>
+    </a>
+
+    <a href="{% url 'software_requirements' %}" class="requirement-card">
+        <div class="icon">⚙️</div>
+        <h3>Software Requirements</h3>
+        <p>Essential software tools, compilers, and development environments</p>
+    </a>
+
+    <a href="{% url 'operating_systems' %}" class="requirement-card">
+        <div class="icon">🖥️</div>
+        <h3>Operating Systems</h3>
+        <p>Rust support across Windows, macOS, and Linux platforms</p>
+    </a>
+
+    <a href="{% url 'development_tools' %}" class="requirement-card">
+        <div class="icon">🛠️</div>
+        <h3>Development Tools</h3>
+        <p>IDEs, text editors, and productivity tools for Rust</p>
+    </a>
+
+    <a href="{% url 'installation_guide' %}" class="requirement-card">
+        <div class="icon">📦</div>
+        <h3>Installation Guide</h3>
+        <p>Step-by-step instructions to install Rust and set up your environment</p>
+    </a>
+
+    <a href="{% url 'verification_testing' %}" class="requirement-card">
+        <div class="icon">✅</div>
+        <h3>Verification & Testing</h3>
+        <p>Verify your installation and run your first Rust program</p>
+    </a>
+</div>
+{% endblock %}

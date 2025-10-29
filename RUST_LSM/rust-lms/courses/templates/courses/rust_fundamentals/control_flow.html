@@ -1,0 +1,627 @@
+{% extends "base.html" %}
+
+{% block title %}Control Flow - Rust Fundamentals{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🔀 Control Flow in Rust</h1>
+
+<div class="info-box">
+    <strong>📌 Key Concept:</strong> Control flow constructs allow you to control the execution path of your program. Rust provides several control flow mechanisms: <code>if</code> expressions, loops (<code>loop</code>, <code>while</code>, <code>for</code>), and pattern matching with <code>match</code>.
+</div>
+
+<div class="section">
+    <h2>1. if Expressions</h2>
+    <p>In Rust, <code>if</code> is an <strong>expression</strong> (not a statement), which means it returns a value.</p>
+
+    <div class="code-block">
+fn main() {
+    let number = 7;
+    
+    if number < 5 {
+        println!("condition was true");
+    } else {
+        println!("condition was false");
+    }
+}
+    </div>
+
+    <h3>Multiple Conditions with else if</h3>
+    <div class="code-block">
+fn main() {
+    let number = 6;
+    
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }
+}
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Important:</strong> The condition in an <code>if</code> expression must be a <code>bool</code>. Rust will not automatically convert non-boolean types to boolean.
+        <div class="code-block" style="margin-top: 1rem;">
+fn main() {
+    let number = 3;
+    
+    // ❌ ERROR: expected `bool`, found integer
+    // if number {
+    //     println!("number was three");
+    // }
+    
+    // ✅ CORRECT: explicit comparison
+    if number != 0 {
+        println!("number was something other than zero");
+    }
+}
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>2. Using if in a let Statement</h2>
+    <p>Because <code>if</code> is an expression, you can use it on the right side of a <code>let</code> statement:</p>
+
+    <div class="code-block">
+fn main() {
+    let condition = true;
+    
+    let number = if condition { 5 } else { 6 };
+    
+    println!("The value of number is: {}", number);
+}
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Type Consistency:</strong> All branches of an <code>if</code> expression must return the same type:
+        <div class="code-block" style="margin-top: 1rem;">
+fn main() {
+    let condition = true;
+    
+    // ❌ ERROR: `if` and `else` have incompatible types
+    // let number = if condition { 5 } else { "six" };
+    
+    // ✅ CORRECT: same types in both branches
+    let number = if condition { 5 } else { 6 };
+}
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. Repetition with Loops</h2>
+    <p>Rust has three kinds of loops: <code>loop</code>, <code>while</code>, and <code>for</code>.</p>
+
+    <h3>3.1 The loop Keyword</h3>
+    <p>The <code>loop</code> keyword creates an infinite loop. Use <code>break</code> to exit.</p>
+
+    <div class="code-block">
+fn main() {
+    let mut counter = 0;
+    
+    loop {
+        counter += 1;
+        
+        if counter == 10 {
+            break;
+        }
+    }
+    
+    println!("Counter: {}", counter);
+}
+    </div>
+
+    <h3>Returning Values from Loops</h3>
+    <div class="code-block">
+fn main() {
+    let mut counter = 0;
+    
+    let result = loop {
+        counter += 1;
+        
+        if counter == 10 {
+            break counter * 2;  // Return value from loop
+        }
+    };
+    
+    println!("The result is {}", result);  // 20
+}
+    </div>
+
+    <h3>Loop Labels</h3>
+    <p>Use loop labels to break or continue specific loops in nested loops:</p>
+
+    <div class="code-block">
+fn main() {
+    let mut count = 0;
+    
+    'outer: loop {
+        println!("count = {}", count);
+        let mut remaining = 10;
+        
+        loop {
+            println!("remaining = {}", remaining);
+            
+            if remaining == 9 {
+                break;  // Break inner loop
+            }
+            
+            if count == 2 {
+                break 'outer;  // Break outer loop
+            }
+            
+            remaining -= 1;
+        }
+        
+        count += 1;
+    }
+    
+    println!("End count = {}", count);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. Conditional Loops with while</h2>
+    <p>The <code>while</code> loop runs while a condition is true:</p>
+
+    <div class="code-block">
+fn main() {
+    let mut number = 3;
+    
+    while number != 0 {
+        println!("{}!", number);
+        number -= 1;
+    }
+    
+    println!("LIFTOFF!!!");
+}
+    </div>
+
+    <h3>Example: Countdown</h3>
+    <div class="code-block">
+fn main() {
+    let mut countdown = 10;
+    
+    while countdown > 0 {
+        println!("T-minus {}", countdown);
+        countdown -= 1;
+    }
+    
+    println!("Blast off! 🚀");
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>5. Looping Through Collections with for</h2>
+    <p>The <code>for</code> loop is the most common loop type for iterating over collections:</p>
+
+    <div class="code-block">
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    
+    for element in a {
+        println!("the value is: {}", element);
+    }
+}
+    </div>
+
+    <h3>Using Ranges</h3>
+    <div class="code-block">
+fn main() {
+    // Count from 1 to 5
+    for number in 1..6 {
+        println!("{}", number);
+    }
+    
+    println!("---");
+    
+    // Reverse countdown
+    for number in (1..4).rev() {
+        println!("{}!", number);
+    }
+    println!("LIFTOFF!!!");
+}
+    </div>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Loop Type</th>
+                <th>When to Use</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>loop</code></td>
+                <td>Infinite loop or when you need to return a value</td>
+                <td><code>loop { if done { break; } }</code></td>
+            </tr>
+            <tr>
+                <td><code>while</code></td>
+                <td>Loop while condition is true</td>
+                <td><code>while count < 10 { count += 1; }</code></td>
+            </tr>
+            <tr>
+                <td><code>for</code></td>
+                <td>Iterate over collections or ranges</td>
+                <td><code>for i in 0..10 { println!("{}", i); }</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>6. break and continue</h2>
+
+    <h3>break Statement</h3>
+    <p>Exits the current loop:</p>
+
+    <div class="code-block">
+fn main() {
+    let mut count = 0;
+    
+    loop {
+        count += 1;
+        
+        if count == 5 {
+            break;  // Exit the loop when count reaches 5
+        }
+        
+        println!("Count: {}", count);
+    }
+}
+    </div>
+
+    <h3>continue Statement</h3>
+    <p>Skips the rest of the current iteration and moves to the next:</p>
+
+    <div class="code-block">
+fn main() {
+    for number in 1..6 {
+        if number == 3 {
+            continue;  // Skip printing 3
+        }
+        
+        println!("{}", number);
+    }
+}
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Output:</strong>
+        <pre>1
+2
+4
+5</pre>
+    </div>
+</div>
+
+<div class="section">
+    <h2>7. Pattern Matching with match</h2>
+    <p>The <code>match</code> expression is a powerful control flow construct for pattern matching:</p>
+
+    <div class="code-block">
+fn main() {
+    let number = 7;
+    
+    match number {
+        1 => println!("One!"),
+        2 | 3 | 5 | 7 | 11 => println!("This is a prime"),
+        13..=19 => println!("A teen"),
+        _ => println!("Ain't special"),
+    }
+}
+    </div>
+
+    <h3>match with Expressions</h3>
+    <div class="code-block">
+fn main() {
+    let boolean = true;
+    
+    let binary = match boolean {
+        false => 0,
+        true => 1,
+    };
+    
+    println!("{} -> {}", boolean, binary);
+}
+    </div>
+
+    <h3>Matching Tuples</h3>
+    <div class="code-block">
+fn main() {
+    let pair = (0, -2);
+    
+    match pair {
+        (0, y) => println!("First is `0` and `y` is `{:?}`", y),
+        (x, 0) => println!("`x` is `{:?}` and last is `0`", x),
+        _ => println!("It doesn't matter what they are"),
+    }
+}
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Exhaustiveness:</strong> Rust requires <code>match</code> expressions to be <strong>exhaustive</strong>. You must handle all possible cases or use <code>_</code> as a catch-all pattern.
+        <div class="code-block" style="margin-top: 1rem;">
+fn main() {
+    let number = 4;
+    
+    // ❌ ERROR: non-exhaustive patterns
+    // match number {
+    //     1 => println!("one"),
+    //     2 => println!("two"),
+    // }
+    
+    // ✅ CORRECT: all cases handled
+    match number {
+        1 => println!("one"),
+        2 => println!("two"),
+        _ => println!("something else"),
+    }
+}
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>8. if let Expression</h2>
+    <p><code>if let</code> is a concise way to handle values that match one pattern while ignoring the rest:</p>
+
+    <div class="code-block">
+fn main() {
+    let favorite_color: Option<&str> = Some("blue");
+    
+    if let Some(color) = favorite_color {
+        println!("Your favorite color is {}", color);
+    }
+}
+    </div>
+
+    <h3>if let vs match</h3>
+    <div class="code-block">
+// Using match
+fn main() {
+    let config_max = Some(3u8);
+    
+    match config_max {
+        Some(max) => println!("The maximum is {}", max),
+        _ => (),
+    }
+}
+
+// Using if let (more concise)
+fn main() {
+    let config_max = Some(3u8);
+    
+    if let Some(max) = config_max {
+        println!("The maximum is {}", max);
+    }
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>9. Control Flow Examples</h2>
+
+    <h3>Example 1: FizzBuzz</h3>
+    <div class="code-block">
+fn main() {
+    for n in 1..=30 {
+        match (n % 3, n % 5) {
+            (0, 0) => println!("FizzBuzz"),
+            (0, _) => println!("Fizz"),
+            (_, 0) => println!("Buzz"),
+            _ => println!("{}", n),
+        }
+    }
+}
+    </div>
+
+    <h3>Example 2: Menu Selection</h3>
+    <div class="code-block">
+fn main() {
+    let choice = 2;
+    
+    match choice {
+        1 => println!("Start new game"),
+        2 => println!("Load saved game"),
+        3 => println!("View settings"),
+        4 => println!("Exit"),
+        _ => println!("Invalid choice!"),
+    }
+}
+    </div>
+
+    <h3>Example 3: Grade Calculator</h3>
+    <div class="code-block">
+fn get_grade(score: u32) -> char {
+    match score {
+        90..=100 => 'A',
+        80..=89 => 'B',
+        70..=79 => 'C',
+        60..=69 => 'D',
+        _ => 'F',
+    }
+}
+
+fn main() {
+    let scores = [95, 87, 72, 55, 90];
+    
+    for score in scores {
+        let grade = get_grade(score);
+        println!("Score {} = Grade {}", score, grade);
+    }
+}
+    </div>
+
+    <h3>Example 4: Nested Loops with break</h3>
+    <div class="code-block">
+fn main() {
+    'outer: for x in 1..=5 {
+        for y in 1..=5 {
+            if x * y == 10 {
+                println!("Found: {} * {} = 10", x, y);
+                break 'outer;
+            }
+        }
+    }
+}
+    </div>
+
+    <h3>Example 5: Sum with Loop</h3>
+    <div class="code-block">
+fn main() {
+    let numbers = [1, 2, 3, 4, 5];
+    let mut sum = 0;
+    
+    for number in numbers {
+        sum += number;
+    }
+    
+    println!("Sum: {}", sum);
+}
+    </div>
+
+    <h3>Example 6: Find First Even Number</h3>
+    <div class="code-block">
+fn main() {
+    let numbers = [1, 3, 7, 8, 9, 12];
+    
+    for number in numbers {
+        if number % 2 == 0 {
+            println!("First even number: {}", number);
+            break;
+        }
+    }
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>10. Best Practices</h2>
+
+    <div class="info-box">
+        <h3>✅ Do's:</h3>
+        <ul>
+            <li>Use <code>for</code> loops for iterating over collections</li>
+            <li>Use <code>match</code> for complex pattern matching</li>
+            <li>Use <code>if let</code> when you only care about one pattern</li>
+            <li>Label nested loops for clarity</li>
+            <li>Keep conditions simple and readable</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>❌ Don'ts:</h3>
+        <ul>
+            <li>Don't use <code>while</code> to iterate over arrays (use <code>for</code> instead)</li>
+            <li>Don't forget the <code>_</code> catch-all in <code>match</code></li>
+            <li>Don't rely on non-boolean values in <code>if</code> conditions</li>
+            <li>Avoid deeply nested loops when possible</li>
+        </ul>
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li><code>if</code> is an <strong>expression</strong> that returns a value</li>
+        <li>Conditions must be <code>bool</code> type (no automatic conversion)</li>
+        <li>Three loop types: <code>loop</code> (infinite), <code>while</code> (conditional), <code>for</code> (iteration)</li>
+        <li><code>break</code> exits loops, <code>continue</code> skips to next iteration</li>
+        <li><code>match</code> is powerful for pattern matching and must be exhaustive</li>
+        <li><code>if let</code> is syntactic sugar for matching a single pattern</li>
+        <li>Use loop labels (<code>'label:</code>) for nested loop control</li>
+        <li>Prefer <code>for</code> loops over <code>while</code> for collection iteration</li>
+    </ul>
+</div>
+
+<a href="{% url 'rust_fundamentals_overview' %}" class="back-link">← Back to Fundamentals Overview</a>
+{% endblock %}

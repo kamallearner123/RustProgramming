@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rust Programming LMS{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        nav {
+            background-color: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #764ba2;
+        }
+
+        main {
+            background: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        .rust-logo {
+            font-weight: bold;
+            color: #CE422B;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><span class="rust-logo">Rust</span> Programming LMS</h1>
+            <p>Learn Systems Programming with Rust</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="{% url 'course_list' %}">Courses</a></li>
+                <li><a href="{% url 'requirements_overview' %}">Pre-Training Setup</a></li>
+                <li><a href="{% url 'rust_fundamentals_overview' %}">Rust Fundamentals</a></li>
+                <li><a href="#">Tutorials</a></li>
+                <li><a href="#">Resources</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Rust Programming LMS. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

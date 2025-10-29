@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Hardware Requirements - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .requirements-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .requirements-table th,
+    .requirements-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .requirements-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+    }
+
+    .requirements-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .spec-category {
+        font-weight: 600;
+        color: #667eea;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+
+    li {
+        margin: 0.5rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>💻 Hardware Requirements for Rust Development</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> Rust is designed to run on a wide range of hardware, from small embedded devices to powerful servers. However, for a comfortable learning and development experience, certain hardware specifications are recommended.
+</div>
+
+<h2>System Specifications</h2>
+
+<table class="requirements-table">
+    <thead>
+        <tr>
+            <th>Component</th>
+            <th>Minimum Requirements</th>
+            <th>Recommended</th>
+            <th>Optimal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="spec-category">Processor (CPU)</td>
+            <td>64-bit processor<br>1.5 GHz dual-core</td>
+            <td>2.5 GHz quad-core<br>(Intel i5/AMD Ryzen 5 or equivalent)</td>
+            <td>3.0+ GHz 6+ cores<br>(Intel i7/AMD Ryzen 7 or higher)</td>
+        </tr>
+        <tr>
+            <td class="spec-category">RAM (Memory)</td>
+            <td>4 GB</td>
+            <td>8 GB</td>
+            <td>16 GB or more</td>
+        </tr>
+        <tr>
+            <td class="spec-category">Storage</td>
+            <td>10 GB free space<br>(HDD acceptable)</td>
+            <td>20 GB free space<br>SSD recommended</td>
+            <td>50+ GB free space<br>NVMe SSD</td>
+        </tr>
+        <tr>
+            <td class="spec-category">Graphics</td>
+            <td>Any modern GPU<br>Integrated graphics OK</td>
+            <td>Integrated graphics<br>(Intel UHD/AMD Radeon)</td>
+            <td>Dedicated GPU<br>(for GUI/graphics projects)</td>
+        </tr>
+        <tr>
+            <td class="spec-category">Display</td>
+            <td>1024x768 resolution</td>
+            <td>1920x1080 (Full HD)</td>
+            <td>2560x1440 or higher</td>
+        </tr>
+        <tr>
+            <td class="spec-category">Internet</td>
+            <td>Required for initial setup</td>
+            <td>Broadband connection</td>
+            <td>High-speed connection</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Why These Specifications Matter</h2>
+
+<h3>🔧 Processor (CPU)</h3>
+<ul>
+    <li><strong>Compilation Speed:</strong> Rust compilation can be CPU-intensive. More cores mean faster parallel compilation.</li>
+    <li><strong>Architecture:</strong> Rust requires a 64-bit processor. Most modern CPUs (made after 2010) are 64-bit.</li>
+    <li><strong>Multi-threading:</strong> Rust's cargo build system uses parallel compilation, benefiting from multi-core processors.</li>
+</ul>
+
+<h3>💾 RAM (Memory)</h3>
+<ul>
+    <li><strong>Compilation:</strong> Large projects can consume significant memory during compilation.</li>
+    <li><strong>IDE Performance:</strong> Modern IDEs with Rust Language Server (rust-analyzer) require adequate RAM.</li>
+    <li><strong>Multitasking:</strong> Running compiler, IDE, browser, and other tools simultaneously.</li>
+</ul>
+
+<div class="warning-box">
+    <strong>⚠️ Note:</strong> With only 4 GB RAM, you may experience slowdowns when compiling larger projects or using feature-rich IDEs. Consider closing other applications during development.
+</div>
+
+<h3>💿 Storage</h3>
+<ul>
+    <li><strong>Toolchain Size:</strong> Rust toolchain and documentation: ~3-4 GB</li>
+    <li><strong>Dependencies:</strong> Cargo dependencies can accumulate over time (stored in ~/.cargo)</li>
+    <li><strong>Build Artifacts:</strong> Compiled artifacts in target/ directories can grow large</li>
+    <li><strong>SSD Benefits:</strong> Significantly faster compilation and project loading times</li>
+</ul>
+
+<div class="success-box">
+    <strong>💡 Tip:</strong> Using an SSD can reduce compilation times by 30-50% compared to traditional HDDs. If you're serious about Rust development, an SSD is a worthwhile investment.
+</div>
+
+<h2>Architecture Support</h2>
+
+<p>Rust officially supports the following architectures:</p>
+
+<table class="requirements-table">
+    <thead>
+        <tr>
+            <th>Architecture</th>
+            <th>Support Level</th>
+            <th>Common Use Cases</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>x86_64 (64-bit Intel/AMD)</td>
+            <td>Tier 1 - Guaranteed</td>
+            <td>Desktop, Server, Workstation</td>
+        </tr>
+        <tr>
+            <td>ARM64 (AArch64)</td>
+            <td>Tier 1 - Guaranteed</td>
+            <td>Apple Silicon Macs, ARM Servers</td>
+        </tr>
+        <tr>
+            <td>x86 (32-bit)</td>
+            <td>Tier 2 - Tested</td>
+            <td>Legacy Systems</td>
+        </tr>
+        <tr>
+            <td>ARM (32-bit)</td>
+            <td>Tier 2 - Tested</td>
+            <td>Embedded, Raspberry Pi</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Special Considerations</h2>
+
+<h3>🍎 Apple Silicon (M1/M2/M3)</h3>
+<ul>
+    <li>Excellent native support with ARM64 architecture</li>
+    <li>Very fast compilation times due to unified memory architecture</li>
+    <li>Recommended minimum: 8 GB RAM</li>
+</ul>
+
+<h3>🪟 Windows on ARM</h3>
+<ul>
+    <li>Supported but less common</li>
+    <li>May require additional setup</li>
+    <li>Some tools might run under emulation</li>
+</ul>
+
+<h3>📱 Embedded Development</h3>
+<ul>
+    <li>If targeting embedded systems (e.g., microcontrollers), your development machine should meet recommended specs</li>
+    <li>Additional hardware like debugging probes may be needed</li>
+</ul>
+
+<div class="info-box">
+    <strong>🎯 Bottom Line:</strong> While Rust can run on minimal hardware, investing in at least the recommended specifications (8 GB RAM, SSD, quad-core CPU) will significantly enhance your learning experience and productivity.
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}

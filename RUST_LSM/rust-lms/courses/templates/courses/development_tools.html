@@ -1,0 +1,518 @@
+{% extends "base.html" %}
+
+{% block title %}Development Tools - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .tool-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+    }
+
+    .tool-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .tool-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .tool-icon {
+        font-size: 2.5rem;
+        margin-right: 1rem;
+    }
+
+    .tool-name {
+        color: #667eea;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .tool-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+
+    .badge-free {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .badge-paid {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+    .badge-beginner {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .badge-advanced {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+
+    .feature-list li {
+        padding: 0.4rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .feature-list li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🛠️ Development Tools for Rust Programming</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> Choosing the right development tools can significantly enhance your Rust programming experience. This guide covers IDEs, text editors, debugging tools, and productivity utilities.
+</div>
+
+<h2>Integrated Development Environments (IDEs)</h2>
+
+<div class="tools-grid">
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">💻</div>
+            <div>
+                <div class="tool-name">Visual Studio Code</div>
+                <span class="tool-badge badge-free">Free</span>
+                <span class="tool-badge badge-beginner">Beginner Friendly</span>
+            </div>
+        </div>
+        <p><strong>Most Popular Choice for Rust</strong></p>
+        <ul class="feature-list">
+            <li>Excellent rust-analyzer extension</li>
+            <li>Integrated terminal and debugging</li>
+            <li>Git integration built-in</li>
+            <li>Large extension marketplace</li>
+            <li>Cross-platform (Windows, macOS, Linux)</li>
+        </ul>
+        <p><strong>Installation:</strong></p>
+        <div class="code-block">
+# Install VS Code, then add extensions:
+# - rust-analyzer
+# - CodeLLDB (for debugging)
+# - Even Better TOML
+# - Error Lens
+        </div>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">🧠</div>
+            <div>
+                <div class="tool-name">IntelliJ IDEA / CLion</div>
+                <span class="tool-badge badge-paid">Paid/Free</span>
+                <span class="tool-badge badge-advanced">Professional</span>
+            </div>
+        </div>
+        <p><strong>Powerful IDE by JetBrains</strong></p>
+        <ul class="feature-list">
+            <li>IntelliJ Rust plugin (excellent features)</li>
+            <li>Superior refactoring capabilities</li>
+            <li>Advanced code analysis</li>
+            <li>Built-in database tools</li>
+            <li>Professional debugger</li>
+        </ul>
+        <p><strong>Editions:</strong></p>
+        <ul>
+            <li>IntelliJ IDEA Community (Free) + Rust plugin</li>
+            <li>CLion (Paid) - Best for C/C++/Rust</li>
+        </ul>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">🦀</div>
+            <div>
+                <div class="tool-name">RustRover</div>
+                <span class="tool-badge badge-paid">Paid</span>
+                <span class="tool-badge badge-advanced">Specialized</span>
+            </div>
+        </div>
+        <p><strong>JetBrains' Dedicated Rust IDE</strong></p>
+        <ul class="feature-list">
+            <li>Built specifically for Rust</li>
+            <li>Advanced code completion</li>
+            <li>Integrated cargo commands</li>
+            <li>Smart refactoring</li>
+            <li>Professional support</li>
+        </ul>
+        <p><strong>Note:</strong> Released in 2023, specifically designed for Rust development.</p>
+    </div>
+</div>
+
+<h2>Text Editors</h2>
+
+<div class="tools-grid">
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">📝</div>
+            <div>
+                <div class="tool-name">Vim / Neovim</div>
+                <span class="tool-badge badge-free">Free</span>
+                <span class="tool-badge badge-advanced">Power Users</span>
+            </div>
+        </div>
+        <p><strong>Terminal-Based Editor</strong></p>
+        <ul class="feature-list">
+            <li>Extremely fast and lightweight</li>
+            <li>Highly customizable</li>
+            <li>rust.vim plugin</li>
+            <li>LSP support via plugins</li>
+            <li>Works over SSH</li>
+        </ul>
+        <p><strong>Recommended Plugins:</strong></p>
+        <div class="code-block">
+" Key plugins for Rust in Vim:
+" - rust.vim
+" - coc.nvim or nvim-lspconfig
+" - vim-cargo
+        </div>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">🎨</div>
+            <div>
+                <div class="tool-name">Sublime Text</div>
+                <span class="tool-badge badge-paid">Paid</span>
+                <span class="tool-badge badge-beginner">Beginner Friendly</span>
+            </div>
+        </div>
+        <p><strong>Fast and Elegant Editor</strong></p>
+        <ul class="feature-list">
+            <li>Very fast startup and performance</li>
+            <li>Rust Enhanced package</li>
+            <li>LSP support available</li>
+            <li>Multiple cursors</li>
+            <li>Beautiful interface</li>
+        </ul>
+        <p><strong>Installation:</strong></p>
+        <div class="code-block">
+# Install via Package Control:
+# - Rust Enhanced
+# - LSP
+# - LSP-rust-analyzer
+        </div>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">⚡</div>
+            <div>
+                <div class="tool-name">Emacs</div>
+                <span class="tool-badge badge-free">Free</span>
+                <span class="tool-badge badge-advanced">Power Users</span>
+            </div>
+        </div>
+        <p><strong>Extensible Editor</strong></p>
+        <ul class="feature-list">
+            <li>Highly customizable with Elisp</li>
+            <li>rust-mode package</li>
+            <li>lsp-mode for LSP support</li>
+            <li>Integrated everything</li>
+            <li>Org-mode for documentation</li>
+        </ul>
+    </div>
+</div>
+
+<h2>Essential Cargo Extensions</h2>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Purpose</th>
+            <th>Installation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>cargo-watch</strong></td>
+            <td>Auto-recompile on file changes</td>
+            <td><code>cargo install cargo-watch</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-edit</strong></td>
+            <td>Manage dependencies from CLI (add, rm, upgrade)</td>
+            <td><code>cargo install cargo-edit</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-expand</strong></td>
+            <td>Show macro expansions</td>
+            <td><code>cargo install cargo-expand</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-audit</strong></td>
+            <td>Check for security vulnerabilities</td>
+            <td><code>cargo install cargo-audit</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-outdated</strong></td>
+            <td>Check for outdated dependencies</td>
+            <td><code>cargo install cargo-outdated</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-bloat</strong></td>
+            <td>Find what takes space in binary</td>
+            <td><code>cargo install cargo-bloat</code></td>
+        </tr>
+        <tr>
+            <td><strong>cargo-flamegraph</strong></td>
+            <td>Generate performance flamegraphs</td>
+            <td><code>cargo install cargo-flamegraph</code></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Debugging Tools</h2>
+
+<h3>🔍 Visual Debuggers</h3>
+
+<div class="tools-grid">
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">🐛</div>
+            <div>
+                <div class="tool-name">CodeLLDB (VS Code)</div>
+                <span class="tool-badge badge-free">Free</span>
+            </div>
+        </div>
+        <p><strong>LLDB Debugger for VS Code</strong></p>
+        <ul class="feature-list">
+            <li>Visual breakpoints</li>
+            <li>Variable inspection</li>
+            <li>Call stack visualization</li>
+            <li>Watch expressions</li>
+        </ul>
+    </div>
+
+    <div class="tool-card">
+        <div class="tool-header">
+            <div class="tool-icon">🔧</div>
+            <div>
+                <div class="tool-name">GDB / LLDB</div>
+                <span class="tool-badge badge-free">Free</span>
+            </div>
+        </div>
+        <p><strong>Command-Line Debuggers</strong></p>
+        <ul class="feature-list">
+            <li>Powerful debugging capabilities</li>
+            <li>Works on all platforms</li>
+            <li>Script automation</li>
+            <li>Remote debugging</li>
+        </ul>
+    </div>
+</div>
+
+<h2>Productivity Tools</h2>
+
+<h3>📊 Code Quality & Analysis</h3>
+
+<div class="code-block">
+# Clippy - Linter for catching common mistakes
+cargo clippy
+
+# Rustfmt - Code formatter
+cargo fmt
+
+# Miri - Interpreter for detecting undefined behavior
+cargo +nightly miri test
+</div>
+
+<h3>📚 Documentation Tools</h3>
+
+<div class="code-block">
+# Generate and open documentation
+cargo doc --open
+
+# mdBook - Create online books (like The Rust Book)
+cargo install mdbook
+
+# cargo-readme - Generate README from doc comments
+cargo install cargo-readme
+</div>
+
+<h3>⚡ Performance Tools</h3>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Criterion</strong></td>
+            <td>Benchmarking library with statistical analysis</td>
+        </tr>
+        <tr>
+            <td><strong>cargo-flamegraph</strong></td>
+            <td>Profile and visualize performance</td>
+        </tr>
+        <tr>
+            <td><strong>Valgrind</strong></td>
+            <td>Memory leak detection (Linux)</td>
+        </tr>
+        <tr>
+            <td><strong>Instruments</strong></td>
+            <td>Profiling tool (macOS)</td>
+        </tr>
+        <tr>
+            <td><strong>Windows Performance Analyzer</strong></td>
+            <td>Profiling tool (Windows)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Version Control</h2>
+
+<div class="tool-card">
+    <div class="tool-header">
+        <div class="tool-icon">🐙</div>
+        <div>
+            <div class="tool-name">Git + GitHub/GitLab</div>
+            <span class="tool-badge badge-free">Free</span>
+        </div>
+    </div>
+    <p><strong>Essential for Rust Development</strong></p>
+    <ul class="feature-list">
+        <li>Version control for your code</li>
+        <li>Cargo dependencies often from Git repos</li>
+        <li>Collaboration with teams</li>
+        <li>CI/CD integration</li>
+    </ul>
+    <p><strong>Recommended .gitignore for Rust:</strong></p>
+    <div class="code-block">
+# Rust project .gitignore
+/target/
+Cargo.lock  # For libraries (include for binaries)
+**/*.rs.bk
+*.pdb
+    </div>
+</div>
+
+<h2>Recommended Tool Combinations</h2>
+
+<h3>🌟 For Beginners</h3>
+<ul>
+    <li><strong>Editor:</strong> Visual Studio Code</li>
+    <li><strong>Extensions:</strong> rust-analyzer, CodeLLDB, Error Lens</li>
+    <li><strong>Tools:</strong> cargo, rustfmt, clippy</li>
+    <li><strong>Version Control:</strong> Git + GitHub Desktop</li>
+</ul>
+
+<h3>🚀 For Professionals</h3>
+<ul>
+    <li><strong>IDE:</strong> CLion or RustRover</li>
+    <li><strong>Cargo Tools:</strong> cargo-watch, cargo-edit, cargo-audit</li>
+    <li><strong>Debugging:</strong> LLDB with IDE integration</li>
+    <li><strong>Profiling:</strong> cargo-flamegraph, perf (Linux)</li>
+    <li><strong>Version Control:</strong> Git CLI</li>
+</ul>
+
+<h3>⚡ For Minimalists</h3>
+<ul>
+    <li><strong>Editor:</strong> Vim/Neovim or Helix</li>
+    <li><strong>Plugins:</strong> rust.vim, LSP, cargo.vim</li>
+    <li><strong>Tools:</strong> cargo, tmux for terminal multiplexing</li>
+    <li><strong>Debugging:</strong> rust-gdb or rust-lldb</li>
+</ul>
+
+<div class="info-box">
+    <strong>💡 Pro Tip:</strong> Start simple with VS Code and rust-analyzer. As you become more comfortable, explore additional tools based on your needs. The Rust tooling ecosystem is excellent, and you can't go wrong with the standard setup.
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}

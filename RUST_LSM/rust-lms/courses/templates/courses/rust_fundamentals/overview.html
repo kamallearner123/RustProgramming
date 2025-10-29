@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Rust Fundamentals - Overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    .fundamentals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .fundamental-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+    }
+
+    .fundamental-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .fundamental-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .fundamental-card p {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .intro-section {
+        background-color: #f8f9fa;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        border-left: 4px solid #667eea;
+    }
+
+    .intro-section h2 {
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🦀 Rust Fundamentals</h1>
+
+<div class="intro-section">
+    <h2>Welcome to Rust Programming Fundamentals!</h2>
+    <p>This section covers the essential building blocks of Rust programming. You'll learn about variables, data types, functions, and control flow - the foundation upon which all Rust programs are built.</p>
+    <p><strong>Why learn Rust fundamentals?</strong> Understanding these core concepts is crucial for writing safe, efficient, and maintainable Rust code. Rust's unique approach to memory safety and ownership starts with mastering these basics.</p>
+</div>
+
+<h2>Topics Covered</h2>
+<div class="fundamentals-grid">
+    <a href="{% url 'rust_variables' %}" class="fundamental-card">
+        <div class="icon">📦</div>
+        <h3>Variables & Mutability</h3>
+        <p>Learn about variable declaration, immutability by default, shadowing, and constants</p>
+    </a>
+
+    <a href="{% url 'rust_data_types' %}" class="fundamental-card">
+        <div class="icon">🔢</div>
+        <h3>Data Types</h3>
+        <p>Explore scalar types, compound types, type inference, and type annotations</p>
+    </a>
+
+    <a href="{% url 'rust_functions' %}" class="fundamental-card">
+        <div class="icon">⚙️</div>
+        <h3>Functions</h3>
+        <p>Master function syntax, parameters, return values, and expressions vs statements</p>
+    </a>
+
+    <a href="{% url 'rust_control_flow' %}" class="fundamental-card">
+        <div class="icon">🔀</div>
+        <h3>Control Flow</h3>
+        <p>Understand if expressions, loops (loop, while, for), pattern matching, and more</p>
+    </a>
+</div>
+
+<div class="intro-section" style="margin-top: 3rem;">
+    <h2>Learning Path</h2>
+    <p>We recommend following the topics in order, as each builds upon the previous concepts:</p>
+    <ol style="margin-left: 2rem; margin-top: 1rem;">
+        <li><strong>Variables & Mutability</strong> - Start here to understand how Rust handles data storage</li>
+        <li><strong>Data Types</strong> - Learn what types of data Rust can work with</li>
+        <li><strong>Functions</strong> - Discover how to organize and reuse code</li>
+        <li><strong>Control Flow</strong> - Master how to make decisions and repeat operations</li>
+    </ol>
+</div>
+{% endblock %}

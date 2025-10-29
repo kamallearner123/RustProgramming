@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Day 2 Afternoon – Concurrency & Real-Time{% endblock %}
+{% block content %}
+<h1>Day 2 Afternoon: Concurrency and Real-Time Programming</h1>
+<ul>
+    <li><strong>Multitasking & concurrency in embedded Rust</strong><br>
+        Cooperative vs preemptive multitasking, task scheduling, and concurrency models in embedded Rust.
+    </li>
+    <li><strong>Synchronization & RT scheduling</strong><br>
+        Mutexes, critical sections, and priority-based scheduling for real-time systems.
+    </li>
+    <li><strong>Interrupt-driven concurrency with RTIC</strong><br>
+        Task model, resource management, and interrupt priorities using RTIC.<br>
+        <em>Contributors: Timothy, Sergey, Rodrigo</em>
+    </li>
+    <li><strong>Async programming with Embassy</strong><br>
+        Using async/await, executors, timers, and peripherals for cooperative multitasking.<br>
+        <em>Contributors: Timothy, Sergey</em>
+    </li>
+</ul>
+
+<h2>Lab</h2>
+<p>Write a driver for UART/SPI in Rust and extend it with concurrency (interrupt handling). This lab demonstrates real-time and concurrent programming in embedded Rust.</p>
+{% endblock %}

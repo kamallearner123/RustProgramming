@@ -24,12 +24,14 @@ show_usage() {
 # Handle special commands
 case "$1" in
     "flash")
+        PROBE_ID="0483:374b:066EFF323532543457225039"
+        CHIP="STM32L476RG"
         if [ "$2" = "--release" ]; then
             echo "Building and flashing release version..."
-            cargo build --release && cargo flash --release
+            cargo build --release && cargo flash --release --chip $CHIP --probe $PROBE_ID
         else
             echo "Building and flashing debug version..."
-            cargo build && cargo flash
+            cargo build && cargo flash --chip $CHIP --probe $PROBE_ID
         fi
         ;;
     "embed")

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Day 1 Afternoon – Rust Language Essentials{% endblock %}
+{% block content %}
+<h1>Day 1 Afternoon: Rust Language Essentials for Embedded Systems</h1>
+
+<ul>
+    <li><strong>Overview of Rust syntax relevant to embedded</strong><br>
+        Covers variables, functions, modules, enums, and pattern matching as used in embedded development.
+    </li>
+    <li><strong>Ownership, Borrowing, and Lifetimes (deep dive)</strong><br>
+        Rust’s ownership model, borrowing rules, and lifetimes ensure safe references and prevent data races and use-after-free bugs.<br>
+        <em>Contributors: Rodrigo, Timothy</em>
+    </li>
+    <li><strong>Memory management in constrained systems</strong><br>
+        Discusses stack vs heap, static allocation, and avoiding dynamic memory in embedded environments.
+    </li>
+    <li><strong>no_std vs std environments; allocator vs no-allocator models</strong><br>
+        <code>#![no_std]</code> for bare-metal, using core and alloc crates, and the implications of not having a standard library.<br>
+        <em>Contributor: Timothy</em>
+    </li>
+    <li><strong>Handling interrupts and low-level programming basics</strong><br>
+        Writing interrupt handlers and using crates like <code>cortex-m-rt</code> for low-level programming.
+    </li>
+</ul>
+
+<h2>Lab</h2>
+<p>Cross-compile a simple Rust “blinky” program to run on an emulator or real board. This hands-on exercise reinforces toolchain setup and basic embedded Rust programming.</p>
+{% endblock %}

@@ -1,0 +1,11 @@
+/home/kamal/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/semver_parser-d4c23a8cafaa3d45.d: /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/lib.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/version.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/range.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/common.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/recognize.rs
+
+/home/kamal/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/libsemver_parser-d4c23a8cafaa3d45.rlib: /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/lib.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/version.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/range.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/common.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/recognize.rs
+
+/home/kamal/Documents/1.GitHub/RustProgramming/STM32/hello/target/debug/deps/libsemver_parser-d4c23a8cafaa3d45.rmeta: /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/lib.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/version.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/range.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/common.rs /home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/recognize.rs
+
+/home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/lib.rs:
+/home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/version.rs:
+/home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/range.rs:
+/home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/common.rs:
+/home/kamal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/semver-parser-0.7.0/src/recognize.rs:

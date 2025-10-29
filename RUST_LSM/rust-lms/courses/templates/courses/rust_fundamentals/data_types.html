@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block title %}Data Types - Rust Fundamentals{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .type-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .type-table th,
+    .type-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .type-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .type-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+
+    .type-category {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🔢 Data Types in Rust</h1>
+
+<div class="info-box">
+    <strong>📌 Key Concept:</strong> Rust is a <strong>statically typed</strong> language, meaning all variable types must be known at compile time. The compiler can usually infer types, but explicit annotations are sometimes needed.
+</div>
+
+<div class="section">
+    <h2>Type System Overview</h2>
+    <p>Rust has two main categories of data types:</p>
+    <ul>
+        <li><strong>Scalar Types:</strong> Represent a single value</li>
+        <li><strong>Compound Types:</strong> Group multiple values</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>1. Scalar Types</h2>
+    <p>Scalar types represent a single value. Rust has four primary scalar types:</p>
+
+    <div class="type-category">
+        <h3>Integer Types</h3>
+        <p>Integers are numbers without fractional components.</p>
+
+        <table class="type-table">
+            <thead>
+                <tr>
+                    <th>Length</th>
+                    <th>Signed</th>
+                    <th>Unsigned</th>
+                    <th>Range (Signed)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>8-bit</td>
+                    <td><code>i8</code></td>
+                    <td><code>u8</code></td>
+                    <td>-128 to 127</td>
+                </tr>
+                <tr>
+                    <td>16-bit</td>
+                    <td><code>i16</code></td>
+                    <td><code>u16</code></td>
+                    <td>-32,768 to 32,767</td>
+                </tr>
+                <tr>
+                    <td>32-bit</td>
+                    <td><code>i32</code></td>
+                    <td><code>u32</code></td>
+                    <td>-2,147,483,648 to 2,147,483,647</td>
+                </tr>
+                <tr>
+                    <td>64-bit</td>
+                    <td><code>i64</code></td>
+                    <td><code>u64</code></td>
+                    <td>-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807</td>
+                </tr>
+                <tr>
+                    <td>128-bit</td>
+                    <td><code>i128</code></td>
+                    <td><code>u128</code></td>
+                    <td>Very large range</td>
+                </tr>
+                <tr>
+                    <td>arch</td>
+                    <td><code>isize</code></td>
+                    <td><code>usize</code></td>
+                    <td>Depends on architecture (32 or 64-bit)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+fn main() {
+    let x: i32 = 42;           // 32-bit signed integer (default)
+    let y: u8 = 255;           // 8-bit unsigned integer
+    let z: isize = 1000;       // Architecture-dependent
+    
+    // Number literals with type suffix
+    let a = 98_222;            // Underscore for readability
+    let b = 0xff;              // Hexadecimal
+    let c = 0o77;              // Octal
+    let d = 0b1111_0000;       // Binary
+    let e = b'A';              // Byte (u8 only)
+    
+    println!("x = {}, y = {}, z = {}", x, y, z);
+}
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Integer Overflow:</strong> In debug mode, Rust checks for integer overflow and panics. In release mode, it wraps around (modular arithmetic). Use methods like <code>wrapping_add()</code>, <code>checked_add()</code>, <code>overflowing_add()</code>, or <code>saturating_add()</code> for explicit behavior.
+        </div>
+    </div>
+
+    <div class="type-category">
+        <h3>Floating-Point Types</h3>
+        <p>Floating-point numbers have decimal points.</p>
+
+        <table class="type-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Precision</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>f32</code></td>
+                    <td>Single precision (32-bit)</td>
+                    <td>When speed matters more than precision</td>
+                </tr>
+                <tr>
+                    <td><code>f64</code></td>
+                    <td>Double precision (64-bit)</td>
+                    <td>Default, better precision</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+fn main() {
+    let x = 2.0;        // f64 (default)
+    let y: f32 = 3.0;   // f32
+    
+    // Floating-point operations
+    let sum = x + 5.0;
+    let difference = 95.5 - 4.3;
+    let product = 4.0 * 30.0;
+    let quotient = 56.7 / 32.2;
+    
+    println!("sum: {}, difference: {}", sum, difference);
+}
+        </div>
+
+        <div class="info-box">
+            <strong>💡 Note:</strong> All floating-point types are signed. Rust follows IEEE-754 standard.
+        </div>
+    </div>
+
+    <div class="type-category">
+        <h3>Boolean Type</h3>
+        <p>The Boolean type has two possible values: <code>true</code> and <code>false</code>.</p>
+
+        <div class="code-block">
+fn main() {
+    let t = true;
+    let f: bool = false; // With explicit type annotation
+    
+    // Booleans are often used in conditionals
+    if t {
+        println!("It's true!");
+    }
+    
+    // Boolean operations
+    let is_greater = 5 > 3;
+    let is_equal = 5 == 5;
+    let combined = t && is_greater;
+    
+    println!("is_greater: {}, is_equal: {}", is_greater, is_equal);
+}
+        </div>
+
+        <p>Booleans are one byte in size.</p>
+    </div>
+
+    <div class="type-category">
+        <h3>Character Type</h3>
+        <p>Rust's <code>char</code> type represents a Unicode Scalar Value.</p>
+
+        <div class="code-block">
+fn main() {
+    let c = 'z';
+    let z: char = 'ℤ';
+    let heart_eyed_cat = '😻';
+    
+    // Chars are 4 bytes and can represent any Unicode character
+    println!("Character: {}", heart_eyed_cat);
+    
+    // Note: Single quotes for char, double quotes for strings
+    let char_type = 'A';      // char
+    let string_type = "A";    // &str (string slice)
+}
+        </div>
+
+        <div class="info-box">
+            <strong>💡 Important:</strong> 
+            <ul>
+                <li><code>char</code> is 4 bytes in size</li>
+                <li>Represents Unicode Scalar Values (U+0000 to U+D7FF and U+E000 to U+10FFFF)</li>
+                <li>More than just ASCII!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>2. Compound Types</h2>
+    <p>Compound types can group multiple values into one type.</p>
+
+    <div class="type-category">
+        <h3>Tuple Type</h3>
+        <p>A tuple groups together multiple values with different types. Tuples have a fixed length.</p>
+
+        <div class="code-block">
+fn main() {
+    // Creating a tuple
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    
+    // Destructuring a tuple
+    let (x, y, z) = tup;
+    println!("The value of y is: {}", y);
+    
+    // Accessing tuple elements by index
+    let five_hundred = tup.0;
+    let six_point_four = tup.1;
+    let one = tup.2;
+    
+    println!("First element: {}", five_hundred);
+    
+    // Empty tuple (unit type)
+    let unit: () = ();
+}
+        </div>
+
+        <div class="info-box">
+            <strong>💡 Unit Type:</strong> The empty tuple <code>()</code> is called the <strong>unit type</strong> and represents an empty value or empty return type. Functions that don't return a value implicitly return <code>()</code>.
+        </div>
+    </div>
+
+    <div class="type-category">
+        <h3>Array Type</h3>
+        <p>Arrays in Rust have a fixed length and all elements must be the same type.</p>
+
+        <div class="code-block">
+fn main() {
+    // Array with explicit type
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+    
+    // Array initialized with same value
+    let b = [3; 5]; // [3, 3, 3, 3, 3]
+    
+    // Accessing array elements
+    let first = a[0];
+    let second = a[1];
+    
+    println!("First: {}, Second: {}", first, second);
+    
+    // Array length
+    println!("Array length: {}", a.len());
+    
+    // Iterating over array
+    for element in &a {
+        println!("Value: {}", element);
+    }
+}
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Index Out of Bounds:</strong> Rust checks array bounds at runtime. Accessing an invalid index will cause a panic.
+            <div class="code-block" style="margin-top: 1rem;">
+let a = [1, 2, 3];
+let element = a[10]; // ❌ Panic: index out of bounds
+            </div>
+        </div>
+
+        <h4>Arrays vs Vectors</h4>
+        <table class="type-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Array</th>
+                    <th>Vector (<code>Vec&lt;T&gt;</code>)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Size</td>
+                    <td>Fixed at compile time</td>
+                    <td>Can grow/shrink at runtime</td>
+                </tr>
+                <tr>
+                    <td>Memory</td>
+                    <td>Stack-allocated</td>
+                    <td>Heap-allocated</td>
+                </tr>
+                <tr>
+                    <td>Syntax</td>
+                    <td><code>[T; N]</code></td>
+                    <td><code>Vec&lt;T&gt;</code></td>
+                </tr>
+                <tr>
+                    <td>Use Case</td>
+                    <td>Fixed size, fast access</td>
+                    <td>Dynamic size needed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. Type Inference</h2>
+    <p>Rust can often infer types based on usage:</p>
+
+    <div class="code-block">
+fn main() {
+    let x = 5;              // Inferred as i32 (default integer type)
+    let y = 2.0;            // Inferred as f64 (default float type)
+    let z = true;           // Inferred as bool
+    let c = 'a';            // Inferred as char
+    
+    // Sometimes inference needs help
+    let parsed: i32 = "42".parse().expect("Not a number!");
+    
+    // Or use turbofish syntax
+    let parsed = "42".parse::<i32>().expect("Not a number!");
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. Type Aliases</h2>
+    <p>Create custom names for existing types:</p>
+
+    <div class="code-block">
+type Kilometers = i32;
+type Point = (f64, f64);
+
+fn main() {
+    let distance: Kilometers = 100;
+    let origin: Point = (0.0, 0.0);
+    
+    println!("Distance: {} km", distance);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>5. Practical Examples</h2>
+
+    <h3>Example 1: Working with Different Types</h3>
+    <div class="code-block">
+fn main() {
+    // User profile
+    let username: &str = "rustacean";
+    let age: u8 = 25;
+    let height: f32 = 5.9;
+    let is_verified: bool = true;
+    let initial: char = 'R';
+    
+    println!("User: {}, Age: {}, Height: {}ft", username, age, height);
+    println!("Verified: {}, Initial: {}", is_verified, initial);
+}
+    </div>
+
+    <h3>Example 2: RGB Color Tuple</h3>
+    <div class="code-block">
+fn main() {
+    let red: (u8, u8, u8) = (255, 0, 0);
+    let green = (0, 255, 0);
+    let blue = (0, 0, 255);
+    
+    println!("Red: RGB({}, {}, {})", red.0, red.1, red.2);
+    
+    // Destructuring
+    let (r, g, b) = red;
+    println!("Red components: R={}, G={}, B={}", r, g, b);
+}
+    </div>
+
+    <h3>Example 3: Temperature Readings Array</h3>
+    <div class="code-block">
+fn main() {
+    let temperatures: [f64; 7] = [72.5, 73.1, 71.8, 74.2, 72.9, 73.5, 71.6];
+    
+    // Calculate average
+    let mut sum = 0.0;
+    for temp in &temperatures {
+        sum += temp;
+    }
+    let average = sum / temperatures.len() as f64;
+    
+    println!("Average temperature: {:.2}°F", average);
+}
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li><strong>Scalar types:</strong> integers, floats, booleans, characters</li>
+        <li><strong>Compound types:</strong> tuples and arrays</li>
+        <li>Rust is <strong>statically typed</strong> but has excellent <strong>type inference</strong></li>
+        <li>Arrays are <strong>fixed-size</strong>, use <code>Vec</code> for dynamic collections</li>
+        <li>Type annotations use <code>:</code> syntax (e.g., <code>let x: i32 = 5;</code>)</li>
+        <li>Default integer type is <code>i32</code>, default float is <code>f64</code></li>
+    </ul>
+</div>
+
+<a href="{% url 'rust_fundamentals_overview' %}" class="back-link">← Back to Fundamentals Overview</a>
+{% endblock %}

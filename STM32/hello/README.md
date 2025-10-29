@@ -12,6 +12,8 @@ This is a simple LED blinking project for STM32F407 microcontroller using Rust.
 
 1. **Rust embedded target**: Already configured
 2. **probe-rs**: Already installed for flashing and debugging
+3. Install "rustup target add thumbv7em-none-eabihf"
+4. Install "cargo install cargo-flash"
 
 ## Building and Flashing
 

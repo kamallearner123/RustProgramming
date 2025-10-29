@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Software Requirements - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .software-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .software-card {
+        background-color: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 1.5rem;
+        border-radius: 4px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .software-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .software-card h3 {
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+
+    .version-badge {
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+
+    .required-badge {
+        background-color: #dc3545;
+    }
+
+    .optional-badge {
+        background-color: #6c757d;
+    }
+
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .checklist {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .checklist li {
+        padding: 0.5rem 0;
+        padding-left: 2rem;
+        position: relative;
+    }
+
+    .checklist li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+
+    th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>⚙️ Software Requirements for Rust Development</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> Setting up a Rust development environment requires installing several software components. This guide covers everything you need to start writing, compiling, and running Rust code.
+</div>
+
+<h2>Essential Software Components</h2>
+
+<div class="software-grid">
+    <div class="software-card">
+        <h3>🦀 Rust Toolchain</h3>
+        <span class="version-badge required-badge">REQUIRED</span>
+        <p><strong>Components:</strong></p>
+        <ul>
+            <li>rustc (Rust compiler)</li>
+            <li>cargo (Build tool & package manager)</li>
+            <li>rustup (Toolchain installer & version manager)</li>
+        </ul>
+        <p><strong>Latest Version:</strong> Rust 1.82+ (as of Oct 2025)</p>
+    </div>
+
+    <div class="software-card">
+        <h3>🔧 C/C++ Compiler</h3>
+        <span class="version-badge required-badge">REQUIRED</span>
+        <p>Rust's linker requires a C/C++ compiler:</p>
+        <ul>
+            <li><strong>Windows:</strong> MSVC or MinGW-w64</li>
+            <li><strong>macOS:</strong> Xcode Command Line Tools</li>
+            <li><strong>Linux:</strong> GCC or Clang</li>
+        </ul>
+    </div>
+
+    <div class="software-card">
+        <h3>📝 Text Editor or IDE</h3>
+        <span class="version-badge">RECOMMENDED</span>
+        <p>Any modern code editor with Rust support:</p>
+        <ul>
+            <li>Visual Studio Code</li>
+            <li>IntelliJ IDEA / CLion</li>
+            <li>Vim / Neovim</li>
+            <li>Sublime Text</li>
+        </ul>
+    </div>
+
+    <div class="software-card">
+        <h3>🔍 Rust Analyzer</h3>
+        <span class="version-badge">RECOMMENDED</span>
+        <p>Language server providing:</p>
+        <ul>
+            <li>Code completion</li>
+            <li>Error checking</li>
+            <li>Inline documentation</li>
+            <li>Refactoring tools</li>
+        </ul>
+    </div>
+
+    <div class="software-card">
+        <h3>🐙 Git Version Control</h3>
+        <span class="version-badge">RECOMMENDED</span>
+        <p><strong>Version:</strong> Git 2.30+</p>
+        <ul>
+            <li>Source code management</li>
+            <li>Collaboration</li>
+            <li>Required for many cargo dependencies</li>
+        </ul>
+    </div>
+
+    <div class="software-card">
+        <h3>🌐 Internet Browser</h3>
+        <span class="version-badge optional-badge">OPTIONAL</span>
+        <p>For accessing documentation:</p>
+        <ul>
+            <li>Chrome / Firefox / Safari</li>
+            <li>For viewing <code>cargo doc</code> output</li>
+            <li>Accessing online Rust resources</li>
+        </ul>
+    </div>
+</div>
+
+<h2>Detailed Requirements by Component</h2>
+
+<h3>1. Rust Toolchain</h3>
+
+<div class="info-box">
+    <strong>What is Rustup?</strong> Rustup is the official Rust toolchain installer. It manages multiple Rust versions, updates, and cross-compilation targets.
+</div>
+
+<p><strong>Included Components:</strong></p>
+<ul class="checklist">
+    <li><strong>rustc:</strong> The Rust compiler that transforms Rust code into executable binaries</li>
+    <li><strong>cargo:</strong> Build system, package manager, and task runner</li>
+    <li><strong>rustfmt:</strong> Automatic code formatter for consistent style</li>
+    <li><strong>clippy:</strong> Linter that catches common mistakes and suggests improvements</li>
+    <li><strong>rust-docs:</strong> Offline documentation for the standard library</li>
+</ul>
+
+<p><strong>Installation Command:</strong></p>
+<div class="code-block">
+# Unix-like systems (Linux, macOS, WSL)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Windows (PowerShell)
+# Download and run: https://rustup.rs/
+</div>
+
+<h3>2. C/C++ Compiler and Linker</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Operating System</th>
+            <th>Required Software</th>
+            <th>Installation Method</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Windows</strong></td>
+            <td>MSVC Build Tools or MinGW-w64</td>
+            <td>Visual Studio Build Tools installer or rustup will prompt</td>
+        </tr>
+        <tr>
+            <td><strong>macOS</strong></td>
+            <td>Xcode Command Line Tools</td>
+            <td><code>xcode-select --install</code></td>
+        </tr>
+        <tr>
+            <td><strong>Linux (Debian/Ubuntu)</strong></td>
+            <td>build-essential package</td>
+            <td><code>sudo apt install build-essential</code></td>
+        </tr>
+        <tr>
+            <td><strong>Linux (Fedora/RHEL)</strong></td>
+            <td>Development Tools group</td>
+            <td><code>sudo dnf groupinstall "Development Tools"</code></td>
+        </tr>
+        <tr>
+            <td><strong>Linux (Arch)</strong></td>
+            <td>base-devel group</td>
+            <td><code>sudo pacman -S base-devel</code></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="warning-box">
+    <strong>⚠️ Windows Users:</strong> You'll need to choose between two toolchains:
+    <ul>
+        <li><strong>MSVC (recommended):</strong> Better Windows integration, requires Visual Studio Build Tools</li>
+        <li><strong>GNU (MinGW-w64):</strong> Unix-like toolchain, smaller download size</li>
+    </ul>
+    Rustup will guide you through this choice during installation.
+</div>
+
+<h3>3. Development Tools</h3>
+
+<h4>Text Editors & IDEs</h4>
+
+<table>
+    <thead>
+        <tr>
+            <th>Tool</th>
+            <th>Rust Support</th>
+            <th>Best For</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Visual Studio Code</strong></td>
+            <td>rust-analyzer extension</td>
+            <td>Beginners, general development</td>
+        </tr>
+        <tr>
+            <td><strong>IntelliJ IDEA / CLion</strong></td>
+            <td>IntelliJ Rust plugin</td>
+            <td>Professional development, refactoring</td>
+        </tr>
+        <tr>
+            <td><strong>Vim / Neovim</strong></td>
+            <td>rust.vim + LSP plugins</td>
+            <td>Terminal enthusiasts, efficiency</td>
+        </tr>
+        <tr>
+            <td><strong>Emacs</strong></td>
+            <td>rust-mode + lsp-mode</td>
+            <td>Power users, customization</td>
+        </tr>
+        <tr>
+            <td><strong>Sublime Text</strong></td>
+            <td>Rust Enhanced package</td>
+            <td>Lightweight, fast</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4>Additional Useful Tools</h4>
+
+<ul>
+    <li><strong>cargo-watch:</strong> Auto-recompile on file changes (<code>cargo install cargo-watch</code>)</li>
+    <li><strong>cargo-edit:</strong> Manage dependencies from CLI (<code>cargo install cargo-edit</code>)</li>
+    <li><strong>cargo-tree:</strong> Visualize dependency tree (built-in with cargo)</li>
+    <li><strong>cargo-audit:</strong> Check for security vulnerabilities (<code>cargo install cargo-audit</code>)</li>
+</ul>
+
+<h2>System Dependencies</h2>
+
+<h3>Common Additional Libraries (Linux)</h3>
+
+<p>Some Rust projects may require system libraries:</p>
+
+<div class="code-block">
+# Debian/Ubuntu
+sudo apt install pkg-config libssl-dev
+
+# Fedora
+sudo dnf install pkgconf openssl-devel
+
+# Arch
+sudo pacman -S pkgconf openssl
+</div>
+
+<h2>Verification Checklist</h2>
+
+<p>After installation, verify you have:</p>
+
+<ul class="checklist">
+    <li>Rust toolchain installed (rustc, cargo, rustup)</li>
+    <li>C/C++ compiler and linker available</li>
+    <li>Git installed (optional but recommended)</li>
+    <li>Text editor or IDE with Rust support</li>
+    <li>Rust-analyzer or equivalent language server</li>
+</ul>
+
+<p><strong>Quick verification commands:</strong></p>
+<div class="code-block">
+rustc --version    # Should show: rustc 1.82.0 or higher
+cargo --version    # Should show: cargo 1.82.0 or higher
+rustup --version   # Should show: rustup 1.27.0 or higher
+git --version      # Should show: git version 2.x.x
+</div>
+
+<div class="info-box">
+    <strong>💡 Pro Tip:</strong> Keep your Rust toolchain up to date with <code>rustup update</code>. Rust releases a new stable version every 6 weeks with improvements and new features.
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}

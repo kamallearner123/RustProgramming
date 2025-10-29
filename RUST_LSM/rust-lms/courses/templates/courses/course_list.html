@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - Rust Programming LMS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .course-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .course-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .course-title {
+        color: #667eea;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .course-description {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .hero-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background-color: white;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: transform 0.3s;
+    }
+
+    .cta-button:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h2>🦀 Welcome to Rust Programming</h2>
+    <p>Master systems programming with safety, speed, and concurrency</p>
+    <a href="{% url 'requirements_overview' %}" class="cta-button">Get Started →</a>
+</div>
+
+<h1>Available Courses</h1>
+
+<div class="course-grid">
+    <a href="{% url 'requirements_overview' %}" class="course-card">
+        <div class="course-title">Pre-Training Setup</div>
+        <div class="course-description">
+            Learn about hardware and software requirements, install Rust, and set up your development environment.
+        </div>
+    </a>
+
+    <div class="course-card" style="opacity: 0.6; cursor: default;">
+        <div class="course-title">Rust Fundamentals</div>
+        <div class="course-description">
+            Coming Soon: Variables, data types, functions, and control flow in Rust.
+        </div>
+    </div>
+
+    <div class="course-card" style="opacity: 0.6; cursor: default;">
+        <div class="course-title">Ownership & Borrowing</div>
+        <div class="course-description">
+            Coming Soon: Master Rust's unique memory management system.
+        </div>
+    </div>
+
+    <div class="course-card" style="opacity: 0.6; cursor: default;">
+        <div class="course-title">Advanced Topics</div>
+        <div class="course-description">
+            Coming Soon: Lifetimes, traits, generics, and more.
+        </div>
+    </div>
+</div>
+
+{% if courses %}
+<h2>Database Courses</h2>
+<div class="course-grid">
+    {% for course in courses %}
+    <a href="{% url 'course_detail' course.id %}" class="course-card">
+        <div class="course-title">{{ course.title }}</div>
+        <div class="course-description">{{ course.description }}</div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

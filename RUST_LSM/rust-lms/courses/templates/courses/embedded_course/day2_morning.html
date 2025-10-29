@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Day 2 Morning – Peripherals & Drivers{% endblock %}
+{% block content %}
+<h1>Day 2 Morning: Working with Peripherals and Device Drivers</h1>
+<ul>
+    <li><strong>GPIO, Timers, PWM</strong><br>
+        Learn to control pins, timers, and generate PWM signals for hardware interaction.
+    </li>
+    <li><strong>UART, SPI, I2C communication</strong><br>
+        Serial communication protocols for embedded systems, using embedded-hal traits for portability.
+    </li>
+    <li><strong>Writing a generic, reusable hardware driver</strong><br>
+        Abstraction over hardware using traits, enabling code reuse and testability.<br>
+        <em>Contributor: Leandro</em>
+    </li>
+    <li><strong>HAL bring-up and porting from C to Rust</strong><br>
+        Porting C drivers to Rust, using bindgen, and writing idiomatic Rust wrappers.<br>
+        <em>Contributor: Louis</em>
+    </li>
+</ul>
+
+<h2>Low-Level Abstractions and Hardware Access</h2>
+<ul>
+    <li><strong>Memory-mapped registers</strong><br>
+        Accessing hardware registers safely, using volatile read/write, and Peripheral Access Crates (PACs).
+    </li>
+    <li><strong>Safe vs unsafe abstractions</strong><br>
+        When to use <code>unsafe</code> in Rust, and how to encapsulate unsafety for safe APIs.
+    </li>
+    <li><strong>Using HAL libraries (embedded-hal)</strong><br>
+        Traits for common peripherals, enabling code portability across hardware.
+    </li>
+    <li><strong>Comparing HAL/framework maturity (RTIC, Embassy, etc.)</strong><br>
+        Overview of RTIC (Real-Time Interrupt-driven Concurrency), Embassy (async/await for embedded), and their ecosystem maturity.<br>
+        <em>Contributors: Sergey, Rodrigo</em>
+    </li>
+</ul>
+{% endblock %}

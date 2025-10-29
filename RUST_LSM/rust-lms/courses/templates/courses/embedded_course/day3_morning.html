@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Day 3 Morning – Debugging & Power Management{% endblock %}
+{% block content %}
+<h1>Day 3 Morning: Debugging, Testing, and Power Management</h1>
+<ul>
+    <li><strong>Debugging with probe-rs, GDB, QEMU, Renode</strong><br>
+        On-chip debugging, emulation, flashing, breakpoints, and tracing for embedded Rust development.<br>
+        <em>Contributors: Louis, Rodrigo, Leandro</em>
+    </li>
+    <li><strong>Unit testing & integration testing</strong><br>
+        Using <code>cargo test</code>, hardware-in-the-loop testing, and mocking for embedded systems.
+    </li>
+    <li><strong>Profiling & optimizing Rust embedded code</strong><br>
+        Measuring performance and code size with <code>cargo-bloat</code>, <code>cargo-binutils</code>, and other tools.
+    </li>
+    <li><strong>Diagnosing ownership/borrowing compile-time errors</strong><br>
+        Understanding and resolving common borrow checker errors in embedded Rust.<br>
+        <em>Contributors: Rodrigo, Timothy</em>
+    </li>
+    <li><strong>Power consumption strategies</strong><br>
+        Techniques for reducing power usage, including sleep modes, clock gating, and peripheral management.
+    </li>
+    <li><strong>Low-power case studies in IoT</strong><br>
+        Real-world examples and lessons learned from low-power IoT projects.<br>
+        <em>Contributor: Sergey</em>
+    </li>
+</ul>
+{% endblock %}

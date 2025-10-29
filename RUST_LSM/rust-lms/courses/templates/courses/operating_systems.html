@@ -1,0 +1,500 @@
+{% extends "base.html" %}
+
+{% block title %}Operating Systems - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .os-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .os-card {
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .os-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .os-header {
+        padding: 1.5rem;
+        color: white;
+        text-align: center;
+        font-size: 3rem;
+    }
+
+    .os-header.windows {
+        background: linear-gradient(135deg, #0078d4 0%, #00bcf2 100%);
+    }
+
+    .os-header.macos {
+        background: linear-gradient(135deg, #333 0%, #666 100%);
+    }
+
+    .os-header.linux {
+        background: linear-gradient(135deg, #FCC624 0%, #E95420 100%);
+    }
+
+    .os-content {
+        padding: 1.5rem;
+    }
+
+    .os-content h3 {
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+
+    .support-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+
+    .tier-1 {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .tier-2 {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .checkmark {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .xmark {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+
+    li {
+        margin: 0.5rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🖥️ Operating System Support for Rust</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> Rust is a cross-platform language with excellent support across Windows, macOS, and Linux. The Rust team maintains a tiered platform support system to ensure quality and reliability across different operating systems.
+</div>
+
+<h2>Supported Operating Systems</h2>
+
+<div class="os-grid">
+    <div class="os-card">
+        <div class="os-header windows">
+            🪟
+        </div>
+        <div class="os-content">
+            <h3>Windows</h3>
+            <span class="support-badge tier-1">Tier 1 - Full Support</span>
+            
+            <p><strong>Supported Versions:</strong></p>
+            <ul>
+                <li>Windows 11 (All versions)</li>
+                <li>Windows 10 (Version 1809+)</li>
+                <li>Windows Server 2019+</li>
+            </ul>
+
+            <p><strong>Architectures:</strong></p>
+            <ul>
+                <li>x86_64 (64-bit Intel/AMD)</li>
+                <li>ARM64 (Windows on ARM)</li>
+            </ul>
+
+            <p><strong>Toolchains:</strong></p>
+            <ul>
+                <li><strong>MSVC</strong> (Recommended): Native Windows toolchain</li>
+                <li><strong>GNU</strong> (MinGW-w64): Unix-like environment</li>
+            </ul>
+
+            <p><strong>Installation:</strong></p>
+            <div class="code-block">
+# Download from: https://rustup.rs/
+# Or use Windows Package Manager:
+winget install Rustlang.Rustup
+            </div>
+        </div>
+    </div>
+
+    <div class="os-card">
+        <div class="os-header macos">
+            🍎
+        </div>
+        <div class="os-content">
+            <h3>macOS</h3>
+            <span class="support-badge tier-1">Tier 1 - Full Support</span>
+            
+            <p><strong>Supported Versions:</strong></p>
+            <ul>
+                <li>macOS Sequoia (15.0+)</li>
+                <li>macOS Sonoma (14.0+)</li>
+                <li>macOS Ventura (13.0+)</li>
+                <li>macOS Monterey (12.0+)</li>
+            </ul>
+
+            <p><strong>Architectures:</strong></p>
+            <ul>
+                <li>ARM64 (Apple Silicon: M1/M2/M3/M4)</li>
+                <li>x86_64 (Intel Macs)</li>
+            </ul>
+
+            <p><strong>Prerequisites:</strong></p>
+            <ul>
+                <li>Xcode Command Line Tools</li>
+            </ul>
+
+            <p><strong>Installation:</strong></p>
+            <div class="code-block">
+# Install Xcode CLI tools first:
+xcode-select --install
+
+# Then install Rust:
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://sh.rustup.rs | sh
+            </div>
+        </div>
+    </div>
+
+    <div class="os-card">
+        <div class="os-header linux">
+            🐧
+        </div>
+        <div class="os-content">
+            <h3>Linux</h3>
+            <span class="support-badge tier-1">Tier 1 - Full Support</span>
+            
+            <p><strong>Supported Distributions:</strong></p>
+            <ul>
+                <li>Ubuntu 20.04+, Debian 11+</li>
+                <li>Fedora 38+, RHEL 8+</li>
+                <li>Arch Linux, Manjaro</li>
+                <li>openSUSE, SUSE Linux</li>
+                <li>Most other modern distributions</li>
+            </ul>
+
+            <p><strong>Architectures:</strong></p>
+            <ul>
+                <li>x86_64 (64-bit)</li>
+                <li>ARM64 (AArch64)</li>
+                <li>ARMv7, RISC-V (Tier 2)</li>
+            </ul>
+
+            <p><strong>Installation:</strong></p>
+            <div class="code-block">
+# Install build tools first:
+# Ubuntu/Debian:
+sudo apt install build-essential
+
+# Fedora:
+sudo dnf groupinstall "Development Tools"
+
+# Then install Rust:
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://sh.rustup.rs | sh
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Platform Support Tiers</h2>
+
+<div class="info-box">
+    <strong>What are Support Tiers?</strong> The Rust project uses a tiered system to communicate the level of support and testing for different platforms.
+</div>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>Tier</th>
+            <th>Description</th>
+            <th>Guarantees</th>
+            <th>Examples</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Tier 1</strong></td>
+            <td>Guaranteed to work</td>
+            <td>
+                <span class="checkmark">✓</span> Automated testing<br>
+                <span class="checkmark">✓</span> Binary releases<br>
+                <span class="checkmark">✓</span> Official builds
+            </td>
+            <td>
+                x86_64-pc-windows-msvc<br>
+                x86_64-apple-darwin<br>
+                x86_64-unknown-linux-gnu
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Tier 2</strong></td>
+            <td>Guaranteed to build</td>
+            <td>
+                <span class="checkmark">✓</span> Automated testing<br>
+                <span class="checkmark">✓</span> Binary releases<br>
+                <span class="xmark">✗</span> Official builds may be limited
+            </td>
+            <td>
+                x86_64-pc-windows-gnu<br>
+                aarch64-apple-darwin<br>
+                armv7-unknown-linux-gnueabihf
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Tier 3</strong></td>
+            <td>May or may not build</td>
+            <td>
+                <span class="xmark">✗</span> No automated testing<br>
+                <span class="xmark">✗</span> No binary releases<br>
+                <span class="xmark">✗</span> Community maintained
+            </td>
+            <td>
+                Embedded targets<br>
+                Experimental platforms<br>
+                Less common architectures
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>OS-Specific Features and Considerations</h2>
+
+<h3>🪟 Windows</h3>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+    <li>Excellent IDE support (Visual Studio, VS Code)</li>
+    <li>Native Windows API bindings available</li>
+    <li>Good integration with Windows development tools</li>
+</ul>
+
+<p><strong>Considerations:</strong></p>
+<ul>
+    <li>Choice between MSVC and GNU toolchains</li>
+    <li>Path length limitations (260 characters) can affect some projects</li>
+    <li>Compilation times generally slower than Unix systems</li>
+</ul>
+
+<div class="warning-box">
+    <strong>⚠️ Windows Subsystem for Linux (WSL):</strong> You can also run Rust in WSL2, which provides a full Linux environment on Windows. This is recommended if you need Unix-specific tools or cross-platform development.
+</div>
+
+<h3>🍎 macOS</h3>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+    <li>Excellent performance on Apple Silicon (M1/M2/M3/M4)</li>
+    <li>Unix-based system with good developer tools</li>
+    <li>Native support for iOS development with Rust</li>
+</ul>
+
+<p><strong>Considerations:</strong></p>
+<ul>
+    <li>Requires Xcode Command Line Tools (large download)</li>
+    <li>Older Intel Macs may have slower compilation</li>
+    <li>Some crates may require additional macOS-specific dependencies</li>
+</ul>
+
+<p><strong>Apple Silicon Performance:</strong></p>
+<ul>
+    <li>Native ARM64 support provides excellent performance</li>
+    <li>Unified memory architecture speeds up compilation</li>
+    <li>Recommended for new Mac purchases</li>
+</ul>
+
+<h3>🐧 Linux</h3>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+    <li>Fastest compilation times (especially on modern CPUs)</li>
+    <li>Most extensive tooling and library support</li>
+    <li>Preferred platform for systems programming</li>
+    <li>Best support for embedded and cross-compilation</li>
+</ul>
+
+<p><strong>Considerations:</strong></p>
+<ul>
+    <li>Distribution-specific package managers</li>
+    <li>May require manual installation of system libraries</li>
+    <li>Different distros may have slightly different setups</li>
+</ul>
+
+<p><strong>Popular Distributions for Rust Development:</strong></p>
+<ul>
+    <li><strong>Ubuntu/Debian:</strong> Stable, well-documented, large community</li>
+    <li><strong>Fedora:</strong> Cutting-edge packages, good for development</li>
+    <li><strong>Arch Linux:</strong> Rolling release, latest software versions</li>
+    <li><strong>NixOS:</strong> Reproducible builds, excellent for advanced users</li>
+</ul>
+
+<h2>Cross-Platform Compatibility</h2>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>Windows</th>
+            <th>macOS</th>
+            <th>Linux</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Standard Library</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+        </tr>
+        <tr>
+            <td>Cargo Package Manager</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+        </tr>
+        <tr>
+            <td>Async Runtime (Tokio)</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+        </tr>
+        <tr>
+            <td>GUI Development</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+        </tr>
+        <tr>
+            <td>Web Assembly</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+        </tr>
+        <tr>
+            <td>Embedded Development</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓</td>
+            <td class="checkmark">✓ (Best)</td>
+        </tr>
+        <tr>
+            <td>Compilation Speed</td>
+            <td>Good</td>
+            <td>Excellent (M-series)</td>
+            <td>Excellent</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Choosing Your Development OS</h2>
+
+<p><strong>Choose Windows if:</strong></p>
+<ul>
+    <li>You're developing Windows-specific applications</li>
+    <li>You need Visual Studio integration</li>
+    <li>You're most comfortable with Windows ecosystem</li>
+</ul>
+
+<p><strong>Choose macOS if:</strong></p>
+<ul>
+    <li>You have Apple Silicon hardware (excellent performance)</li>
+    <li>You're developing for iOS/macOS platforms</li>
+    <li>You want Unix tools with polished UX</li>
+</ul>
+
+<p><strong>Choose Linux if:</strong></p>
+<ul>
+    <li>You want the fastest compilation times</li>
+    <li>You're doing systems programming or embedded development</li>
+    <li>You prefer open-source tools and maximum control</li>
+</ul>
+
+<div class="info-box">
+    <strong>💡 The Good News:</strong> Rust code is highly portable! Code written on one OS generally works on others with minimal or no changes. You can develop on your preferred platform and deploy anywhere.
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}

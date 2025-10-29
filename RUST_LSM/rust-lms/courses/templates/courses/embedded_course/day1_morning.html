@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Day 1 Morning – Introduction & Environment Setup{% endblock %}
+{% block content %}
+<h1>Day 1 Morning: Introduction to Embedded Systems & Environment Setup</h1>
+
+<h2>Introduction to Embedded Systems Programming</h2>
+<ul>
+    <li><strong>What are embedded systems?</strong><br>
+        Embedded systems are specialized computing systems that perform dedicated functions within larger systems. Examples include automotive ECUs, IoT devices, medical equipment, and industrial controllers.
+    </li>
+    <li><strong>Challenges in embedded systems development</strong><br>
+        Developers face resource constraints (CPU, memory, power), real-time requirements, hardware diversity, and debugging/testing difficulties.
+    </li>
+    <li><strong>Why Rust? Safety, reliability, and modern tooling</strong><br>
+        Rust offers memory safety without garbage collection, zero-cost abstractions, concurrency without data races, and modern tooling (Cargo, rust-analyzer, Clippy).<br>
+        <em>Contributors: Hanqi, Sergey</em>
+    </li>
+    <li><strong>Rust community & resources for continued learning</strong><br>
+        The Rust Embedded Working Group, Rust Embedded Book, forums, Discord, Matrix, and conferences provide ongoing support and learning opportunities.<br>
+        <em>Contributors: Hanqi, Rodrigo</em>
+    </li>
+</ul>
+
+<h2>Setting up the Development Environment</h2>
+<ul>
+    <li><strong>Installing Rust for embedded systems development</strong><br>
+        Use <code>rustup</code> to install Rust toolchains. Add target architectures (e.g., <code>thumbv7em-none-eabihf</code>) for cross-compilation.
+    </li>
+    <li><strong>Configuring toolchains & environment</strong><br>
+        Install cross-compilation tools (<code>cargo-binutils</code>, <code>llvm-tools-preview</code>). Set up VS Code or your preferred IDE with rust-analyzer.
+    </li>
+    <li><strong>Exploring microcontroller families & platforms</strong><br>
+        Learn about ARM Cortex-M, RISC-V, ESP32, AVR, and other platforms.
+    </li>
+    <li><strong>MCU ecosystem maturity & supported vendors</strong><br>
+        ARM: STM32, NXP, Nordic, Microchip, etc. RISC-V: SiFive, Espressif, etc. Community-maintained HALs and BSPs.<br>
+        <em>Contributors: Sergey, Rodrigo</em>
+    </li>
+    <li><strong>References to real-world embedded Rust projects</strong><br>
+        Explore Tock OS, RTIC, Ferrous Systems’ knurling, drone, embassy, and more.<br>
+        <em>Contributors: Rodrigo, Sergey</em>
+    </li>
+</ul>
+{% endblock %}

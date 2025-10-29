@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Embedded Rust Course Outline{% endblock %}
+
+{% block content %}
+<h1>Embedded Rust Course Outline</h1>
+<p>This course is designed to take you from the basics of embedded systems programming to advanced topics in Rust, with hands-on labs and a capstone project.</p>
+
+<h2>Day 1 – Rust Foundations & Development Environment</h2>
+<ul>
+    <li><a href="{% url 'embedded_day1_morning' %}">Morning: Introduction & Environment Setup</a></li>
+    <li><a href="{% url 'embedded_day1_afternoon' %}">Afternoon: Rust Language Essentials</a></li>
+</ul>
+
+<h2>Day 2 – Hardware Access, Drivers, and Concurrency</h2>
+<ul>
+    <li><a href="{% url 'embedded_day2_morning' %}">Morning: Peripherals & Drivers</a></li>
+    <li><a href="{% url 'embedded_day2_afternoon' %}">Afternoon: Concurrency & Real-Time</a></li>
+</ul>
+
+<h2>Day 3 – Debugging, Optimization, Safety, and Capstone</h2>
+<ul>
+    <li><a href="{% url 'embedded_day3_morning' %}">Morning: Debugging & Power Management</a></li>
+    <li><a href="{% url 'embedded_day3_afternoon' %}">Afternoon: Safety, Security & Capstone</a></li>
+</ul>
+{% endblock %}

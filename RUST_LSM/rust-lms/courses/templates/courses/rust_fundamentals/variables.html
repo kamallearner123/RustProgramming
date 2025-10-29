@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}Variables & Mutability - Rust Fundamentals{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📦 Variables & Mutability</h1>
+
+<div class="info-box">
+    <strong>📌 Key Concept:</strong> In Rust, variables are <strong>immutable by default</strong>. This is a fundamental design choice that promotes safety and prevents accidental data modification.
+</div>
+
+<div class="section">
+    <h2>1. Declaring Variables</h2>
+    <p>Variables in Rust are declared using the <code>let</code> keyword:</p>
+
+    <div class="code-block">
+fn main() {
+    let x = 5;
+    println!("The value of x is: {}", x);
+}
+    </div>
+
+    <p>This creates an <strong>immutable</strong> variable named <code>x</code> with the value <code>5</code>.</p>
+</div>
+
+<div class="section">
+    <h2>2. Immutability by Default</h2>
+    <p>Once a value is bound to a variable, you cannot change that value:</p>
+
+    <div class="code-block">
+fn main() {
+    let x = 5;
+    x = 6; // ❌ ERROR: cannot assign twice to immutable variable
+}
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Compiler Error:</strong> The Rust compiler will prevent you from compiling this code, catching bugs at compile time rather than runtime!
+    </div>
+
+    <h3>Why Immutability?</h3>
+    <ul>
+        <li><strong>Safety:</strong> Prevents accidental data modification</li>
+        <li><strong>Concurrency:</strong> Makes it easier to reason about concurrent code</li>
+        <li><strong>Performance:</strong> Compiler can make optimizations knowing data won't change</li>
+        <li><strong>Predictability:</strong> Code behavior is more predictable</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>3. Mutable Variables</h2>
+    <p>When you need to modify a variable, explicitly declare it as mutable using <code>mut</code>:</p>
+
+    <div class="code-block">
+fn main() {
+    let mut x = 5;
+    println!("The value of x is: {}", x);
+    
+    x = 6; // ✅ This works!
+    println!("The value of x is now: {}", x);
+}
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Output:</strong>
+        <pre>The value of x is: 5
+The value of x is now: 6</pre>
+    </div>
+
+    <p>The <code>mut</code> keyword explicitly signals that this variable's value may change, making your intentions clear to other developers.</p>
+</div>
+
+<div class="section">
+    <h2>4. Shadowing</h2>
+    <p>Rust allows you to declare a new variable with the same name as a previous variable. The new variable <strong>shadows</strong> the previous one:</p>
+
+    <div class="code-block">
+fn main() {
+    let x = 5;
+    
+    let x = x + 1; // Shadows the first x
+    
+    {
+        let x = x * 2; // Shadows within this scope
+        println!("The value of x in the inner scope is: {}", x); // 12
+    }
+    
+    println!("The value of x is: {}", x); // 6
+}
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Output:</strong>
+        <pre>The value of x in the inner scope is: 12
+The value of x is: 6</pre>
+    </div>
+
+    <h3>Shadowing vs Mutability</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Shadowing (<code>let</code>)</th>
+                <th>Mutability (<code>mut</code>)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Creates new variable</td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Can change type</td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Requires <code>let</code></td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Scoped</td>
+                <td>✅ Yes</td>
+                <td>❌ No (same variable)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Example: Changing Types with Shadowing</h3>
+    <div class="code-block">
+fn main() {
+    let spaces = "   ";           // String slice
+    let spaces = spaces.len();    // Number - Different type!
+    
+    println!("Number of spaces: {}", spaces); // 3
+}
+    </div>
+
+    <p>This is <strong>not possible</strong> with mutability:</p>
+    <div class="code-block">
+fn main() {
+    let mut spaces = "   ";
+    spaces = spaces.len(); // ❌ ERROR: expected `&str`, found `usize`
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>5. Constants</h2>
+    <p>Constants are values that are bound to a name and cannot change. Unlike variables:</p>
+    <ul>
+        <li>Must be annotated with a type</li>
+        <li>Can be declared in any scope, including global</li>
+        <li>Can only be set to a constant expression (not the result of runtime computation)</li>
+        <li>Use <code>const</code> keyword</li>
+        <li>Named using SCREAMING_SNAKE_CASE by convention</li>
+    </ul>
+
+    <div class="code-block">
+const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
+const MAX_POINTS: u32 = 100_000;
+
+fn main() {
+    println!("Max points: {}", MAX_POINTS);
+}
+    </div>
+
+    <h3>Constants vs Immutable Variables</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Constants (<code>const</code>)</th>
+                <th>Immutable Variables (<code>let</code>)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Type annotation</td>
+                <td>✅ Required</td>
+                <td>❌ Optional (inferred)</td>
+            </tr>
+            <tr>
+                <td>Can use <code>mut</code></td>
+                <td>❌ Never</td>
+                <td>✅ Yes (<code>let mut</code>)</td>
+            </tr>
+            <tr>
+                <td>Runtime values</td>
+                <td>❌ No</td>
+                <td>✅ Yes</td>
+            </tr>
+            <tr>
+                <td>Global scope</td>
+                <td>✅ Yes</td>
+                <td>❌ Limited</td>
+            </tr>
+            <tr>
+                <td>Shadowing</td>
+                <td>❌ No</td>
+                <td>✅ Yes</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>6. Variable Naming Conventions</h2>
+    <div class="code-block">
+// Variables and functions: snake_case
+let user_name = "Alice";
+let total_count = 42;
+
+// Constants: SCREAMING_SNAKE_CASE
+const MAX_SIZE: usize = 1024;
+const PI: f64 = 3.14159;
+
+// Types, traits, enums: PascalCase (covered later)
+// struct UserProfile { ... }
+    </div>
+</div>
+
+<div class="section">
+    <h2>7. Practical Examples</h2>
+
+    <h3>Example 1: Counter with Mutability</h3>
+    <div class="code-block">
+fn main() {
+    let mut counter = 0;
+    
+    for i in 1..=5 {
+        counter += i;
+        println!("Counter: {}", counter);
+    }
+    
+    println!("Final count: {}", counter); // 15
+}
+    </div>
+
+    <h3>Example 2: Shadowing for Transformations</h3>
+    <div class="code-block">
+fn main() {
+    let input = "  hello  ";
+    println!("Original: '{}'", input);
+    
+    let input = input.trim();
+    println!("Trimmed: '{}'", input);
+    
+    let input = input.to_uppercase();
+    println!("Uppercase: '{}'", input); // 'HELLO'
+}
+    </div>
+
+    <h3>Example 3: Configuration Constants</h3>
+    <div class="code-block">
+const BUFFER_SIZE: usize = 8192;
+const TIMEOUT_SECONDS: u64 = 30;
+const DEBUG_MODE: bool = true;
+
+fn main() {
+    if DEBUG_MODE {
+        println!("Debug: Buffer size is {} bytes", BUFFER_SIZE);
+        println!("Debug: Timeout is {} seconds", TIMEOUT_SECONDS);
+    }
+}
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li>Variables are <strong>immutable by default</strong> in Rust</li>
+        <li>Use <code>mut</code> to explicitly allow modification</li>
+        <li><strong>Shadowing</strong> creates a new variable, allowing type changes</li>
+        <li><strong>Constants</strong> are always immutable and must be compile-time values</li>
+        <li>Immutability promotes safety and helps prevent bugs</li>
+    </ul>
+</div>
+
+<a href="{% url 'rust_fundamentals_overview' %}" class="back-link">← Back to Fundamentals Overview</a>
+{% endblock %}

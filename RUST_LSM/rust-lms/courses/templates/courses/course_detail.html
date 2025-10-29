@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - Rust Programming LMS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .course-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .course-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .lesson-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .lesson-item {
+        background: #f8f9fa;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-left: 4px solid #667eea;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="course-header">
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+</div>
+
+<div class="course-content">
+    <h2>Course Content</h2>
+    
+    {% if course.lessons.all %}
+    <ul class="lesson-list">
+        {% for lesson in course.lessons.all %}
+        <li class="lesson-item">
+            <strong>Lesson {{ lesson.order }}:</strong> {{ lesson.title }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No lessons available yet.</p>
+    {% endif %}
+</div>
+
+<a href="{% url 'course_list' %}" class="back-link">← Back to Courses</a>
+{% endblock %}

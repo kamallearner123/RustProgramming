@@ -1,0 +1,632 @@
+{% extends "base.html" %}
+
+{% block title %}Installation Guide - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .os-tabs {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0 1rem 0;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .os-tab {
+        padding: 1rem 2rem;
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-bottom: 3px solid transparent;
+    }
+
+    .os-tab:hover {
+        color: #667eea;
+    }
+
+    .os-tab.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.5s;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .step-container {
+        margin: 2rem 0;
+    }
+
+    .step {
+        background: white;
+        border-left: 4px solid #667eea;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .step-number {
+        display: inline-block;
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 35px;
+        font-weight: bold;
+        margin-right: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .step-title {
+        display: inline-block;
+        color: #667eea;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        position: relative;
+    }
+
+    .code-block code {
+        color: #abb2bf;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 4px;
+    }
+
+    .screenshot-placeholder {
+        background-color: #f5f5f5;
+        border: 2px dashed #ccc;
+        padding: 2rem;
+        text-align: center;
+        color: #666;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+
+    li {
+        margin: 0.5rem 0;
+    }
+</style>
+<script>
+    function showTab(os) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.os-tab').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(os + '-content').classList.add('active');
+        document.getElementById(os + '-tab').classList.add('active');
+    }
+    
+    // Show Windows tab by default when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        showTab('windows');
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>📦 Rust Installation Guide</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> This comprehensive guide will walk you through installing Rust on your operating system. Follow the steps carefully for your specific platform.
+</div>
+
+<div class="os-tabs">
+    <button id="windows-tab" class="os-tab" onclick="showTab('windows')">🪟 Windows</button>
+    <button id="macos-tab" class="os-tab" onclick="showTab('macos')">🍎 macOS</button>
+    <button id="linux-tab" class="os-tab" onclick="showTab('linux')">🐧 Linux</button>
+</div>
+
+<!-- Windows Content -->
+<div id="windows-content" class="tab-content">
+    <h2>Installing Rust on Windows</h2>
+
+    <div class="step-container">
+        <div class="step">
+            <span class="step-number">1</span>
+            <span class="step-title">Choose Your Toolchain</span>
+            <p>Windows offers two toolchain options:</p>
+            <ul>
+                <li><strong>MSVC (Recommended):</strong> Native Windows toolchain, better integration</li>
+                <li><strong>GNU (MinGW-w64):</strong> Unix-like toolchain, smaller size</li>
+            </ul>
+            <div class="info-box">
+                For most users, <strong>MSVC</strong> is recommended as it provides better Windows integration and is the default choice.
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-title">Install Visual C++ Build Tools (MSVC only)</span>
+            <p>If choosing MSVC, you'll need the Microsoft C++ Build Tools:</p>
+            <ul>
+                <li>Download from: <a href="https://visualstudio.microsoft.com/downloads/" target="_blank">Visual Studio Downloads</a></li>
+                <li>Select "Build Tools for Visual Studio 2022"</li>
+                <li>In the installer, check "Desktop development with C++"</li>
+                <li>This is approximately 6-8 GB download</li>
+            </ul>
+            <div class="warning-box">
+                <strong>⚠️ Alternative:</strong> If you don't want to install Visual Studio, rustup will offer to install the build tools automatically during Rust installation.
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-title">Download Rustup Installer</span>
+            <p>Visit <a href="https://rustup.rs" target="_blank">https://rustup.rs</a> and download the installer:</p>
+            <ul>
+                <li>Click "Download Rustup-init.exe (64-bit)"</li>
+                <li>Save the file to your Downloads folder</li>
+                <li>File size: approximately 8-10 MB</li>
+            </ul>
+            <div class="info-box">
+                <strong>Alternative Method:</strong> Using Windows Package Manager (winget):
+                <div class="code-block">
+winget install Rustlang.Rustup
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <span class="step-title">Run the Installer</span>
+            <p>Execute rustup-init.exe:</p>
+            <ul>
+                <li>Double-click the downloaded file</li>
+                <li>A command prompt window will open</li>
+                <li>You'll see installation options</li>
+                <li>Press <kbd>1</kbd> and <kbd>Enter</kbd> for default installation</li>
+                <li>Or press <kbd>2</kbd> to customize installation</li>
+            </ul>
+            <div class="code-block">
+Welcome to Rust!
+
+This will download and install Rust toolchain.
+
+Current installation options:
+
+   default host triple: x86_64-pc-windows-msvc
+     default toolchain: stable (default)
+               profile: default
+  modify PATH variable: yes
+
+1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation
+>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <span class="step-title">Wait for Installation</span>
+            <p>The installer will:</p>
+            <ul>
+                <li>Download the Rust toolchain (approximately 200-300 MB)</li>
+                <li>Install rustc, cargo, and other tools</li>
+                <li>Configure your PATH environment variable</li>
+                <li>Set up default profile</li>
+            </ul>
+            <div class="info-box">
+                Installation typically takes 5-15 minutes depending on your internet speed.
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">6</span>
+            <span class="step-title">Restart Your Terminal</span>
+            <p>After installation completes:</p>
+            <ul>
+                <li>Close all PowerShell or Command Prompt windows</li>
+                <li>Open a new PowerShell or Command Prompt</li>
+                <li>This ensures the PATH is updated</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">7</span>
+            <span class="step-title">Verify Installation</span>
+            <p>Check that Rust is installed correctly:</p>
+            <div class="code-block">
+# Check Rust compiler version
+rustc --version
+
+# Check cargo version
+cargo --version
+
+# Check rustup version
+rustup --version
+            </div>
+            <div class="success-box">
+                <strong>✅ Expected Output:</strong>
+                <pre>
+rustc 1.82.0 (f6e511eec 2024-10-15)
+cargo 1.82.0 (8f40fc59f 2024-08-21)
+rustup 1.27.1 (54dd3d00f 2024-04-24)
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Common Issues:</strong>
+        <ul>
+            <li><strong>Missing MSVC:</strong> If you see linker errors, install Visual C++ Build Tools</li>
+            <li><strong>PATH not updated:</strong> Restart your terminal or PC</li>
+            <li><strong>Antivirus interference:</strong> Temporarily disable if installation hangs</li>
+        </ul>
+    </div>
+</div>
+
+<!-- macOS Content -->
+<div id="macos-content" class="tab-content">
+    <h2>Installing Rust on macOS</h2>
+
+    <div class="step-container">
+        <div class="step">
+            <span class="step-number">1</span>
+            <span class="step-title">Install Xcode Command Line Tools</span>
+            <p>Rust requires a C compiler and linker, provided by Xcode CLI tools:</p>
+            <div class="code-block">
+xcode-select --install
+            </div>
+            <ul>
+                <li>A dialog box will appear asking to install</li>
+                <li>Click "Install" and agree to the license</li>
+                <li>Download size: approximately 500 MB - 1 GB</li>
+                <li>Installation takes 5-20 minutes</li>
+            </ul>
+            <div class="info-box">
+                <strong>Already Installed?</strong> If you see "command line tools are already installed", you're good to go!
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-title">Download and Run Rustup</span>
+            <p>Open Terminal and run the rustup installer:</p>
+            <div class="code-block">
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+            </div>
+            <p>This command:</p>
+            <ul>
+                <li>Downloads the rustup installation script securely</li>
+                <li>Executes the installer</li>
+                <li>Uses TLS 1.2 for secure connection</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-title">Choose Installation Options</span>
+            <p>The installer will present options:</p>
+            <div class="code-block">
+Current installation options:
+
+   default host triple: x86_64-apple-darwin
+     # or: aarch64-apple-darwin (M1/M2/M3)
+     default toolchain: stable (default)
+               profile: default
+  modify PATH variable: yes
+
+1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation
+>
+            </div>
+            <p>Press <kbd>1</kbd> and <kbd>Enter</kbd> for default installation.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <span class="step-title">Wait for Installation</span>
+            <p>Rustup will:</p>
+            <ul>
+                <li>Download Rust toolchain (200-300 MB)</li>
+                <li>Install to ~/.cargo and ~/.rustup</li>
+                <li>Update ~/.zshrc or ~/.bash_profile</li>
+                <li>Set up PATH environment variable</li>
+            </ul>
+            <div class="success-box">
+                You'll see: "Rust is installed now. Great!" when complete.
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <span class="step-title">Configure Your Shell</span>
+            <p>Apply the PATH changes:</p>
+            <div class="code-block">
+# For zsh (default on macOS Catalina+):
+source ~/.zshrc
+
+# For bash:
+source ~/.bash_profile
+
+# Or simply close and reopen Terminal
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">6</span>
+            <span class="step-title">Verify Installation</span>
+            <p>Confirm Rust is working:</p>
+            <div class="code-block">
+# Check versions
+rustc --version
+cargo --version
+rustup --version
+
+# Check architecture (should show aarch64 for M-series)
+rustc --version --verbose | grep host
+            </div>
+            <div class="success-box">
+                <strong>✅ For Apple Silicon:</strong> Should show <code>aarch64-apple-darwin</code><br>
+                <strong>✅ For Intel Macs:</strong> Should show <code>x86_64-apple-darwin</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <strong>🍎 Apple Silicon Notes:</strong>
+        <ul>
+            <li>Rust has native ARM64 support for M1/M2/M3/M4 chips</li>
+            <li>No Rosetta 2 translation needed</li>
+            <li>Performance is excellent on Apple Silicon</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Linux Content -->
+<div id="linux-content" class="tab-content">
+    <h2>Installing Rust on Linux</h2>
+
+    <div class="step-container">
+        <div class="step">
+            <span class="step-number">1</span>
+            <span class="step-title">Install Build Tools</span>
+            <p>Install a C compiler and linker first:</p>
+            
+            <p><strong>Ubuntu / Debian:</strong></p>
+            <div class="code-block">
+sudo apt update
+sudo apt install build-essential
+            </div>
+
+            <p><strong>Fedora / RHEL / CentOS:</strong></p>
+            <div class="code-block">
+sudo dnf groupinstall "Development Tools"
+            </div>
+
+            <p><strong>Arch Linux / Manjaro:</strong></p>
+            <div class="code-block">
+sudo pacman -S base-devel
+            </div>
+
+            <p><strong>openSUSE:</strong></p>
+            <div class="code-block">
+sudo zypper install -t pattern devel_basis
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-title">Download and Run Rustup</span>
+            <p>Execute the rustup installer:</p>
+            <div class="code-block">
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+            </div>
+            <div class="info-box">
+                <strong>Alternative:</strong> Some distributions have rust in their package managers, but rustup is recommended for the latest versions and easier updates.
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-title">Choose Installation Options</span>
+            <p>Select installation preferences:</p>
+            <div class="code-block">
+Current installation options:
+
+   default host triple: x86_64-unknown-linux-gnu
+     default toolchain: stable (default)
+               profile: default
+  modify PATH variable: yes
+
+1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation
+>
+            </div>
+            <p>Press <kbd>1</kbd> for default installation.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <span class="step-title">Configure Your Shell</span>
+            <p>After installation, update your PATH:</p>
+            <div class="code-block">
+# For bash:
+source ~/.bashrc
+
+# For zsh:
+source ~/.zshrc
+
+# For fish:
+source ~/.config/fish/config.fish
+
+# Or open a new terminal
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <span class="step-title">Install Additional Dependencies (Optional)</span>
+            <p>Some Rust crates require additional system libraries:</p>
+            
+            <p><strong>Ubuntu / Debian:</strong></p>
+            <div class="code-block">
+sudo apt install pkg-config libssl-dev
+            </div>
+
+            <p><strong>Fedora:</strong></p>
+            <div class="code-block">
+sudo dnf install pkgconf openssl-devel
+            </div>
+
+            <p><strong>Arch:</strong></p>
+            <div class="code-block">
+sudo pacman -S pkgconf openssl
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">6</span>
+            <span class="step-title">Verify Installation</span>
+            <p>Confirm everything is working:</p>
+            <div class="code-block">
+# Check versions
+rustc --version
+cargo --version
+rustup --version
+
+# Check installation location
+which rustc
+which cargo
+            </div>
+            <div class="success-box">
+                <strong>✅ Expected Output:</strong>
+                <pre>
+rustc 1.82.0 (f6e511eec 2024-10-15)
+cargo 1.82.0 (8f40fc59f 2024-08-21)
+/home/username/.cargo/bin/rustc
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Common Issues:</strong>
+        <ul>
+            <li><strong>curl not found:</strong> Install curl: <code>sudo apt install curl</code></li>
+            <li><strong>Linker errors:</strong> Install build-essential or equivalent</li>
+            <li><strong>Permission denied:</strong> Don't use sudo with rustup installer</li>
+        </ul>
+    </div>
+</div>
+
+<h2>Post-Installation Steps (All Platforms)</h2>
+
+<div class="step">
+    <h3>Update Rust</h3>
+    <p>Keep your Rust installation up to date:</p>
+    <div class="code-block">
+rustup update
+    </div>
+</div>
+
+<div class="step">
+    <h3>Install Additional Components</h3>
+    <p>Add useful components:</p>
+    <div class="code-block">
+# Install rustfmt (code formatter)
+rustup component add rustfmt
+
+# Install clippy (linter)
+rustup component add clippy
+
+# Install rust-src (source code for standard library)
+rustup component add rust-src
+    </div>
+</div>
+
+<div class="step">
+    <h3>Configure Your Editor</h3>
+    <p>Install extensions for your preferred editor:</p>
+    <ul>
+        <li><strong>VS Code:</strong> Install "rust-analyzer" extension</li>
+        <li><strong>IntelliJ/CLion:</strong> Install "Rust" plugin</li>
+        <li><strong>Vim/Neovim:</strong> Install rust.vim and LSP plugins</li>
+    </ul>
+</div>
+
+<div class="success-box">
+    <h3>🎉 Installation Complete!</h3>
+    <p>You're ready to start learning Rust! Proceed to the verification page to test your setup.</p>
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}

@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+
+{% block title %}Functions - Rust Fundamentals{% endblock %}
+
+{% block extra_css %}
+<style>
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .comparison-table th {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .section {
+        margin: 3rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>⚙️ Functions in Rust</h1>
+
+<div class="info-box">
+    <strong>📌 Key Concept:</strong> Functions are the primary way to organize and reuse code in Rust. Rust uses the <code>fn</code> keyword to declare functions. The <code>main</code> function is the entry point of every Rust program.
+</div>
+
+<div class="section">
+    <h2>1. Function Basics</h2>
+    <p>Functions are declared using the <code>fn</code> keyword:</p>
+
+    <div class="code-block">
+fn main() {
+    println!("Hello, world!");
+    
+    another_function();
+}
+
+fn another_function() {
+    println!("Another function.");
+}
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Output:</strong>
+        <pre>Hello, world!
+Another function.</pre>
+    </div>
+
+    <h3>Function Naming Convention</h3>
+    <ul>
+        <li>Use <strong>snake_case</strong> for function names</li>
+        <li>Examples: <code>calculate_total</code>, <code>fetch_user_data</code>, <code>is_valid</code></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>2. Function Parameters</h2>
+    <p>Functions can have parameters (also called arguments). You must declare the type of each parameter.</p>
+
+    <div class="code-block">
+fn main() {
+    print_labeled_measurement(5, 'h');
+}
+
+fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {}{}", value, unit_label);
+}
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Output:</strong> <code>The measurement is: 5h</code>
+    </div>
+
+    <h3>Multiple Parameters</h3>
+    <div class="code-block">
+fn calculate_area(width: f64, height: f64) {
+    let area = width * height;
+    println!("The area is: {} square units", area);
+}
+
+fn main() {
+    calculate_area(10.5, 20.3);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. Return Values</h2>
+    <p>Functions can return values. The return type is declared after an arrow <code>-></code>.</p>
+
+    <div class="code-block">
+fn five() -> i32 {
+    5  // No semicolon = this is an expression that returns the value
+}
+
+fn main() {
+    let x = five();
+    println!("The value of x is: {}", x);
+}
+    </div>
+
+    <h3>Explicit Return Statement</h3>
+    <div class="code-block">
+fn plus_one(x: i32) -> i32 {
+    return x + 1;  // Explicit return with 'return' keyword
+}
+
+fn main() {
+    let result = plus_one(5);
+    println!("Result: {}", result);  // 6
+}
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Important:</strong> Most Rust functions return values using expressions (no semicolon). Adding a semicolon turns an expression into a statement, which doesn't return a value.
+        <div class="code-block" style="margin-top: 1rem;">
+fn plus_one(x: i32) -> i32 {
+    x + 1;  // ❌ ERROR: semicolon makes this return () instead of i32
+}
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. Expressions vs Statements</h2>
+    
+    <h3>Statements</h3>
+    <p>Statements are instructions that perform an action and do not return a value.</p>
+    <div class="code-block">
+fn main() {
+    let y = 6;  // Statement: doesn't return a value
+}
+    </div>
+
+    <h3>Expressions</h3>
+    <p>Expressions evaluate to a resulting value.</p>
+    <div class="code-block">
+fn main() {
+    let y = {
+        let x = 3;
+        x + 1  // Expression: returns 4 (no semicolon!)
+    };
+    
+    println!("The value of y is: {}", y);  // 4
+}
+    </div>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Statement</th>
+                <th>Expression</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Returns value</td>
+                <td>❌ No</td>
+                <td>✅ Yes</td>
+            </tr>
+            <tr>
+                <td>Ends with semicolon</td>
+                <td>✅ Yes</td>
+                <td>❌ No (usually)</td>
+            </tr>
+            <tr>
+                <td>Examples</td>
+                <td><code>let x = 5;</code></td>
+                <td><code>5 + 3</code>, <code>{ x + 1 }</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>5. Multiple Return Values</h2>
+    <p>Use tuples to return multiple values:</p>
+
+    <div class="code-block">
+fn calculate_dimensions(width: f64, height: f64) -> (f64, f64, f64) {
+    let area = width * height;
+    let perimeter = 2.0 * (width + height);
+    let diagonal = (width.powi(2) + height.powi(2)).sqrt();
+    
+    (area, perimeter, diagonal)
+}
+
+fn main() {
+    let (area, perimeter, diagonal) = calculate_dimensions(10.0, 20.0);
+    
+    println!("Area: {}", area);
+    println!("Perimeter: {}", perimeter);
+    println!("Diagonal: {:.2}", diagonal);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>6. Function Signatures</h2>
+    <p>A complete function signature specifies:</p>
+
+    <div class="code-block">
+// Function signature breakdown:
+// fn         - function keyword
+// add        - function name
+// (a: i32, b: i32) - parameters with types
+// -> i32     - return type
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+    </div>
+
+    <h3>Unit Return Type</h3>
+    <p>Functions that don't return a value implicitly return <code>()</code> (unit type):</p>
+
+    <div class="code-block">
+fn print_message(msg: &str) {
+    println!("{}", msg);
+    // Implicitly returns ()
+}
+
+// Equivalent to:
+fn print_message_explicit(msg: &str) -> () {
+    println!("{}", msg);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>7. Early Returns</h2>
+    <p>Use <code>return</code> to exit a function early:</p>
+
+    <div class="code-block">
+fn divide(numerator: f64, denominator: f64) -> f64 {
+    if denominator == 0.0 {
+        println!("Error: Division by zero!");
+        return 0.0;  // Early return
+    }
+    
+    numerator / denominator
+}
+
+fn main() {
+    let result = divide(10.0, 0.0);
+    println!("Result: {}", result);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>8. Function Examples</h2>
+
+    <h3>Example 1: Temperature Converter</h3>
+    <div class="code-block">
+fn fahrenheit_to_celsius(f: f64) -> f64 {
+    (f - 32.0) * 5.0 / 9.0
+}
+
+fn celsius_to_fahrenheit(c: f64) -> f64 {
+    (c * 9.0 / 5.0) + 32.0
+}
+
+fn main() {
+    let temp_f = 98.6;
+    let temp_c = fahrenheit_to_celsius(temp_f);
+    
+    println!("{}°F is {:.1}°C", temp_f, temp_c);
+    
+    let back_to_f = celsius_to_fahrenheit(temp_c);
+    println!("{:.1}°C is {:.1}°F", temp_c, back_to_f);
+}
+    </div>
+
+    <h3>Example 2: Mathematical Functions</h3>
+    <div class="code-block">
+fn square(n: i32) -> i32 {
+    n * n
+}
+
+fn is_even(n: i32) -> bool {
+    n % 2 == 0
+}
+
+fn factorial(n: u32) -> u32 {
+    if n <= 1 {
+        return 1;
+    }
+    n * factorial(n - 1)  // Recursive call
+}
+
+fn main() {
+    println!("Square of 5: {}", square(5));
+    println!("Is 4 even? {}", is_even(4));
+    println!("Factorial of 5: {}", factorial(5));
+}
+    </div>
+
+    <h3>Example 3: String Formatting</h3>
+    <div class="code-block">
+fn format_full_name(first: &str, last: &str) -> String {
+    format!("{} {}", first, last)
+}
+
+fn greet_user(name: &str, age: u32) -> String {
+    format!("Hello, {}! You are {} years old.", name, age)
+}
+
+fn main() {
+    let full_name = format_full_name("Alice", "Smith");
+    println!("{}", full_name);
+    
+    let greeting = greet_user("Bob", 30);
+    println!("{}", greeting);
+}
+    </div>
+
+    <h3>Example 4: Data Validation</h3>
+    <div class="code-block">
+fn is_valid_age(age: i32) -> bool {
+    age >= 0 && age <= 150
+}
+
+fn is_valid_email(email: &str) -> bool {
+    email.contains('@') && email.contains('.')
+}
+
+fn validate_user_input(age: i32, email: &str) -> bool {
+    is_valid_age(age) && is_valid_email(email)
+}
+
+fn main() {
+    let age = 25;
+    let email = "user@example.com";
+    
+    if validate_user_input(age, email) {
+        println!("User input is valid!");
+    } else {
+        println!("Invalid user input!");
+    }
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>9. Function Pointers</h2>
+    <p>Functions can be stored in variables and passed as arguments:</p>
+
+    <div class="code-block">
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn multiply(a: i32, b: i32) -> i32 {
+    a * b
+}
+
+fn apply_operation(a: i32, b: i32, op: fn(i32, i32) -> i32) -> i32 {
+    op(a, b)
+}
+
+fn main() {
+    let result1 = apply_operation(5, 3, add);
+    let result2 = apply_operation(5, 3, multiply);
+    
+    println!("5 + 3 = {}", result1);
+    println!("5 * 3 = {}", result2);
+}
+    </div>
+</div>
+
+<div class="section">
+    <h2>10. Diverging Functions</h2>
+    <p>Functions that never return use the <code>!</code> type:</p>
+
+    <div class="code-block">
+fn panic_function() -> ! {
+    panic!("This function never returns!");
+}
+
+fn infinite_loop() -> ! {
+    loop {
+        println!("This runs forever...");
+    }
+}
+    </div>
+
+    <div class="info-box">
+        <strong>💡 Note:</strong> The <code>!</code> type (called "never") indicates that a function never returns normally. This is useful for functions that always panic or loop forever.
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>💡 Key Takeaways</h3>
+    <ul>
+        <li>Functions are declared with <code>fn</code> keyword</li>
+        <li>Use <strong>snake_case</strong> for function names</li>
+        <li>Parameters must have explicit types</li>
+        <li>Return type is specified with <code>-> Type</code></li>
+        <li>The last expression (without semicolon) is the return value</li>
+        <li><strong>Expressions</strong> return values, <strong>statements</strong> don't</li>
+        <li>Use tuples to return multiple values</li>
+        <li>Functions can be passed as arguments (function pointers)</li>
+    </ul>
+</div>
+
+<a href="{% url 'rust_fundamentals_overview' %}" class="back-link">← Back to Fundamentals Overview</a>
+{% endblock %}

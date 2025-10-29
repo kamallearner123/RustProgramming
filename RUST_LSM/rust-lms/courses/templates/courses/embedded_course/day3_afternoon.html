@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Day 3 Afternoon – Safety, Security & Capstone{% endblock %}
+{% block content %}
+<h1>Day 3 Afternoon: Safety, Security, and Capstone Project</h1>
+<ul>
+    <li><strong>Memory safety in embedded Rust</strong><br>
+        Preventing buffer overflows, null dereferences, and use-after-free bugs using Rust’s safety guarantees.
+    </li>
+    <li><strong>Error handling & resilience strategies</strong><br>
+        Using <code>Result</code>, <code>Option</code>, panic handling, watchdogs, and fail-safe design for robust embedded systems.<br>
+        <em>Contributors: Sergey, Rodrigo</em>
+    </li>
+    <li><strong>Secure comms & cryptography basics</strong><br>
+        Implementing TLS, using encryption libraries, and understanding secure boot for embedded devices.
+    </li>
+    <li><strong>Capstone Project</strong><br>
+        Implement a driver or peripheral interface in Rust, add concurrency (RTIC/Embassy), and debug/test on emulator or hardware.
+    </li>
+    <li><strong>Wrap-up & Next Steps</strong><br>
+        Roadmap for contributing to the Rust embedded community, open source projects, and community channels.<br>
+        <em>Contributors: Hanqi, Sergey</em>
+    </li>
+</ul>
+
+<h2>Lab</h2>
+<p>Capstone integration project: build a small but complete Rust embedded application, integrating drivers, concurrency, and safety features.</p>
+{% endblock %}

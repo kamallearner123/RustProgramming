@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+
+{% block title %}Verification & Testing - Rust Programming{% endblock %}
+
+{% block extra_css %}
+<style>
+    .test-section {
+        background: white;
+        border-left: 4px solid #667eea;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .test-section h3 {
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+
+    .code-block {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .output-block {
+        background-color: #1e1e1e;
+        color: #4ec9b0;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        border-left: 4px solid #28a745;
+    }
+
+    .checklist {
+        list-style: none;
+        padding: 0;
+    }
+
+    .checklist li {
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        background-color: #f8f9fa;
+        border-left: 4px solid #28a745;
+        border-radius: 4px;
+        position: relative;
+        padding-left: 3rem;
+    }
+
+    .checklist li:before {
+        content: "✓";
+        position: absolute;
+        left: 1rem;
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+    .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196F3;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .success-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .error-box {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .command-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .command-card {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 2px solid #e0e0e0;
+    }
+
+    .command-card h4 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .back-link:hover {
+        background-color: #764ba2;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .badge-required {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .badge-optional {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>✅ Verification & Testing Your Rust Installation</h1>
+
+<div class="info-box">
+    <strong>📌 Overview:</strong> After installing Rust, it's important to verify that everything is working correctly. This guide will walk you through testing your installation and creating your first Rust program.
+</div>
+
+<h2>Step 1: Verify Toolchain Installation</h2>
+
+<div class="test-section">
+    <h3>Check Installed Versions</h3>
+    <p>Run these commands to verify all components are installed:</p>
+    
+    <div class="code-block">
+# Check Rust compiler
+rustc --version
+
+# Check Cargo (package manager)
+cargo --version
+
+# Check Rustup (toolchain manager)
+rustup --version
+
+# Check installed components
+rustup component list --installed
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Expected Output:</strong>
+        <div class="output-block">
+rustc 1.82.0 (f6e511eec 2024-10-15)
+cargo 1.82.0 (8f40fc59f 2024-08-21)
+rustup 1.27.1 (54dd3d00f 2024-04-24)
+
+cargo-x86_64-pc-windows-msvc (installed)
+rust-std-x86_64-pc-windows-msvc (installed)
+rustc-x86_64-pc-windows-msvc (installed)
+        </div>
+    </div>
+</div>
+
+<h2>Step 2: Quick Verification Tests</h2>
+
+<div class="command-grid">
+    <div class="command-card">
+        <h4>Test 1: Compiler Check</h4>
+        <div class="code-block">
+rustc --version --verbose
+        </div>
+        <p>This shows detailed compiler information including host architecture and commit hash.</p>
+    </div>
+
+    <div class="command-card">
+        <h4>Test 2: Cargo Check</h4>
+        <div class="code-block">
+cargo --list
+        </div>
+        <p>Lists all available cargo commands and subcommands.</p>
+    </div>
+
+    <div class="command-card">
+        <h4>Test 3: Toolchain Info</h4>
+        <div class="code-block">
+rustup show
+        </div>
+        <p>Displays active toolchain and installed targets.</p>
+    </div>
+
+    <div class="command-card">
+        <h4>Test 4: Documentation</h4>
+        <div class="code-block">
+rustup doc
+        </div>
+        <p>Opens local Rust documentation in your browser.</p>
+    </div>
+</div>
+
+<h2>Step 3: Create Your First Rust Program</h2>
+
+<div class="test-section">
+    <h3>Option A: Quick Test with rustc</h3>
+    <p>Create a simple "Hello, World!" program:</p>
+
+    <p><strong>1. Create a new file called <code>hello.rs</code>:</strong></p>
+    <div class="code-block">
+fn main() {
+    println!("Hello, World!");
+}
+    </div>
+
+    <p><strong>2. Compile the program:</strong></p>
+    <div class="code-block">
+rustc hello.rs
+    </div>
+
+    <p><strong>3. Run the executable:</strong></p>
+    <div class="code-block">
+# On Windows:
+.\hello.exe
+
+# On macOS/Linux:
+./hello
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Expected Output:</strong>
+        <div class="output-block">
+Hello, World!
+        </div>
+    </div>
+</div>
+
+<div class="test-section">
+    <h3>Option B: Create a Cargo Project (Recommended)</h3>
+    <p>Cargo is Rust's build tool and package manager. Let's create a proper project:</p>
+
+    <p><strong>1. Create a new project:</strong></p>
+    <div class="code-block">
+cargo new hello_rust
+cd hello_rust
+    </div>
+
+    <p><strong>2. Explore the project structure:</strong></p>
+    <div class="code-block">
+hello_rust/
+├── Cargo.toml       # Project configuration
+└── src/
+    └── main.rs      # Source code
+    </div>
+
+    <p><strong>3. View the generated code:</strong></p>
+    <div class="code-block">
+# Cargo automatically created a hello world program
+cat src/main.rs   # On Unix
+type src\main.rs  # On Windows
+    </div>
+
+    <p><strong>4. Build and run:</strong></p>
+    <div class="code-block">
+# Build the project
+cargo build
+
+# Run the project
+cargo run
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Expected Output:</strong>
+        <div class="output-block">
+   Compiling hello_rust v0.1.0 (/path/to/hello_rust)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.75s
+     Running `target/debug/hello_rust`
+Hello, world!
+        </div>
+    </div>
+</div>
+
+<h2>Step 4: Test Cargo Features</h2>
+
+<div class="test-section">
+    <h3>Essential Cargo Commands</h3>
+    
+    <div class="code-block">
+# Build in release mode (optimized)
+cargo build --release
+
+# Check for errors without building
+cargo check
+
+# Format your code
+cargo fmt
+
+# Run linter (clippy)
+cargo clippy
+
+# Run tests
+cargo test
+
+# Generate and open documentation
+cargo doc --open
+
+# Clean build artifacts
+cargo clean
+    </div>
+
+    <div class="info-box">
+        <strong>💡 Tip:</strong> <code>cargo check</code> is much faster than <code>cargo build</code> and is great for quick error checking during development.
+    </div>
+</div>
+
+<h2>Step 5: Verification Checklist</h2>
+
+<p>Ensure all these items work correctly:</p>
+
+<ul class="checklist">
+    <li><code>rustc --version</code> shows version 1.75.0 or higher</li>
+    <li><code>cargo --version</code> works without errors</li>
+    <li><code>cargo new test_project</code> creates a new project</li>
+    <li><code>cargo run</code> compiles and executes code</li>
+    <li><code>cargo fmt</code> formats code (no errors)</li>
+    <li><code>cargo clippy</code> runs linter (may need installation)</li>
+    <li><code>rustup doc</code> opens documentation in browser</li>
+    <li>Your editor/IDE recognizes Rust files</li>
+</ul>
+
+<h2>Step 6: Advanced Verification</h2>
+
+<div class="test-section">
+    <h3>Test with a More Complex Program</h3>
+    <p>Create a program that uses Rust's unique features:</p>
+
+    <div class="code-block">
+// src/main.rs
+fn main() {
+    // Test variables and mutability
+    let mut count = 0;
+    count += 1;
+    
+    // Test string handling
+    let message = String::from("Rust");
+    println!("Hello from {}!", message);
+    
+    // Test iterators
+    let numbers = vec![1, 2, 3, 4, 5];
+    let sum: i32 = numbers.iter().sum();
+    println!("Sum: {}", sum);
+    
+    // Test pattern matching
+    match sum {
+        15 => println!("Perfect!"),
+        _ => println!("Something else"),
+    }
+    
+    // Test function call
+    greet("Developer");
+}
+
+fn greet(name: &str) {
+    println!("Welcome, {}!", name);
+}
+    </div>
+
+    <p><strong>Run with:</strong></p>
+    <div class="code-block">
+cargo run
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Expected Output:</strong>
+        <div class="output-block">
+Hello from Rust!
+Sum: 15
+Perfect!
+Welcome, Developer!
+        </div>
+    </div>
+</div>
+
+<h2>Step 7: Test External Dependencies</h2>
+
+<div class="test-section">
+    <h3>Add and Use a Crate</h3>
+    <p>Test that you can download and use external libraries:</p>
+
+    <p><strong>1. Edit Cargo.toml:</strong></p>
+    <div class="code-block">
+[package]
+name = "hello_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.8"
+    </div>
+
+    <p><strong>2. Use the crate in your code:</strong></p>
+    <div class="code-block">
+use rand::Rng;
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let number: u32 = rng.gen_range(1..=100);
+    println!("Random number: {}", number);
+}
+    </div>
+
+    <p><strong>3. Run the program:</strong></p>
+    <div class="code-block">
+cargo run
+    </div>
+
+    <div class="success-box">
+        <strong>✅ Expected Behavior:</strong>
+        <ul>
+            <li>Cargo downloads the <code>rand</code> crate</li>
+            <li>Compiles successfully</li>
+            <li>Prints a random number between 1 and 100</li>
+        </ul>
+    </div>
+</div>
+
+<h2>Common Issues and Solutions</h2>
+
+<div class="error-box">
+    <h3>❌ Issue: "rustc: command not found"</h3>
+    <p><strong>Solution:</strong></p>
+    <ul>
+        <li>Restart your terminal/command prompt</li>
+        <li>Check PATH: run <code>echo $PATH</code> (Unix) or <code>echo %PATH%</code> (Windows)</li>
+        <li>Manually source: <code>source $HOME/.cargo/env</code></li>
+        <li>Reinstall Rust if PATH is missing</li>
+    </ul>
+</div>
+
+<div class="error-box">
+    <h3>❌ Issue: Linker errors on Windows</h3>
+    <p><strong>Solution:</strong></p>
+    <ul>
+        <li>Install Visual Studio Build Tools</li>
+        <li>Or switch to GNU toolchain: <code>rustup default stable-x86_64-pc-windows-gnu</code></li>
+    </ul>
+</div>
+
+<div class="error-box">
+    <h3>❌ Issue: Slow compilation</h3>
+    <p><strong>Solutions:</strong></p>
+    <ul>
+        <li>Use <code>cargo check</code> instead of <code>cargo build</code> during development</li>
+        <li>Install on SSD for faster I/O</li>
+        <li>Enable parallel compilation (usually automatic)</li>
+        <li>Use incremental compilation (enabled by default)</li>
+    </ul>
+</div>
+
+<div class="error-box">
+    <h3>❌ Issue: Certificate/SSL errors</h3>
+    <p><strong>Solution:</strong></p>
+    <ul>
+        <li>Check firewall/proxy settings</li>
+        <li>Update certificates on your system</li>
+        <li>Use <code>cargo build --offline</code> if dependencies are cached</li>
+    </ul>
+</div>
+
+<h2>Additional Tools to Install</h2>
+
+<div class="test-section">
+    <h3>Recommended Additional Components</h3>
+    
+    <div class="code-block">
+# Install clippy (if not already installed)
+rustup component add clippy
+
+# Install rustfmt (if not already installed)
+rustup component add rustfmt
+
+# Install rust-src for IDE features
+rustup component add rust-src
+
+# Install useful cargo extensions
+cargo install cargo-watch    # Auto-rebuild on changes
+cargo install cargo-edit     # Manage dependencies
+cargo install cargo-tree     # Visualize dependencies
+    </div>
+</div>
+
+<h2>Next Steps</h2>
+
+<div class="success-box">
+    <h3>🎉 Congratulations!</h3>
+    <p>If all verification tests passed, you're ready to start learning Rust! Here's what to do next:</p>
+    <ul>
+        <li>📚 Read "The Rust Book" (<code>rustup doc --book</code>)</li>
+        <li>🏋️ Practice with Rustlings exercises</li>
+        <li>🚀 Build small projects to reinforce learning</li>
+        <li>👥 Join the Rust community (forums, Discord, Reddit)</li>
+        <li>📖 Explore crates at <a href="https://crates.io" target="_blank">crates.io</a></li>
+    </ul>
+</div>
+
+<div class="info-box">
+    <strong>💡 Pro Tip:</strong> Keep your Rust installation updated with <code>rustup update</code>. New versions are released every 6 weeks with improvements and new features!
+</div>
+
+<a href="{% url 'requirements_overview' %}" class="back-link">← Back to Requirements Overview</a>
+{% endblock %}
